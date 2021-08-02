@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="./assets/demo.css">
+    <script src="https://cdn.jsdelivr.net/npm/overhide-widgets@1.0.20/dist/overhide-widgets.js"></script>
+
+    <script>
+      // Uncomment on of the back-end connection strings below.
+
+      BACKEND_CONNECTION_STRING = `https://demo-back-end.azurewebsites.net/api`;
+      // BACKEND_CONNECTION_STRING = `http://localhost:8100`;
+      // BACKEND_CONNECTION_STRING = `http://localhost:7071/api`;
+      // BACKEND_CONNECTION_STRING = `NONE`
+    </script>
+
+    <script src="./index.js"></script>
+
+    <script>
+      // Set the token from back-end
+      window.onload = (event) => {
+      fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
+        .then(async (response) => {
+          if (response.ok) {
+            const hub = document.querySelector('#demo-hub');
+            hub.setAttribute('token', await response.text());
+          } else {
+            console.error(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+          }
+        }).catch(e => console.error(`error talking to back-end &mdash; ${e}`));
+      };
+    </script>
+
+  </head>
+
+  <body>
+    <div id="demo-front-end">
+
+      <style>
+        overhide-appsell {
+          width: 60%;
+        }
+        .neopolitan-button {
+          color: #8C6551;
+          background-color: #fa94c4;
+          width: 100%; 
+          height: 100%; 
+          padding: 1em;
+          cursor: pointer;
+        }
+        .neopolitan-button:hover {
+          color: #FFDDBD;
+          background-color: #8C6551;
+          cursor: pointer;
+        }
+        .clear-button {
+          width: 100%; 
+          height: 100%; 
+          padding: 1em;
+          cursor: pointer;
+        }
+        .clear-button:hover {
+          cursor: pointer;
+        }
+        .button-icon {
+          width: 100%; 
+          height: 100%; 
+          padding: 1em;
+          cursor: pointer;
+        }
+        .button-icon:hover {
+          cursor: pointer;
+        }
+        .button-icon.unauth {
+          filter: grayscale(100%);
+        }        
+        .visa {
+          position: fixed;
+          top: 0px;
+          right: 0px;
+          z-index: 50;
+          opacity: 0;
+          transition: opacity 1s ease-in 1s;
+          pointer-events: none;
+        }
+        .header-envelope {
+          display: flex;
+          justify-content: flex-start;
+        }
+        .header-logo {
+          width: 100px;
+          margin-top: 10px;
+        }
+        .headers {
+          color: rgba(255, 166, 0, 0.829);
+          display: flex;
+          flex-direction: column;
+          margin-left: 1em;
+          margin-top: .25em;
+        }
+        .header {
+          font-size: x-large;
+        }
+      </style>
+      <img class="visa" id="visa" src="./assets/visa.png">
+
+      <!-- look at `window.onload` script above to see how we set the token from back-end -->
+      <overhide-hub id="demo-hub" isTest></overhide-hub>      
+
+      <div class="w3-bar w3-border w3-light-grey">
+        <div class="w3-right">
+          <overhide-status hubId="demo-hub"></overhide-status>
+        </div>          
+      </div>
+
+      <!-- info note-->
+      <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
+        <img class="w3-left info" src="./assets/info.png">
+        <p>The demo showing off all widgets but with all <em>overhide-appsell</em> buttons having a customized ice cream related look-and-feel &mdash; ice cream icons and color scheme through CSS and slots.</p>
+        <p>Using features causes back-end endpoint invocations with authorization checks.</p>
+        <p>In the top-right we see the <em>overhide-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
+        <p>Just below we see an explicit "login" button (<em>overhide-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.  This button has some custom neopolitan themed color scheme CSS.</p>
+        <p>At the bottom we see three feature buttons (<em>overhide-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.  These buttons don't look like buttons but ice cream deserts &mdash; with the help of slot customizations.  They become coloured when enabled.</p>
+        <p><a href="https://github.com/overhide/overhide-widgets#demos">...back to demos</a></p>
+      </div></div>
+
+      <overhide-login hubId="demo-hub"
+                      overhideSocialMicrosoftEnabled
+                      overhideOhledgerWeb3Enabled
+                      overhideEthereumWeb3Enabled
+                      overhideLedgerEnabled>
+        <div slot="header" class="header-envelope">
+          <img src="./assets/logo.png" class="header-logo">
+          <div class="headers">
+            <div class="header">Custom Login</div>
+            <div>(logo + no <em>Google</em> or <em>bitcoin</em>)</div>
+          </div>
+        </div>
+      </overhide-login>
+
+      <div class="w3-row w3-padding-64"><div class="w3-col s4">&nbsp</div><div class="w3-col s4 w3-center">
+        <overhide-appsell 
+          hubId="demo-hub" 
+          loginMessage="Login">
+            <div slot="unauthorized-button" class="neopolitan-button"></div>
+        </overhide-appsell>
+      </div></div>
+
+      <div class="w3-row" style="display: flex; align-content: stretch;">
+        <div class="w3-col s4 w3-center">
+          <overhide-appsell 
+            hubId="demo-hub" 
+            sku="free-feature"
+            priceDollars="0"
+            authorizedMessage="Free Popsicle"
+            unauthorizedTemplate="Login for Free Popsicle"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
+
+            <img src="assets/popsicle.png" slot="unauthorized-header" class="button-icon unauth">
+            <img src="assets/popsicle.png" slot="authorized-header" class="button-icon">
+            <div slot="authorized-button" class="clear-button"></div>
+            <div slot="unauthorized-button" class="clear-button"></div>
+
+          </overhide-appsell>
+        </div>
+        <div class="w3-col s4 w3-center">
+          <overhide-appsell 
+            id="foo"
+            hubId="demo-hub" 
+            sku="paid-feature"
+            priceDollars="2"
+            authorizedMessage="Paid Cone"
+            unauthorizedTemplate="Get Cone ($${topup})"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
+
+            <img src="assets/cone.png" slot="unauthorized-header" class="button-icon unauth">
+            <img src="assets/cone.png" slot="authorized-header" class="button-icon">
+            <div slot="authorized-button" class="clear-button"></div>
+            <div slot="unauthorized-button" class="clear-button"></div>
+
+          </overhide-appsell>
+        </div>
+        <div class="w3-col s4 w3-center">
+          <overhide-appsell 
+            hubId="demo-hub" 
+            sku="subscribed-feature"
+            priceDollars="3"
+            authorizedMessage="Subscribed Sundae"
+            unauthorizedTemplate="Add 30 Minute Sundae Subscription ($${topup})"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            withinMinutes="30">
+
+            <img src="assets/sundae.png" slot="unauthorized-header" class="button-icon unauth">
+            <img src="assets/sundae.png" slot="authorized-header" class="button-icon">
+            <div slot="authorized-button" class="clear-button"></div>
+            <div slot="unauthorized-button" class="clear-button"></div>
+
+          </overhide-appsell>
+        </div>
+      </div>
+
+      <div class="w3-row" style="display: flex; justify-content: center; margin-top: 12em;">
+        <div id="messages" class="w3-col s8 w3-center">
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

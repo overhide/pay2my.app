@@ -1,0 +1,49 @@
+{
+  "name": "pay2my.app",
+  "version": "1.0.20",
+  "description": "",
+  "main": "dist/overhide-widgets.js",
+  "types": "dist/overhide-widgets.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/overhide/pay2my.app.git"
+  },
+  "homepage": "https://overhide.io",
+  "scripts": {
+    "build": "rimraf dist && webpack --config webpack.config.js --mode=production",
+    "devbuild": "rimraf dist && webpack --config webpack.config.js --mode=development",
+    "dev": "webpack-dev-server",
+    "serve": "http-server -c-1 -p 8099",
+    "test": "concurrently -k -s first \"npm run serve\" \"mocha --exit test/js\"",
+    "test-report": "mocha --exit test/js --reporter mocha-junit-reporter --reporter-options toConsole=true,mochaFile=test-report/test-report.xml"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@microsoft/fast-element": "latest",
+    "@microsoft/fast-foundation": "latest",
+    "async-mutex": "0.3.1",
+    "ledgers.js": "4.5.10",
+    "lodash-es": "4.17.15",
+    "tslib": "^1.11.1"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.2.0",
+    "concurrently": "6.1.0",
+    "http-server": "^0.12.1",
+    "mocha": "5.2.0",
+    "mocha-junit-reporter": "1.22.0",
+    "puppeteer": "9.1.1",
+    "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^7.0.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.44.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

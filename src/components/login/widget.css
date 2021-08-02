@@ -1,0 +1,116 @@
+:host {
+  font-family: "Segoe UI", Arial, sans-serif
+}  
+
+.panel:hover {
+  color:#000 !important;
+  background-color:#fdf5e6 !important  ;
+}
+
+.panel.active {
+  color:#000 !important;
+  background-color:#ddffdd !important;
+}
+
+.panel:hover .w3-input {
+  color:#000 !important;
+  background-color:#fdf5e6 !important;
+}
+
+.panel.active .w3-input {
+  color:#000 !important;
+  background-color:#ddffdd !important;
+}
+
+.name {
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+.currency {
+  font-weight: lighter;
+  font-variant: small-caps;
+}
+
+.currency-span .info {
+  margin-right: 1em;
+}
+
+.svg svg {
+  width: 1em;
+  height: 1em;
+  top: 4px;
+  position: relative;
+}
+
+.svg2 svg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.svg3 svg {
+  width: 1.6em;
+  height: 1.6em;
+  top: 6px;
+  position: relative;
+  margin-right: .3em;
+}
+
+.clipboard {
+  position: relative;
+}
+
+.clipboard .clickable {
+  right: 1px;
+  position: absolute;
+  top: 6px;
+  min-width: 2em;
+  text-align: center;
+  cursor:pointer;
+}  
+
+.panel .clipboard .clickable {
+  background-color: white !important  ;
+}
+
+.panel.active .clipboard .clickable {
+  background-color:#ddffdd !important  ;
+}
+
+.panel:hover .clipboard .clickable {
+  background-color:#fdf5e6 !important  ;
+}
+
+.panel.active:hover .clipboard .clickable {
+  background-color:#ddffdd !important  ;
+}
+.clipboard .clickable svg {
+  width: 1.5em;
+}  
+
+.right-tooltip {
+  position:absolute;
+  right:40px;
+  width: 20em;
+  z-index: 50;
+}
+
+.input {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.input input {
+  width: 100%;
+}
+
+.message {
+  margin-left: 1em;
+  margin-right: 1em;
+  font-weight: lighter;
+  font-variant: small-caps;
+}
+
+.invalidMessage {
+  color: red;
+}

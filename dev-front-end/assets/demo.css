@@ -1,0 +1,28 @@
+overhide-appsell {
+  width: 60%;
+}
+.visa {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 1s ease-in 1s;
+  pointer-events: none;
+}
+.note-container {
+  margin-top: 2em;
+  min-height: 3em;
+}
+.note {
+  max-width: 50%;          
+  margin: auto !important;
+  padding: .5em;
+}
+.note p {
+  padding-right: 3em;
+  padding-left: 5em;
+}
+.info {
+  height: 2em;
+}
