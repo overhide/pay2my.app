@@ -11,9 +11,9 @@ import {
 
 import {
   Imparter,
-  IOverhideHub,
-  IOverhideLogin,
-  IOverhideStatus,
+  IPay2MyAppHub,
+  IPay2MyAppLogin,
+  IPay2MyAppStatus,
   NetworkType,
   PaymentsInfo,
   Social
@@ -31,33 +31,33 @@ import logoutIcon from "../../static/icons/logout.svg";
 import errorIcon from "../../static/icons/error.svg";
 import refreshIcon from "../../static/icons/refresh.svg";
 
-const template = html<OverhideStatus>`
+const template = html<Pay2MyAppStatus>`
   <div class="input">
     <div class="panel ${e => e.error ? 'w3-tooltip' : ''}">
       <div class="${e => e.canGetTransactions ? '' : 'disabled'}">
 
-        ${when(e => e.error, html<OverhideStatus>`
+        ${when(e => e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${errorIcon}</span>
         `)}
-        ${when(e => !e.logo && !e.error, html<OverhideStatus>`
+        ${when(e => !e.logo && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${deniedIcon}</span>
         `)}
-        ${when(e => e.logo == 'microsoft' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'microsoft' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${microsoftIcon}</span>
         `)}
-        ${when(e => e.logo == 'google' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'google' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${googleIcon}</span>
         `)}
-        ${when(e => e.logo == 'wallet' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'wallet' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${walletIcon}</span>
         `)}
-        ${when(e => e.logo == 'eth' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'eth' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${ethIcon}</span>
         `)}
-        ${when(e => e.logo == 'bitcoin' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'bitcoin' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${bitcoinIcon}</span>
         `)}
-        ${when(e => e.logo == 'passphrase' && !e.error, html<OverhideStatus>`
+        ${when(e => e.logo == 'passphrase' && !e.error, html<Pay2MyAppStatus>`
           <span class="name svg3" @click="${e => e.addressClicked()}">${passphraseIcon}</span>
         `)}
       </div>
@@ -66,7 +66,7 @@ const template = html<OverhideStatus>`
         <div class="label"><span>&nbsp;${e => e.address}</span></div>
       </div>
       
-      ${when(e => e.error, html<OverhideStatus>`
+      ${when(e => e.error, html<Pay2MyAppStatus>`
         <span class="right-tooltip w3-text w3-tag w3-round-xlarge">
           ${e => e.error}
         </span>        
@@ -169,11 +169,11 @@ ${w3Css}
 
 
 @customElement({
-  name: "overhide-status",
+  name: "pay2myapp-status",
   template,
   styles,
 })
-export class OverhideStatus extends FASTElement implements IOverhideStatus {
+export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
   @attr 
   hubId?: string;
 
@@ -192,10 +192,10 @@ export class OverhideStatus extends FASTElement implements IOverhideStatus {
   @observable
   canGetTransactions?: boolean | null;
 
-  hub?: IOverhideHub | null; 
+  hub?: IPay2MyAppHub | null; 
   currentImparter?: Imparter | null;
   isSignedIn: boolean = false;
-  loginElement?: IOverhideLogin | null;
+  loginElement?: IPay2MyAppLogin | null;
 
   public constructor() {
     super(); 
@@ -225,7 +225,7 @@ export class OverhideStatus extends FASTElement implements IOverhideStatus {
   hubIdChanged(oldValue: string, newValue: string) {
     const el = document.querySelector(`#${this.hubId}`);
     if (!el) {
-      console.log(`WARNING: overhide-status configured for overhide-hub with ID ${newValue} but no element in DOM with this ID.`);
+      console.log(`WARNING: pay2myapp-status configured for pay2myapp-hub with ID ${newValue} but no element in DOM with this ID.`);
       return;
     }
     this.setHub(el);

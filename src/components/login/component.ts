@@ -10,8 +10,8 @@ import {
 } from "@microsoft/fast-element";
 
 import {
-  IOverhideLogin,
-  IOverhideHub,
+  IPay2MyAppLogin,
+  IPay2MyAppHub,
   PaymentsInfo
 } from '../hub/definitions';
 
@@ -32,7 +32,7 @@ OverhideOhSocialGoogle;
 OverhideOhWeb3;
 OverhideEthWeb3;
 
-const template = html<OverhideLogin>`
+const template = html<Pay2MyAppLogin>`
   <div class="w3-modal root" ${ref('rootElement')} style="padding-top: 0px; padding-bottom: 0px;">
     <div class="envelope" ${ref('envelopeElement')} @click="${(e, c) => e.outsideClick(c.event)}">
       <div class="w3-modal-content modal">
@@ -45,34 +45,34 @@ const template = html<OverhideLogin>`
         <div class="modal">
           <div class="w3-container">
             <slot name="header"></slot>
-            ${when(e => e.overhideSocialMicrosoftEnabled, html<OverhideLogin>`
+            ${when(e => e.overhideSocialMicrosoftEnabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-ohsocial-ms ${ref('overhideSocialMicrosoftElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-ohsocial-ms>
+                <pay2myapp-ohsocial-ms ${ref('overhideSocialMicrosoftElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-ohsocial-ms>
               </div>
             `)}
-            ${when(e => e.overhideSocialGoogleEnabled, html<OverhideLogin>`
+            ${when(e => e.overhideSocialGoogleEnabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-ohsocial-google ${ref('overhideSocialGoogleElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-ohsocial-google>
+                <pay2myapp-ohsocial-google ${ref('overhideSocialGoogleElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-ohsocial-google>
               </div>
             `)}            
-            ${when(e => e.overhideOhledgerWeb3Enabled, html<OverhideLogin>`
+            ${when(e => e.overhideWeb3Enabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-ohledger-web3 ${ref('overhideOhledgerWeb3Element')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-ohledger-web3>
+                <pay2myapp-ohledger-web3 ${ref('overhideOhledgerWeb3Element')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-ohledger-web3>
               </div>
             `)}            
-            ${when(e => e.overhideEthereumWeb3Enabled, html<OverhideLogin>`
+            ${when(e => e.ethereumWeb3Enabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-eth-web3 ${ref('overhideEthereumWeb3Element')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-eth-web3>
+                <pay2myapp-eth-web3 ${ref('overhideEthereumWeb3Element')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-eth-web3>
               </div>
             `)}            
-            ${when(e => e.overhideBitcoinEnabled, html<OverhideLogin>`
+            ${when(e => e.bitcoinEnabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-btc-manual ${ref('overhideBitcoinElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-btc-manual>
+                <pay2myapp-btc-manual ${ref('overhideBitcoinElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-btc-manual>
               </div>
             `)}            
-            ${when(e => e.overhideLedgerEnabled, html<OverhideLogin>`
+            ${when(e => e.overhideSecretTokenEnabled, html<Pay2MyAppLogin>`
               <div class="s12">
-                <overhide-ohledger ${ref('overhideLedgerElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></overhide-ohledger>
+                <pay2myapp-ohledger ${ref('overhideLedgerElement')} hubId="${e => e.hubId}" @close="${(e) => e.close()}"></pay2myapp-ohledger>
               </div>
             `)}
           </div>
@@ -130,19 +130,19 @@ const styles = css`
 
 
 @customElement({
-  name: "overhide-login",
+  name: "pay2myapp-login",
   template,
   styles,
 })
-export class OverhideLogin extends FASTElement implements IOverhideLogin {
+export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
   @attr 
   hubId?: string;
 
   @attr({ mode: 'boolean' })
-  overhideLedgerEnabled?: boolean = false;
+  overhideSecretTokenEnabled?: boolean = false;
 
   @attr({ mode: 'boolean' })
-  overhideBitcoinEnabled?: boolean = false;
+  bitcoinEnabled?: boolean = false;
 
   @attr({ mode: 'boolean' })
   overhideSocialMicrosoftEnabled?: boolean = false;
@@ -151,10 +151,10 @@ export class OverhideLogin extends FASTElement implements IOverhideLogin {
   overhideSocialGoogleEnabled?: boolean = false;
 
   @attr({ mode: 'boolean' })
-  overhideOhledgerWeb3Enabled?: boolean = false;
+  overhideWeb3Enabled?: boolean = false;
 
   @attr({ mode: 'boolean' })
-  overhideEthereumWeb3Enabled?: boolean = false;
+  ethereumWeb3Enabled?: boolean = false;
 
   rootElement?: HTMLElement;
   envelopeElement?: HTMLElement;
@@ -164,7 +164,7 @@ export class OverhideLogin extends FASTElement implements IOverhideLogin {
   overhideEthereumWeb3Element?: HTMLElement;
   overhideBitcoinElement?: HTMLElement;
   overhideLedgerElement?: HTMLElement;
-  hub?: IOverhideHub; 
+  hub?: IPay2MyAppHub; 
   opens: any[] = [];
 
   public constructor() {
@@ -175,7 +175,7 @@ export class OverhideLogin extends FASTElement implements IOverhideLogin {
   public open(): Promise<void> {
     if (this.rootElement) {
       this.rootElement.style.display = 'block';
-      this.$emit('overhide-login-open');
+      this.$emit('pay2myapp-login-open');
       return new Promise<void>((resolve, reject) => {
         this.opens.push(resolve);
       });;      
@@ -187,13 +187,13 @@ export class OverhideLogin extends FASTElement implements IOverhideLogin {
   public close(): void {
     if (this.rootElement) {
       this.rootElement.style.display = 'none';
-      this.$emit('overhide-login-close');
+      this.$emit('pay2myapp-login-close');
       this.opens.forEach(resolve => resolve());
       this.opens = [];
     }
   }
 
-  public setHub(hub: IOverhideHub) {
+  public setHub(hub: IPay2MyAppHub) {
     this.hub = hub;
     const notifier = Observable.getNotifier(hub);
     const that = this;
@@ -222,11 +222,11 @@ export class OverhideLogin extends FASTElement implements IOverhideLogin {
   hubIdChanged(oldValue: string, newValue: string) {
     const el = document.querySelector(`#${this.hubId}`) as any;
     if (!el) {
-      console.log(`WARNING: overhide-login configured for overhide-hub with ID ${newValue} but no element in DOM with this ID.`);
+      console.log(`WARNING: pay2myapp-login configured for pay2myapp-hub with ID ${newValue} but no element in DOM with this ID.`);
       return;
     }
     if (!el.THIS_IS_OVERHIDE_HUB) {
-      console.log(`WARNING: overhide-login configured for overhide-hub with ID ${newValue} but element with this ID is not an overhide-hub element.`);
+      console.log(`WARNING: pay2myapp-login configured for pay2myapp-hub with ID ${newValue} but element with this ID is not an pay2myapp-hub element.`);
       return;
     }
     this.setHub(el);

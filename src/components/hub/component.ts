@@ -11,13 +11,13 @@ import {
   CURRENCY_BY_IMPARTER,
   NETWORKS_BY_IMPARTER,
   Currency,
-  IOverhideLogin,
+  IPay2MyAppLogin,
   Imparter,
   Social,
-  IOverhideAppsell,
-  IOverhideHub,
-  IOverhidePendingTransactionEvent,
-  IOverhideSkuAuthorizationChangedEvent,
+  IPay2MyAppAppsell,
+  IPay2MyAppHub,
+  IPay2MyAppPendingTransactionEvent,
+  IPay2MyAppSkuAuthorizationChangedEvent,
   PaymentsInfo,
   NetworkType
 } from './definitions';
@@ -25,13 +25,13 @@ import {
 import oh$ from "ledgers.js";
 import w3Css from "../../static/w3.css";
 
-const template = html<OverhideHub>`<template ${ref('rootElement')}></template>`
+const template = html<Pay2MyAppHub>`<template ${ref('rootElement')}></template>`
 
 @customElement({
-  name: "overhide-hub",
+  name: "pay2myapp-hub",
   template
 })
-export class OverhideHub extends FASTElement implements IOverhideHub {
+export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   @attr({ mode: 'boolean' })
   isTest?: boolean | null = false;
 
@@ -99,7 +99,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
     },
 
     loginElement: null,
-    pendingTransaction: <IOverhidePendingTransactionEvent> {isPending: false, currency: null},
+    pendingTransaction: <IPay2MyAppPendingTransactionEvent> {isPending: false, currency: null},
 
     skuAuthorizations: {},
     skuComponents: {},
@@ -329,8 +329,8 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
     const imparter = this.getCurrentImparter();
     const oldInfo = {...this.paymentsInfo};
     try {
-      this.paymentsInfo.pendingTransaction = <IOverhidePendingTransactionEvent>{isPending: true, currency: this.paymentsInfo.currentCurrency};
-      this.$emit('overhide-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
+      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{isPending: true, currency: this.paymentsInfo.currentCurrency};
+      this.$emit('pay2myapp-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
       const amount = Math.ceil(amountDollars == 0 ? amountDollars : await oh$.getFromDollars(imparter, amountDollars));
       const aDayAgo = new Date((new Date()).getTime() - 24*60*60*1000);     // we compare tallies...
       if (amount > 0) {
@@ -363,8 +363,8 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
       this.error = `${typeof error == 'object' && 'message' in error ? error.message : error}`;
       return false;
     } finally {
-      this.paymentsInfo.pendingTransaction = <IOverhidePendingTransactionEvent>{isPending: false, currency: this.paymentsInfo.currentCurrency};
-      this.$emit('overhide-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
+      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{isPending: false, currency: this.paymentsInfo.currentCurrency};
+      this.$emit('pay2myapp-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
       this.pingApplicationState();
     }
   }
@@ -398,7 +398,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
     return oh$.getOverhideRemunerationAPIUri(imparter);
   }
 
-  public setLoginElement = (element?: IOverhideLogin | null) => {
+  public setLoginElement = (element?: IPay2MyAppLogin | null) => {
     this.paymentsInfo.loginElement = element;
     this.pingApplicationState();
   }
@@ -426,8 +426,8 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
       }      
     }
     this.paymentsInfo.skuAuthorizations[sku] = authorized;
-    const event: IOverhideSkuAuthorizationChangedEvent = <IOverhideSkuAuthorizationChangedEvent> {isAuthorized: authorized};
-    this.$emit("overhide-hub-sku-authorization-changed", event);
+    const event: IPay2MyAppSkuAuthorizationChangedEvent = <IPay2MyAppSkuAuthorizationChangedEvent> {isAuthorized: authorized};
+    this.$emit("pay2myapp-hub-sku-authorization-changed", event);
   }
 
   public isSkuAuthorized = (sku: string): boolean => {
@@ -437,7 +437,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
     return false;
   }
 
-  public setComponentForSku = (sku: string, component: IOverhideAppsell) => {
+  public setComponentForSku = (sku: string, component: IPay2MyAppAppsell) => {
     if (sku in this.paymentsInfo.skuComponents) {
       console.warn(`sku ${sku} already has a component set, resetting`);
     }
@@ -446,7 +446,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
     this.pingApplicationState();
   }
 
-  public getComponentForSku = (sku: string): IOverhideAppsell | null => {
+  public getComponentForSku = (sku: string): IPay2MyAppAppsell | null => {
     if (sku in this.paymentsInfo.skuComponents) {
       return this.paymentsInfo.skuComponents[sku];
     }
@@ -681,7 +681,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
         case 'ohledger-web3':
           this.setWallet(imparter, e.isPresent);
           await this.setCredentials(imparter, credentials.address, null);
-          console.log(`overhide-ledger wallet set for network ${network.currency}:${network.mode}`); // no network misconfigs for ohledger as explicitly set
+          console.log(`pay2myapp-ledger wallet set for network ${network.currency}:${network.mode}`); // no network misconfigs for ohledger as explicitly set
           break;
         default:
       }
@@ -711,7 +711,7 @@ export class OverhideHub extends FASTElement implements IOverhideHub {
           }
           // wrong network
           this.clear(imparter);
-          this.error = `overhide-ledger network misconfig: (expected:${NETWORKS_BY_IMPARTER[this.allowNetworkType][imparter]}) (seen: ${e.currency}:${e.mode})`;
+          this.error = `pay2myapp-ledger network misconfig: (expected:${NETWORKS_BY_IMPARTER[this.allowNetworkType][imparter]}) (seen: ${e.currency}:${e.mode})`;
           return;
         default:
       }

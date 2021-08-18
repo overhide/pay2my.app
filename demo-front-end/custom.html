@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
-    <script src="https://cdn.jsdelivr.net/npm/overhide-widgets@1.0.20/dist/overhide-widgets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.21/dist/pay2my.app.js"></script>
 
     <script>
       // Uncomment on of the back-end connection strings below.
@@ -38,7 +38,7 @@
     <div id="demo-front-end">
 
       <style>
-        overhide-appsell {
+        pay2myapp-appsell {
           width: 60%;
         }
         .neopolitan-button {
@@ -106,30 +106,30 @@
       <img class="visa" id="visa" src="./assets/visa.png">
 
       <!-- look at `window.onload` script above to see how we set the token from back-end -->
-      <overhide-hub id="demo-hub" isTest></overhide-hub>      
+      <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
 
       <div class="w3-bar w3-border w3-light-grey">
         <div class="w3-right">
-          <overhide-status hubId="demo-hub"></overhide-status>
+          <pay2myapp-status hubId="demo-hub"></pay2myapp-status>
         </div>          
       </div>
 
       <!-- info note-->
       <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
         <img class="w3-left info" src="./assets/info.png">
-        <p>The demo showing off all widgets but with all <em>overhide-appsell</em> buttons having a customized ice cream related look-and-feel &mdash; ice cream icons and color scheme through CSS and slots.</p>
+        <p>The demo showing off all widgets but with all <em>pay2myapp-appsell</em> buttons having a customized ice cream related look-and-feel &mdash; ice cream icons and color scheme through CSS and slots.</p>
         <p>Using features causes back-end endpoint invocations with authorization checks.</p>
-        <p>In the top-right we see the <em>overhide-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
-        <p>Just below we see an explicit "login" button (<em>overhide-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.  This button has some custom neopolitan themed color scheme CSS.</p>
-        <p>At the bottom we see three feature buttons (<em>overhide-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.  These buttons don't look like buttons but ice cream deserts &mdash; with the help of slot customizations.  They become coloured when enabled.</p>
-        <p><a href="https://github.com/overhide/overhide-widgets#demos">...back to demos</a></p>
+        <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
+        <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.  This button has some custom neopolitan themed color scheme CSS.</p>
+        <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.  These buttons don't look like buttons but ice cream deserts &mdash; with the help of slot customizations.  They become coloured when enabled.</p>
+        <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>
       </div></div>
 
-      <overhide-login hubId="demo-hub"
+      <pay2myapp-login hubId="demo-hub"
                       overhideSocialMicrosoftEnabled
-                      overhideOhledgerWeb3Enabled
-                      overhideEthereumWeb3Enabled
-                      overhideLedgerEnabled>
+                      overhideWeb3Enabled
+                      ethereumWeb3Enabled
+                      overhideSecretTokenEnabled>
         <div slot="header" class="header-envelope">
           <img src="./assets/logo.png" class="header-logo">
           <div class="headers">
@@ -137,19 +137,19 @@
             <div>(logo + no <em>Google</em> or <em>bitcoin</em>)</div>
           </div>
         </div>
-      </overhide-login>
+      </pay2myapp-login>
 
       <div class="w3-row w3-padding-64"><div class="w3-col s4">&nbsp</div><div class="w3-col s4 w3-center">
-        <overhide-appsell 
+        <pay2myapp-appsell 
           hubId="demo-hub" 
           loginMessage="Login">
             <div slot="unauthorized-button" class="neopolitan-button"></div>
-        </overhide-appsell>
+        </pay2myapp-appsell>
       </div></div>
 
       <div class="w3-row" style="display: flex; align-content: stretch;">
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             hubId="demo-hub" 
             sku="free-feature"
             priceDollars="0"
@@ -163,10 +163,10 @@
             <div slot="authorized-button" class="clear-button"></div>
             <div slot="unauthorized-button" class="clear-button"></div>
 
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             id="foo"
             hubId="demo-hub" 
             sku="paid-feature"
@@ -181,10 +181,10 @@
             <div slot="authorized-button" class="clear-button"></div>
             <div slot="unauthorized-button" class="clear-button"></div>
 
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             hubId="demo-hub" 
             sku="subscribed-feature"
             priceDollars="3"
@@ -199,7 +199,7 @@
             <div slot="authorized-button" class="clear-button"></div>
             <div slot="unauthorized-button" class="clear-button"></div>
 
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
       </div>
 

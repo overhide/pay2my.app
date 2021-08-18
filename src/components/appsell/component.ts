@@ -13,11 +13,11 @@ import {
 
 import {
   Imparter,
-  IOverhideAppsell,
-  IOverhideSkuClickedEvent,
-  IOverhideSkuTopupOutstandingEvent,
-  IOverhideLogin,
-  IOverhideHub,
+  IPay2MyAppAppsell,
+  IPay2MyAppSkuClickedEvent,
+  IPay2MyAppSkuTopupOutstandingEvent,
+  IPay2MyAppLogin,
+  IPay2MyAppHub,
   NetworkType,
   PaymentsInfo,
   Social
@@ -27,35 +27,35 @@ import {Mutex} from 'async-mutex';
 import w3Css from "../../static/w3.css";
 import loadingCss from "../../static/loading.css";
 
-const template = html<OverhideAppsell>`
+const template = html<Pay2MyAppSell>`
   <template ${ref('rootElement')}>
     <div class="panel ${e => e.orientation}">
-      ${when(e => e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="authorized-header" class="${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
         </slot>
       `)}
-      ${when(e => !e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => !e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="unauthorized-header" class="${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
         </slot>
       `)}
-      ${when(e => e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="authorized-button" ${slotted('authorizedButton')} class="${e => e.loading ? 'loading' : ''} ${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
           <div class="button w3-button w3-dark-grey">
             <div class="button-content ${e => e.loading ? 'dim' : ''}">${e => e.getAuthButtonContent()}</div>
           </div>
         </slot>
       `)}
-      ${when(e => !e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => !e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="unauthorized-button" ${slotted('unauthorizedButton')} class="${e => e.loading ? 'loading' : ''} ${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
           <div class="button w3-button w3-dark-grey">
             <div class="button-content ${e => e.loading ? 'dim' : ''}">${e => e.getUnauthButtonContent()}</div>
           </div>
         </slot>
       `)}
-      ${when(e => e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="authorized-footer" class="${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}"></slot>
       `)}
-      ${when(e => !e.isAuthorized, html<OverhideAppsell>`
+      ${when(e => !e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="unauthorized-footer" class="${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}"></slot>
       `)}
     </div>
@@ -129,11 +129,11 @@ export enum Orientation {
 }
 
 @customElement({
-  name: "overhide-appsell",
+  name: "pay2myapp-appsell",
   template,
   styles,
 })
-export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
+export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
   @attr 
   hubId?: string;
 
@@ -205,10 +205,10 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
   loading: boolean = false;
 
   rootElement?: HTMLElement;
-  hub?: IOverhideHub | null; 
+  hub?: IPay2MyAppHub | null; 
   currentImparter?: Imparter | null;
   signature?: string | null;
-  loginElement?: IOverhideLogin | null;
+  loginElement?: IPay2MyAppLogin | null;
   isLogedIn: boolean = false
   lastInfo?: PaymentsInfo | null;
   isInited: boolean = false;
@@ -274,7 +274,7 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
       return;
     }
 
-    const event: IOverhideSkuClickedEvent = <IOverhideSkuClickedEvent> {
+    const event: IPay2MyAppSkuClickedEvent = <IPay2MyAppSkuClickedEvent> {
       sku: this.sku,
       topup: this.topupDollars,
       currency: this.lastInfo.currentCurrency,
@@ -285,13 +285,13 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
       to: this.getToAddress(),
       asOf: this.asOf
     };
-    this.$emit(`overhide-appsell-sku-clicked`, event);
+    this.$emit(`pay2myapp-appsell-sku-clicked`, event);
   }
 
   hubIdChanged(oldValue: string, newValue: string) {
     const el = document.querySelector(`#${this.hubId}`);
     if (!el) {
-      console.log(`WARNING: overhide-appsell configured for overhide-hub with ID ${newValue} but no element in DOM with this ID.`);
+      console.log(`WARNING: pay2myapp-appsell configured for pay2myapp-hub with ID ${newValue} but no element in DOM with this ID.`);
       return;
     }
     this.setHub(el);
@@ -420,25 +420,25 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
 
   validate() {
     if (!this.hub) {
-      console.warn(`hub not setup on overhide-appsell component with sku ${this.sku}`);
+      console.warn(`hub not setup on pay2myapp-appsell component with sku ${this.sku}`);
       return;
     }
     if (this.loginMessage) {
       return; // no other validations.
     }
     if (!this.sku) {
-      console.error(`overhide-appsell component not provided a sku`);
+      console.error(`pay2myapp-appsell component not provided a sku`);
       return;
     }
     if (!this.priceDollars) {
-      console.error(`overhide-appsell component with sku ${this.sku} not provided a priceDollars`);
+      console.error(`pay2myapp-appsell component with sku ${this.sku} not provided a priceDollars`);
       return;
     }
     if (!!this.withinMinutes) {
       try {
         parseInt(this.withinMinutes);
       } catch (e) {
-        console.error(`overhide-appsell component with sku ${this.sku} has non-number withinMinutes: ${this.withinMinutes}`);
+        console.error(`pay2myapp-appsell component with sku ${this.sku} has non-number withinMinutes: ${this.withinMinutes}`);
         return;          
       }
     }
@@ -504,7 +504,7 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
     }
 
     if (!address) {
-      const message = `allowed user to log in with $${this.currentImparter} but overhide-appsell component with sku ${this.sku} doesn't have an address setup for that ledger`;
+      const message = `allowed user to log in with $${this.currentImparter} but pay2myapp-appsell component with sku ${this.sku} doesn't have an address setup for that ledger`;
       console.error(message);
       throw message;
     }
@@ -525,11 +525,11 @@ export class OverhideAppsell extends FASTElement implements IOverhideAppsell {
       this.asOf = result.asOf;  
     }
 
-    const event: IOverhideSkuTopupOutstandingEvent = <IOverhideSkuTopupOutstandingEvent> {
+    const event: IPay2MyAppSkuTopupOutstandingEvent = <IPay2MyAppSkuTopupOutstandingEvent> {
       sku: this.sku,
       topup: this.topupDollars
     }
-    this.$emit(`overhide-appsell-topup-outstanding`, event);
+    this.$emit(`pay2myapp-appsell-topup-outstanding`, event);
     return this.topupDollars == 0;
   }
 

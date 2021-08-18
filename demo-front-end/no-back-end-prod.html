@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <script src="https://cdn.jsdelivr.net/npm/overhide-widgets@1.0.20/dist/overhide-widgets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.21/dist/pay2my.app.js"></script>
 
     <script>
       // Uncomment on of the back-end connection strings below.
@@ -21,7 +21,7 @@
     <div id="demo-front-end">
 
       <style>
-        overhide-appsell {
+        pay2myapp-appsell {
           width: 60%;
         }
         .visa {
@@ -36,33 +36,33 @@
       </style>
       <img class="visa" id="visa" src="./assets/visa.png">
 
-      <overhide-hub id="demo-hub" apiKey="0x706ad35096598e8363d669a435880bed581805078649ea1a84591aa3162843e4"></overhide-hub>      
+      <pay2myapp-hub id="demo-hub" apiKey="0x706ad35096598e8363d669a435880bed581805078649ea1a84591aa3162843e4"></pay2myapp-hub>      
 
       <div class="w3-bar w3-border w3-light-grey">
         <div class="w3-right">
-          <overhide-status hubId="demo-hub"></overhide-status>
+          <pay2myapp-status hubId="demo-hub"></pay2myapp-status>
         </div>          
       </div>
 
-      <overhide-login hubId="demo-hub"
+      <pay2myapp-login hubId="demo-hub"
                       overhideSocialMicrosoftEnabled
                       overhideSocialGoogleEnabled
-                      overhideOhledgerWeb3Enabled
-                      overhideEthereumWeb3Enabled
-                      overhideBitcoinEnabled
-                      overhideLedgerEnabled>
-      </overhide-login>
+                      overhideWeb3Enabled
+                      ethereumWeb3Enabled
+                      bitcoinEnabled
+                      overhideSecretTokenEnabled>
+      </pay2myapp-login>
 
       <div class="w3-row w3-padding-64"><div class="w3-col s4">&nbsp</div><div class="w3-col s4 w3-center">
-        <overhide-appsell 
+        <pay2myapp-appsell 
           hubId="demo-hub" 
           loginMessage="Login">
-        </overhide-appsell>
+        </pay2myapp-appsell>
       </div></div>
 
       <div class="w3-row" style="display: flex; align-content: stretch;">
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             hubId="demo-hub" 
             sku="free-feature"
             priceDollars="0"
@@ -71,10 +71,10 @@
             bitcoinAddress="bc1q43lsc38x6ez3nd6j6sw2cys8gtjm9zemms84u2"
             ethereumAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989"
             overhideAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             id="foo"
             hubId="demo-hub" 
             sku="paid-feature"
@@ -84,10 +84,10 @@
             bitcoinAddress="bc1q43lsc38x6ez3nd6j6sw2cys8gtjm9zemms84u2"
             ethereumAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989"
             overhideAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             hubId="demo-hub" 
             sku="subscribed-feature"
             priceDollars=".75"
@@ -97,7 +97,7 @@
             ethereumAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989"
             overhideAddress="0x5F71Eb078d489FFc46B9519e2BD7085561cFb989"
             withinMinutes="30">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
       </div>
 

@@ -10,7 +10,7 @@ import {
 
 import {
   Imparter,
-  IOverhideHub,
+  IPay2MyAppHub,
   PaymentsInfo,
   Social
 } from '../hub/definitions';
@@ -67,7 +67,7 @@ const styles = css`
 
 
 @customElement({
-  name: "overhide-ohsocial-google",
+  name: "pay2myapp-ohsocial-google",
   template,
   styles,
 })
@@ -87,14 +87,14 @@ export class OverhideOhSocialGoogle extends FASTElement {
   @observable
   message?:any;
 
-  hub?: IOverhideHub; 
+  hub?: IPay2MyAppHub; 
 
   public constructor() {
     super();
     this.setNormalMessage();
   }
 
-  public setHub(hub: IOverhideHub) {
+  public setHub(hub: IPay2MyAppHub) {
     this.hub = hub;
     const notifier = Observable.getNotifier(hub);
     const that = this;

@@ -1,9 +1,9 @@
 {
   "name": "pay2my.app",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "",
-  "main": "dist/overhide-widgets.js",
-  "types": "dist/overhide-widgets.d.ts",
+  "main": "dist/pay2my.app.js",
+  "types": "dist/pay2my.app.d.ts",
   "files": [
     "/dist"
   ],

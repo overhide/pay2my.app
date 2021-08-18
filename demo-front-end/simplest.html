@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
-    <script src="https://cdn.jsdelivr.net/npm/overhide-widgets@1.0.20/dist/overhide-widgets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.21/dist/pay2my.app.js"></script>
 
     <script>
-      window.addEventListener('overhide-appsell-sku-clicked',(e) => { 
+      window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
         alert(`It worked!\n\nYou're authenticated and authorized...\n\nFeature button clicked:\n\n${JSON.stringify(e.detail, null, 2)}`);
       });
     </script>
@@ -19,22 +19,22 @@
       <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
         <img class="w3-left info" src="./assets/info.png">
         <p>The simplest demo showing a single widget and not using a back-end.  Using the single feature does not cause back-end endpoint invocations.  All business flows are solely in-browser, with all that entails.</p>
-        <p>Just below we see a single feature button (<em>overhide-appsell</em> widget).  Clicking it always causes a login and &mdash; if authorized &mdash; subsequent feature flow.  All solely in the front-end &mdash; at the single payment tier.</p>
-        <p><a href="https://github.com/overhide/overhide-widgets#demos">...back to demos</a></p>        
+        <p>Just below we see a single feature button (<em>pay2myapp-appsell</em> widget).  Clicking it always causes a login and &mdash; if authorized &mdash; subsequent feature flow.  All solely in the front-end &mdash; at the single payment tier.</p>
+        <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>        
       </div></div><br/><br/>
           
-      <overhide-hub id="hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></overhide-hub>      
+      <pay2myapp-hub id="hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></pay2myapp-hub>      
 
-      <overhide-login hubId="hub"
+      <pay2myapp-login hubId="hub"
                       overhideSocialMicrosoftEnabled
                       overhideSocialGoogleEnabled
-                      overhideOhledgerWeb3Enabled
-                      overhideEthereumWeb3Enabled
-                      overhideBitcoinEnabled
-                      overhideLedgerEnabled>
-      </overhide-login>
+                      overhideWeb3Enabled
+                      ethereumWeb3Enabled
+                      bitcoinEnabled
+                      overhideSecretTokenEnabled>
+      </pay2myapp-login>
 
-      <overhide-appsell
+      <pay2myapp-appsell
         style="width: 20em; margin: auto; padding: 0px;"
         hubId="hub" 
         sku="2-dollar-feature"
@@ -45,7 +45,7 @@
         ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
         overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
         alwaysLogin>
-      </overhide-appsell>
+      </pay2myapp-appsell>
   
     <!--------------------------------------------------------------------------------------------------------------------------------->
     <!-- This bit below is just to show testnet VISA entry help information:  how to enter mock VISA details to create a transaction -->
@@ -64,7 +64,7 @@
     <script>
       // This event fires whenever we're asked to topup funds.
       // We're using it here to show the VISA instructional helper image.
-      window.addEventListener('overhide-hub-pending-transaction',(e) => { 
+      window.addEventListener('pay2myapp-hub-pending-transaction',(e) => { 
         console.log(`pending-transaction :: ${JSON.stringify(e.detail, null, 2)}`);
         if (e.detail.currency == 'dollars') {
           document.querySelector("#visa").style.opacity = e.detail.isPending ? "1" : "0";

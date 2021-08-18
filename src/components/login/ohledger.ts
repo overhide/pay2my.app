@@ -10,7 +10,7 @@ import {
 
 import {
   Imparter,
-  IOverhideHub,
+  IPay2MyAppHub,
   PaymentsInfo
 } from '../hub/definitions';
 
@@ -85,7 +85,7 @@ const styles = css`
 
 
 @customElement({
-  name: "overhide-ohledger",
+  name: "pay2myapp-ohledger",
   template,
   styles,
 })
@@ -111,14 +111,14 @@ export class OverhideOhledger extends FASTElement {
   @observable
   message?:any;
 
-  hub?: IOverhideHub; 
+  hub?: IPay2MyAppHub; 
 
   public constructor() {
     super();
     this.setNormalMessage();
   }
 
-  public setHub(hub: IOverhideHub) {
+  public setHub(hub: IPay2MyAppHub) {
     this.hub = hub;
     const notifier = Observable.getNotifier(hub);
     const that = this;

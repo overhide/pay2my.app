@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
-    <script src="https://cdn.jsdelivr.net/npm/overhide-widgets@1.0.20/dist/overhide-widgets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.21/dist/pay2my.app.js"></script>
 
     <script>
       // Uncomment on of the back-end connection strings below.
@@ -23,13 +23,13 @@
       fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
         .then(async (response) => {
           if (response.ok) {            
-            const hub = document.createElement('overhide-hub'); 
+            const hub = document.createElement('pay2myapp-hub'); 
             hub.setAttribute('token', await response.text());
             hub.setAttribute('isTest', true);
             hub.init();
-            document.querySelector('overhide-login').setHub(hub);
-            document.querySelector('overhide-status').setHub(hub);
-            document.querySelectorAll('overhide-appsell').forEach(e => e.setHub(hub));
+            document.querySelector('pay2myapp-login').setHub(hub);
+            document.querySelector('pay2myapp-status').setHub(hub);
+            document.querySelectorAll('pay2myapp-appsell').forEach(e => e.setHub(hub));
           } else {
             console.error(`error talking to back-end -- ${response.status} &mdash; ${response.statusText}`);
           }
@@ -43,7 +43,7 @@
     <div id="demo-front-end">
 
       <style>
-        overhide-appsell {
+        pay2myapp-appsell {
           width: 60%;
         }
         .visa {
@@ -60,38 +60,38 @@
 
       <div class="w3-bar w3-border w3-light-grey">
         <div class="w3-right">
-          <overhide-status></overhide-status>
+          <pay2myapp-status></pay2myapp-status>
         </div>          
       </div>
 
       <!-- info note-->
       <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
         <img class="w3-left info" src="./assets/info.png">
-        <p>Same as the basic demo except the <em>overhide-hub</em> component is not wired up throught the DOM, but through JavaScript.  This approach is useful when wireing up the widgets in a framework &mdash; where everything happens through JavaScript.</p>
+        <p>Same as the basic demo except the <em>pay2myapp-hub</em> component is not wired up throught the DOM, but through JavaScript.  This approach is useful when wireing up the widgets in a framework &mdash; where everything happens through JavaScript.</p>
         <p>Shows off all widgets.  Using features causes back-end endpoint invocations with authorization checks.</p>
-        <p>In the top-right we see the <em>overhide-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
-        <p>Just below we see an explicit "login" button (<em>overhide-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.</p>
-        <p>At the bottom we see three feature buttons (<em>overhide-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.</p>
-        <p><a href="https://github.com/overhide/overhide-widgets#demos">...back to demos</a></p>        
+        <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
+        <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.</p>
+        <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.</p>
+        <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>        
       </div></div>
 
-      <overhide-login overhideSocialMicrosoftEnabled
+      <pay2myapp-login overhideSocialMicrosoftEnabled
                       overhideSocialGoogleEnabled
-                      overhideOhledgerWeb3Enabled
-                      overhideEthereumWeb3Enabled
-                      overhideBitcoinEnabled
-                      overhideLedgerEnabled>
-      </overhide-login>
+                      overhideWeb3Enabled
+                      ethereumWeb3Enabled
+                      bitcoinEnabled
+                      overhideSecretTokenEnabled>
+      </pay2myapp-login>
 
       <div class="w3-row w3-padding-64"><div class="w3-col s4">&nbsp</div><div class="w3-col s4 w3-center">
-        <overhide-appsell 
+        <pay2myapp-appsell 
           loginMessage="Login">
-        </overhide-appsell>
+        </pay2myapp-appsell>
       </div></div>
 
       <div class="w3-row" style="display: flex; align-content: stretch;">
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             sku="free-feature"
             priceDollars="0"
             authorizedMessage="Use Feature"
@@ -99,10 +99,10 @@
             bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             id="foo"
             sku="paid-feature"
             priceDollars="2"
@@ -111,10 +111,10 @@
             bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
-          <overhide-appsell 
+          <pay2myapp-appsell 
             sku="subscribed-feature"
             priceDollars="3"
             authorizedMessage="Use Feature"
@@ -123,7 +123,7 @@
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             withinMinutes="30">
-          </overhide-appsell>
+          </pay2myapp-appsell>
         </div>
       </div>
 

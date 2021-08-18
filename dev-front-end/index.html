@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/dist/overhide-widgets.js"></script>
+    <script src="/dist/pay2my.app.js"></script>
 
     <script>
       BACKEND_CONNECTION_STRING = `http://localhost:7071/api`;
@@ -14,11 +14,11 @@
     <script src="/demo-front-end/index.js"></script>
   </head>
   <body>
-    <div id="overhide-widgets-demo"></div>
+    <div id="pay2my.app-demo"></div>
   </body>
   <script>
     $(document).ready(function() {
-      $('#overhide-widgets-demo').load("/demo-front-end/basic.html div#demo-front-end");
+      $('#pay2my.app-demo').load("/demo-front-end/basic.html div#demo-front-end");
 
       fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
         .then(async (response) => {

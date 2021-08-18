@@ -72,17 +72,17 @@ export interface PaymentsInfo {
   currentSocial: Social,                    // chosen social provider
   ordinal: number,                          // ordinal of refresh
 
-  loginElement?: IOverhideLogin | null,                     // the login element
-  pendingTransaction: IOverhidePendingTransactionEvent,     // the currently pending transaction, if any (see flag inside)
+  loginElement?: IPay2MyAppLogin | null,                     // the login element
+  pendingTransaction: IPay2MyAppPendingTransactionEvent,     // the currently pending transaction, if any (see flag inside)
 
   skuAuthorizations: {[sku: string]: boolean}               // state of sku authorizations
-  skuComponents: {[sku: string]: IOverhideAppsell}          // component per sku
+  skuComponents: {[sku: string]: IPay2MyAppAppsell}          // component per sku
 }
 
 /**
- * Event fired by overhide-appsell as a custom event: "overhide-appsell-sku-clicked"
+ * Event fired by pay2myapp-appsell as a custom event: "pay2myapp-appsell-sku-clicked"
  * 
- * The event fired by an overhide-appsell component when an appsell 
+ * The event fired by an pay2myapp-appsell component when an appsell 
  * SKU deemed authorized by overhide is clicked by the user.
  * 
  * Usually safest to route state-changes in response to this
@@ -95,7 +95,7 @@ export interface PaymentsInfo {
  * services already checked these transactions as part of this front-end work.  The `asOf` timestamp
  * ensures we re-load these resutls from cache and do not get rate-limited in the back-end.
  */
- export interface IOverhideSkuClickedEvent {
+ export interface IPay2MyAppSkuClickedEvent {
   sku: string,
   message: string,
   signature: string,
@@ -107,57 +107,57 @@ export interface PaymentsInfo {
 }
 
 /**
- * Event fired by overhide-appsell as a custom event: "overhide-appsell-topup-outstanding"
+ * Event fired by pay2myapp-appsell as a custom event: "pay2myapp-appsell-topup-outstanding"
  * 
- * An event fired by an overhide-appsell component when
+ * An event fired by an pay2myapp-appsell component when
  * there was an authorization attempt but insufficient funds
  * to authorize. 
  * 
  * This even contains the outstanind topup funds required.
  */
-export interface IOverhideSkuTopupOutstandingEvent {
+export interface IPay2MyAppSkuTopupOutstandingEvent {
   sku: string,
   topup: number
 }
 
 /**
- * Event fired by overhide-hub as a custom event: "overhide-hub-sku-authorization-changed"
+ * Event fired by pay2myapp-hub as a custom event: "pay2myapp-hub-sku-authorization-changed"
  * 
  * Indicated a change in authorization status.
  */
-export interface IOverhideSkuAuthorizationChangedEvent {
+export interface IPay2MyAppSkuAuthorizationChangedEvent {
   isAuthorized: boolean;
 }
 
 /**
- * Event fired by overhide-hub as a custom event: "overhide-hub-pending-transaction"
+ * Event fired by pay2myapp-hub as a custom event: "pay2myapp-hub-pending-transaction"
  * 
  * Fired when we have a pending transaction.  We're waiting for a transaction to finish.  
  * 
- * This should be useful for spinners on custom overhide-appsell components.
+ * This should be useful for spinners on custom pay2myapp-appsell components.
  * 
- * All overhide-appsell components should spin when a transaction is pending.
+ * All pay2myapp-appsell components should spin when a transaction is pending.
  */
-export interface IOverhidePendingTransactionEvent {
+export interface IPay2MyAppPendingTransactionEvent {
   isPending: boolean;
   currency: string | null;
 }
 
-// Represents any of the overhide-appsell components.
-export interface IOverhideAppsell {
+// Represents any of the pay2myapp-appsell components.
+export interface IPay2MyAppAppsell {
   // Set the hub against the login component.
   // An alternative to the `hubId` attribute on the component
-  // @param {IOverhideHub} hub -- the hub to set
-  setHub(hub: IOverhideHub): void;
+  // @param {IPay2MyAppHub} hub -- the hub to set
+  setHub(hub: IPay2MyAppHub): void;
   
   // Programatically 'click' the appsell widget.
   //
   // Will result in the login modal is not logged in.
   //
   // If logged in and insufficient funds to authorize, will result in the 
-  // IOverhideSkuTopupOutstandingEvent.
+  // IPay2MyAppSkuTopupOutstandingEvent.
   //
-  // If authorized, will result in the IOverhideSkuClickedEvent.
+  // If authorized, will result in the IPay2MyAppSkuClickedEvent.
   click(): void;
 }
 
@@ -166,34 +166,34 @@ export interface IOverhideAppsell {
 //
 // Reference available from the PaymentsInfo::loginElement.
 //
-// Emits "overhide-login-open" custom event when modal open.
+// Emits "pay2myapp-login-open" custom event when modal open.
 //
-// Emits "overhide-login-close" custom event when modal closed.
-export interface IOverhideLogin {
+// Emits "pay2myapp-login-close" custom event when modal closed.
+export interface IPay2MyAppLogin {
   // Set the hub against the login component.
   // An alternative to the `hubId` attribute on the component
-  // @param {IOverhideHub} hub -- the hub to set
-  setHub(hub: IOverhideHub): void;
+  // @param {IPay2MyAppHub} hub -- the hub to set
+  setHub(hub: IPay2MyAppHub): void;
 
   // Close the login modal
   //
-  // Emits "overhide-login-close" custom event.
+  // Emits "pay2myapp-login-close" custom event.
   close(): void;
 
   // Open the login modal
   //
-  // Emits "overhide-login-open" custom event.
+  // Emits "pay2myapp-login-open" custom event.
   //
   // @returns {Promise} to await until closed.
   open(): Promise<void>;
 }
 
-// Represents the overhide-status component.
-export interface IOverhideStatus {
+// Represents the pay2myapp-status component.
+export interface IPay2MyAppStatus {
   // Set the hub against the login component.
   // An alternative to the `hubId` attribute on the component
-  // @param {IOverhideHub} hub -- the hub to set
-  setHub(hub: IOverhideHub): void;
+  // @param {IPay2MyAppHub} hub -- the hub to set
+  setHub(hub: IPay2MyAppHub): void;
 }
 
 // Represents the one non-visible hub component that controls all the activity.  
@@ -210,7 +210,7 @@ export interface IOverhideStatus {
 // will retrieve the token, but that means you 'apiKey' sits in browser-code.
 //
 // For 'apiKey' and 'token' see https://token.overhide.io/swagger.html.
-export interface IOverhideHub {
+export interface IPay2MyAppHub {
   // Initialize this hub explitily when not connecting to DOM.
   //
   // Call this after the `token` or `apiKey` attributes are set, `isTest` if on testnet.
@@ -292,7 +292,7 @@ export interface IOverhideHub {
 
   // Sets the login element
   // @param {HTMLElement} element -- the login element
-  setLoginElement: (element?: IOverhideLogin | null) => void;
+  setLoginElement: (element?: IPay2MyAppLogin | null) => void;
 
   // Refreshes topup cache to re-fetch new values upon transactions.
     // @param {Imparter} imparter -- which imparter to refresh for
@@ -300,7 +300,7 @@ export interface IOverhideHub {
 
   // Sets the SKU as authorized
   //
-  // Fires "overhide-hub-sku-authorization-changed" with IOverhideSkuAuthorizationChangedEvent payload if the authorization 
+  // Fires "pay2myapp-hub-sku-authorization-changed" with IPay2MyAppSkuAuthorizationChangedEvent payload if the authorization 
   // state has changed for this sku.
   //
   // @param {string} sku -- to set
@@ -315,12 +315,12 @@ export interface IOverhideHub {
   // Sets the component for a SKU
   //
   // @param {string} sku -- to set
-  // @param {IOverhideAppsell} component -- to set
-  setComponentForSku: (sku: string, component: IOverhideAppsell) => void;
+  // @param {IPay2MyAppAppsell} component -- to set
+  setComponentForSku: (sku: string, component: IPay2MyAppAppsell) => void;
 
   // @param {string} sku -- to check
-  // @returns {IOverhideAppsell} the component, if any
-  getComponentForSku: (sku: string) => IOverhideAppsell | null;
+  // @returns {IPay2MyAppAppsell} the component, if any
+  getComponentForSku: (sku: string) => IPay2MyAppAppsell | null;
 
   // Logout of the current impater, if possible.
   logout: () => void;

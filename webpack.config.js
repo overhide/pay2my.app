@@ -6,10 +6,10 @@ module.exports = function(env, { mode }) {
     mode: production ? 'production' : 'development',
     devtool: production ? '' : 'inline-source-map',
     entry: {
-      app: ['./src/overhide-widgets.ts']
+      app: ['./src/pay2my.app.ts']
     },
     output: {
-      filename: 'overhide-widgets.js'
+      filename: 'pay2my.app.js'
     },
     resolve: {
       extensions: ['.ts', '.js'],

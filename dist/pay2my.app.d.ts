@@ -6,11 +6,11 @@ export * from "./components/appsell/component";
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'overhide-hub': any;
-            'overhide-appsell': any;
-            'overhide-status': any;
-            'overhide-login': any;
+            'pay2myapp--hub': any;
+            'pay2myapp--appsell': any;
+            'pay2myapp--status': any;
+            'pay2myapp--login': any;
         }
     }
 }
-//# sourceMappingURL=overhide-widgets.d.ts.map
+//# sourceMappingURL=pay2my.app.d.ts.map
