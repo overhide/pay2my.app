@@ -14,11 +14,11 @@
     <script src="/demo-front-end/index.js"></script>
   </head>
   <body>
-    <div id="pay2my.app-demo"></div>
+    <div id="pay2myapp-demo"></div>
   </body>
   <script>
     $(document).ready(function() {
-      $('#pay2my.app-demo').load("/demo-front-end/basic.html div#demo-front-end");
+      $('#pay2myapp-demo').load("/demo-front-end/basic.html div#demo-front-end");
 
       fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
         .then(async (response) => {

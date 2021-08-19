@@ -26,9 +26,9 @@
             const hub = document.querySelector('#demo-hub');
             hub.setAttribute('token', await response.text());
           } else {
-            console.error(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+            console.error(`error talking to back-end -- ${response.status} -- ${response.statusText}`);
           }
-        }).catch(e => console.error(`error talking to back-end &mdash; ${e}`));
+        }).catch(e => console.error(`error talking to back-end -- ${e}`));
       };
     </script>
 

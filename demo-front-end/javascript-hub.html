@@ -31,7 +31,7 @@
             document.querySelector('pay2myapp-status').setHub(hub);
             document.querySelectorAll('pay2myapp-appsell').forEach(e => e.setHub(hub));
           } else {
-            console.error(`error talking to back-end -- ${response.status} &mdash; ${response.statusText}`);
+            console.error(`error talking to back-end -- ${response.status} -- ${response.statusText}`);
           }
         }).catch(e => console.error(`error talking to back-end -- ${e}`));
       };
