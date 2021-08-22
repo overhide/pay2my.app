@@ -6,10 +6,10 @@ export * from "./components/appsell/component";
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'pay2myapp--hub': any;
-            'pay2myapp--appsell': any;
-            'pay2myapp--status': any;
-            'pay2myapp--login': any;
+            'pay2myapp-hub': any;
+            'pay2myapp-appsell': any;
+            'pay2myapp-status': any;
+            'pay2myapp-login': any;
         }
     }
 }
