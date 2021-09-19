@@ -126,6 +126,7 @@ export interface IPay2MyAppSkuTopupOutstandingEvent {
  * Indicated a change in authorization status.
  */
 export interface IPay2MyAppSkuAuthorizationChangedEvent {
+  sku: string,
   isAuthorized: boolean;
 }
 

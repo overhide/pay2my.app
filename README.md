@@ -107,7 +107,7 @@ Don't just read these steps, follow along copying/looking-at the [demos](#demos)
 
 The first three steps are gathering metadata necessary to setup how you, the developer, get paid.
 
-The reminder of the steps are actual code changes in your Web application.
+The remainder of the steps are actual code changes in your Web application.
 
 
 
@@ -151,7 +151,7 @@ The reminder of the steps are actual code changes in your Web application.
 
    1. optional, as the feature buttons &mdash; when clicked &mdash;  will login your users if they're not yet logged in
    2. configure the *id* of the [pay2myapp-hub](#pay2myapp-hub) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
-   3. do not provide any [pay2myapp-appsell](#pay2myapp-appsell) attrubutes except for the *hubId* (above) and the *loginMessage*
+   3. do not provide any [pay2myapp-appsell](#pay2myapp-appsell) attributesexcept for the *hubId* (above) and the *loginMessage*
 
 8. add [pay2myapp-appsell](#pay2myapp-appsell) components to your DOM for each feature
 
@@ -258,15 +258,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.0.23/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.0/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.23/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.1.0/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.0.23*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.0.23/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.1.0*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.0/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -277,7 +277,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.0.23",
+  "pay2my.app": "1.1.0",
   ..
 }
 ```
@@ -410,6 +410,7 @@ N/A &mdash; this is an invisible element and not customizable via slots.
 
 ```
 export interface IPay2MyAppSkuAuthorizationChangedEvent {
+  sku: string,
   isAuthorized: boolean;
 }
 ```

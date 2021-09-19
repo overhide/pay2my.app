@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
-    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.0.23/dist/pay2my.app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.1.0/dist/pay2my.app.js"></script>
 
     <script>
       // Uncomment on of the back-end connection strings below.
@@ -75,6 +75,9 @@
         .button-icon.unauth {
           filter: grayscale(100%);
         }        
+        .button-icon.dim {
+          opacity: 0.7;
+        }        
         .visa {
           position: fixed;
           top: 0px;
@@ -121,7 +124,7 @@
         <p>Using features causes back-end endpoint invocations with authorization checks.</p>
         <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
         <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.  This button has some custom neopolitan themed color scheme CSS.</p>
-        <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  These cause initial login and feature flows &mdash; through the backe-end &mdash; at different payment tiers.  These buttons don't look like buttons but ice cream deserts &mdash; with the help of slot customizations.  They become coloured when enabled.</p>
+        <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  The "free" one on the left inhibits login (doesn't allow login).  The "paid" two on the right cause initial login.  All three, once authorized, cause feature flows &mdash; through the backe-end &mdash; at different payment tiers.  These buttons don't look like buttons but ice cream deserts &mdash; with the help of slot customizations.  They become coloured when enabled.</p>
         <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>
       </div></div>
 
@@ -155,10 +158,11 @@
             priceDollars="0"
             authorizedMessage="Free Popsicle"
             unauthorizedTemplate="Login for Free Popsicle"
+            inhibitLogin
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
 
-            <img src="assets/popsicle.png" slot="unauthorized-header" class="button-icon unauth">
+            <img src="assets/popsicle.png" slot="unauthorized-header" class="button-icon unauth dim">
             <img src="assets/popsicle.png" slot="authorized-header" class="button-icon">
             <div slot="authorized-button" class="clear-button"></div>
             <div slot="unauthorized-button" class="clear-button"></div>

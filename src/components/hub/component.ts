@@ -426,7 +426,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       }      
     }
     this.paymentsInfo.skuAuthorizations[sku] = authorized;
-    const event: IPay2MyAppSkuAuthorizationChangedEvent = <IPay2MyAppSkuAuthorizationChangedEvent> {isAuthorized: authorized};
+    const event: IPay2MyAppSkuAuthorizationChangedEvent = <IPay2MyAppSkuAuthorizationChangedEvent> {sku: sku, isAuthorized: authorized};
     this.$emit("pay2myapp-hub-sku-authorization-changed", event);
   }
 

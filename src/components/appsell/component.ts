@@ -40,14 +40,14 @@ const template = html<Pay2MyAppSell>`
       `)}
       ${when(e => e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="authorized-button" ${slotted('authorizedButton')} class="${e => e.loading ? 'loading' : ''} ${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
-          <div class="button w3-button w3-dark-grey">
+          <div class="button w3-button w3-dark-grey ${e => e.isClickable() ? '' : 'disabled'}">
             <div class="button-content ${e => e.loading ? 'dim' : ''}">${e => e.getAuthButtonContent()}</div>
           </div>
         </slot>
       `)}
       ${when(e => !e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="unauthorized-button" ${slotted('unauthorizedButton')} class="${e => e.loading ? 'loading' : ''} ${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
-          <div class="button w3-button w3-dark-grey">
+          <div class="button w3-button w3-dark-grey ${e => e.isClickable() ? '' : 'disabled'}">
             <div class="button-content ${e => e.loading ? 'dim' : ''}">${e => e.getUnauthButtonContent()}</div>
           </div>
         </slot>
@@ -377,6 +377,9 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
         } finally {
           this.loading = false;
         }
+      }
+      if (this.hub && this.sku) {
+        this.hub?.setSkuAuthorized(this.sku, this.isAuthorized);
       }
     });
   }

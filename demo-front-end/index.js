@@ -29,6 +29,10 @@ function addError(text) {
   document.querySelector('#messages').innerHTML = newMessage;
 }
 
+window.addEventListener('pay2myapp-hub-sku-authorization-changed',(e) => { 
+  console.log(`pay2myapp-hub-sku-authorization-changed :: ${JSON.stringify(e.detail, null, 2)}`);
+});
+
 // This is where we listen to authorized users clicking on events when they click a feature button.
 // We hit the back-end in response to these.
 // We re-validate authorizations in the back-end.
