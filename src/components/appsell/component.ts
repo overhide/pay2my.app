@@ -233,9 +233,14 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
     }
     
     notifier.subscribe(handler, 'paymentsInfo');
+
     if (this.sku) {
       this.hub?.setComponentForSku(this.sku, this);
     }    
+
+    if (hub.getInfo()) {
+      this.paymentInfoChanged(hub.getInfo());
+    }
   }
 
   public async click(): Promise<void> {
