@@ -220,6 +220,10 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
 
     notifier.subscribe(handler, 'paymentsInfo')
     notifier.subscribe(handler, 'error')
+
+    if (hub.getInfo()) {
+      this.paymentInfoChanged(hub.getInfo());
+    }    
   }
 
   hubIdChanged(oldValue: string, newValue: string) {
