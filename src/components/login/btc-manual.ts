@@ -136,7 +136,7 @@ export class OverhideBtcManual extends FASTElement {
   };
 
   paymentInfoChanged(info: PaymentsInfo): void {
-    this.isActive = info.currentImparter === Imparter.btcManual && !!info.payerSignature[info.currentImparter];
+    this.isActive = info.currentImparter === Imparter.btcManual && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
 
     if (info.payerAddress[Imparter.btcManual] != this.address) {
       this.changeAddress({target: {value: info.payerAddress[Imparter.btcManual]}});

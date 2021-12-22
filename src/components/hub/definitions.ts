@@ -286,9 +286,9 @@ export interface IPay2MyAppHub {
 
   // Do the actual topup to authorize
   // @param {number} amountDollars - amount to topup in US dollars, can be 0 to just create a free transaction for getting on ledger
-  // @param {string} toAddress - to pay
+  // @param {string} toAddress - to pay, can be null if amountDollars is 0
   // @returns {Promise<boolean>} with status of topup -- successful or not.
-  topUp: (amountDollars: number, toAddress: string) => Promise<boolean>,
+  topUp: (amountDollars: number, toAddress: string | null) => Promise<boolean>,
 
   // Get URL for imparter
   // @param {Imparter} imparter - to set 

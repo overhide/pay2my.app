@@ -146,7 +146,7 @@ export class OverhideOhledger extends FASTElement {
 
   paymentInfoChanged(info: PaymentsInfo): void {
     this.address = info.payerAddress[Imparter.ohledger];
-    this.isActive = info.currentImparter === Imparter.ohledger && !!info.payerSignature[info.currentImparter];
+    this.isActive = info.currentImparter === Imparter.ohledger && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
 
     if (info.payerPrivateKey[Imparter.ohledger] != this.key) {
       this.changeKey({target: {value: info.payerPrivateKey[Imparter.ohledger]}});

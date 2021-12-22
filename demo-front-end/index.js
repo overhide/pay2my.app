@@ -29,6 +29,10 @@ function addError(text) {
   document.querySelector('#messages').innerHTML = newMessage;
 }
 
+window.addEventListener('pay2myapp-hub-sku-authentication-changed',(e) => { 
+  console.log(`pay2myapp-hub-sku-authentication-changed :: ${JSON.stringify(e.detail, null, 2)}`);
+});
+
 window.addEventListener('pay2myapp-hub-sku-authorization-changed',(e) => { 
   console.log(`pay2myapp-hub-sku-authorization-changed :: ${JSON.stringify(e.detail, null, 2)}`);
 });

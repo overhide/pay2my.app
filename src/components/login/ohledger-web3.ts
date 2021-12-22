@@ -128,7 +128,7 @@ export class OverhideOhWeb3 extends FASTElement {
     if (this.address) {
       this.setNormalMessage();
     }
-    this.isActive = info.currentImparter === Imparter.ohledgerWeb3 && !!info.payerSignature[info.currentImparter];
+    this.isActive = info.currentImparter === Imparter.ohledgerWeb3 && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
     this.hasWallet = info.wallet[Imparter.ohledgerWeb3];
   }
 

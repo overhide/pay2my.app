@@ -242,7 +242,7 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
   paymentInfoChanged(info: PaymentsInfo): void {
     this.error = null;
     this.currentImparter = info.currentImparter;
-    this.isSignedIn = !!info.payerSignature[info.currentImparter];
+    this.isSignedIn = !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
     this.address = this.isSignedIn ? info.payerAddress[info.currentImparter] : 'sign-in';
     this.loginElement = info.loginElement;
     this.canLogout = false;
@@ -310,9 +310,14 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
     this.address = 'problem';
   }
 
-  addressClicked() {
+  async addressClicked() {
     if (this.hub && !this.isSignedIn && !!this.loginElement) {
-      this.loginElement.open();
+      await this.loginElement.open();
+      let info: PaymentsInfo = this.hub.getInfo();
+      if (info.currentImparter && !info.isOnLedger[info.currentImparter]) {
+        await this.hub.topUp(0, null);
+      }
+      return;
     } 
     if (this.hub && this.isSignedIn && this.currentImparter && !this.error) {
       switch (this.currentImparter) {

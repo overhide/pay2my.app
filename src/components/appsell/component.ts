@@ -249,6 +249,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
     }
 
     if (this.loginMessage) {
+      await this.authorize();
       return; // this is just a login button, no further actions.
     }
 
@@ -511,11 +512,6 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       return false;
     }
 
-    if (!address) {
-      const message = `allowed user to log in with $${this.currentImparter} but pay2myapp-appsell component with sku ${this.sku} doesn't have an address setup for that ledger`;
-      console.error(message);
-      throw message;
-    }
     if (!this.priceDollars) {
       var price: number = 0;
     } else {
@@ -525,6 +521,12 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
     if (price == 0) {    
       this.topupDollars = 0;  
       return this.lastInfo.isOnLedger[this.currentImparter || Imparter.unknown];
+    }
+
+    if (!address) {
+      const message = `allowed user to log in with $${this.currentImparter} but pay2myapp-appsell component with sku ${this.sku} doesn't have an address setup for that ledger`;
+      console.error(message);
+      throw message;
     }
 
     const result = await this.hub.getOutstanding(price, address, this.withinMinutes ? parseFloat(this.withinMinutes) : null);
@@ -547,7 +549,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       this.loading = true;
       const isAuthorized = await this.determineAuthorized();
       const address = this.getToAddress();
-      if (this.hub && address && !isAuthorized) {
+      if (this.hub && !isAuthorized) {
         return await this.hub.topUp(this.topupDollars || 0, address);
       }
     } catch (e) {

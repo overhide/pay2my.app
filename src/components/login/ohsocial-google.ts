@@ -122,7 +122,7 @@ export class OverhideOhSocialGoogle extends FASTElement {
 
   paymentInfoChanged(info: PaymentsInfo): void {
     this.address = info.payerAddress[Imparter.ohledgerSocial];
-    this.isActive = info.currentImparter === Imparter.ohledgerSocial && info.currentSocial === Social.google && !!info.payerSignature[info.currentImparter];
+    this.isActive = info.currentImparter === Imparter.ohledgerSocial && info.currentSocial === Social.google && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
   }
 
   setNormalMessage() {

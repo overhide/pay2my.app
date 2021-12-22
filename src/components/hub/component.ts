@@ -180,6 +180,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       if (imparter !== Imparter.unknown && !this.isAuthenticated(imparter)) {
         await this.authenticate(imparter);
       }
+
+      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: imparter, isAuthenticated: this.isAuthenticated(imparter)};
+      this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
+
       this.pingApplicationState();
       sessionStorage.setItem('paymentsInfo', JSON.stringify({...this.paymentsInfo, skuComponents: {}, loginElement: null}));
       return true;
@@ -324,11 +328,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
 
   // Do the actual topup to authorize
   // @param {number} amountDollars - amount to topup in US dollars, can be 0 to just create a free transaction for getting on ledger
-  // @param {} toAddress - to pay
+  // @param {} toAddress - to pay, can be null if `amountDollars` is 0.
   // @returns {Promise<boolean>} with status of topup -- successful or not.
-  public topUp = async (amountDollars: number, toAddress: string): Promise<boolean> => {
+  public topUp = async (amountDollars: number, toAddress: string | null): Promise<boolean> => {
     const imparter = this.getCurrentImparter();
     const oldInfo = {...this.paymentsInfo};
+    if (!toAddress && amountDollars > 0) throw `cannot topUp: toAddress null and a non-0 amount`;
+    toAddress = !toAddress ? oldInfo.payerAddress[imparter] : toAddress;
     try {
       this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{isPending: true, currency: this.paymentsInfo.currentCurrency};
       this.$emit('pay2myapp-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
@@ -525,8 +531,6 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       this.paymentsInfo.isOnLedger[imparter] = false;
       if (await oh$.isOnLedger(imparter, options)) {
         this.paymentsInfo.isOnLedger[imparter] = true;
-        const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: imparter, isAuthenticated: true};
-        this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
       }
     } catch (error) {
       throw `${typeof error == 'object' && 'message' in error ? error.message : error}`;

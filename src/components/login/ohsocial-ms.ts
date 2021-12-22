@@ -122,7 +122,7 @@ export class OverhideOhSocialMs extends FASTElement {
 
   paymentInfoChanged(info: PaymentsInfo): void {
     this.address = info.payerAddress[Imparter.ohledgerSocial];
-    this.isActive = info.currentImparter === Imparter.ohledgerSocial && info.currentSocial === Social.microsoft && !!info.payerSignature[info.currentImparter];
+    this.isActive = info.currentImparter === Imparter.ohledgerSocial && info.currentSocial === Social.microsoft && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
   }
 
   setNormalMessage() {
