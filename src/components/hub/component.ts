@@ -17,6 +17,7 @@ import {
   IPay2MyAppAppsell,
   IPay2MyAppHub,
   IPay2MyAppPendingTransactionEvent,
+  IPay2MyAppSkuAuthenticationChangedEvent,
   IPay2MyAppSkuAuthorizationChangedEvent,
   PaymentsInfo,
   NetworkType
@@ -386,6 +387,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     if (imparter == Imparter.ohledgerSocial && !!this.paymentsInfo.currentImparter && this.paymentsInfo.currentImparter != Imparter.unknown) {
       oh$.setCredentials(null);
     }
+
+    const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: Imparter.unknown, isAuthenticated: false};
+    this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
+
     this.pingApplicationState();
   }
 
@@ -520,6 +525,8 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       this.paymentsInfo.isOnLedger[imparter] = false;
       if (await oh$.isOnLedger(imparter, options)) {
         this.paymentsInfo.isOnLedger[imparter] = true;
+        const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: imparter, isAuthenticated: true};
+        this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
       }
     } catch (error) {
       throw `${typeof error == 'object' && 'message' in error ? error.message : error}`;

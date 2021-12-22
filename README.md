@@ -3,13 +3,10 @@
 <p align="center"><a href="https://overhide.io"><img src="https://overhide.github.io/pay2my.app/assets/logo.png" width="200px"/></a></p>
 
 
-
 <p align="center"><a href="https://overhide.io">pay2my.app by overhide.io</a></p><p style="width: 500px; margin: auto">A free and open-sourced ecosystem of widgets, a front-end library, and back-end services &mdash; to make addition of "logins" and "in-app-purchases" (IAP) to your app as banal as possible.</p>
 
 
-
 <hr/>
-
 # pay2my.app widgets
 
 Customizable web-components enabling login and in-app purchases (IAP, paid up-sells) for any Web application to be as simple as possible.
@@ -76,7 +73,6 @@ Most demos in this repo have business flows incorporating a simple back-end.  Th
 The below infographic conveys at-a-glance what you get with these widgets:
 
 <p align="center"><a href="https://overhide.github.io/pay2my.app/assets/widgets.svg" target="_blank"><img src="https://overhide.github.io/pay2my.app/assets/widgets.svg" width="75%"/></a></p>
-
 The top-left shows a sample Web app with a nav-bar housing the [pay2myapp-status](#pay2myapp-status) component.  It also shows three purchase buttons.  Clicking any of these will open up the [pay2myapp-login](#pay2myapp-login-) component which serves as our "login widget".
 
 When a user wants to authorize for a feature; different UI experiences will present themselves depending on whether the feature is free, the user wants to pay in dollars, or the user wants to pay using a wallet, e.g., above, see:
@@ -258,15 +254,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.2/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.3/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.1.2/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.1.3/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.1.2*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.2/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.1.3*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.1.3/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -277,7 +273,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.1.2",
+  "pay2my.app": "1.1.3",
   ..
 }
 ```
@@ -404,6 +400,22 @@ N/A &mdash; this is an invisible element and not customizable via slots.
 
 ##### Events
 
+*pay2myapp-hub-sku-authentication-changed*
+
+- see *IPay2MyAppSkuAuthenticationChangedEvent* in [/src/components/hub/definitions.ts](/src/components/hub/definitions.ts)
+
+```
+export interface IPay2MyAppSkuAuthenticationChangedEvent {
+  imparter: Imparter,
+  isAuthenticated: boolean;
+}
+```
+
+- indicated a change in authentication status
+- imparter indicates which authenticated, or `Unknown` if not authenticated (`isAuthenticated === false`)
+- `isAuthenticated === false` event only sent on logout
+- `isAuthenticated === true` events sent on successful login
+
 *pay2myapp-hub-sku-authorization-changed*
 
 - see *IPay2MyAppSkuAuthorizationChangedEvent* in [/src/components/hub/definitions.ts](/src/components/hub/definitions.ts)
@@ -416,6 +428,7 @@ export interface IPay2MyAppSkuAuthorizationChangedEvent {
 ```
 
 - indicated a change in authorization status
+- `isAuthorized === false` events may not be sent
 
 *pay2myapp-hub-pending-transaction*
 

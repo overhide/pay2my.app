@@ -121,6 +121,18 @@ export interface IPay2MyAppSkuTopupOutstandingEvent {
 }
 
 /**
+ * Event fired by pay2myapp-hub as a custom event: "pay2myapp-hub-sku-authentication-changed"
+ * 
+ * Indicated a change in authentication status.
+ * 
+ * The `imparter` for which the authentication is changed is signaled.
+ */
+ export interface IPay2MyAppSkuAuthenticationChangedEvent {
+  imparter: Imparter,
+  isAuthenticated: boolean;
+}
+
+/**
  * Event fired by pay2myapp-hub as a custom event: "pay2myapp-hub-sku-authorization-changed"
  * 
  * Indicated a change in authorization status.
