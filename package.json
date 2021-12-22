@@ -1,6 +1,6 @@
 {
   "name": "pay2my.app",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "",
   "main": "dist/pay2my.app.js",
   "types": "dist/pay2my.app.d.ts",
