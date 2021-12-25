@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.2.0/dist/pay2my.app.js"></script>
+
+  </head>
+
+  <body style="max-width: 350px; margin: auto; display: flex; flex-direction: column; row-gap: 30px">
+
+    <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
+
+    <pay2myapp-login hubId="demo-hub"
+                    overhideSocialMicrosoftEnabled
+                    overhideSocialGoogleEnabled
+                    overhideSecretTokenEnabled
+                    overhideWeb3Enabled
+                    ethereumWeb3Enabled>
+    </pay2myapp-login>
+
+    <pay2myapp-status hubId="demo-hub"></pay2myapp-status>
+
+    <pay2myapp-appsell 
+      hubId="demo-hub" 
+      sku="subscribed-feature"
+      priceDollars="3"
+      authorizedMessage="Use Feature"
+      unauthorizedTemplate="Subscribe Feature For 2 Minutes ($${topup})"
+      overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+      ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+      withinMinutes="2">
+    </pay2myapp-appsell>
+
+    <div id="message">❌ Not Authenticated</div>
+
+  </body>
+
+  <script>
+
+    BACKEND_CONNECTION_STRING = `http://localhost:8100`;
+
+    // Set the token from back-end
+    window.onload = (event) => {
+    fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
+      .then(async (response) => {
+        if (response.ok) {
+          const hub = document.querySelector('#demo-hub');
+          hub.setAttribute('token', await response.text());
+        } else {
+          document.querySelector("#message").innerHTML = `error talking to back-end -- ${response.status} -- ${response.statusText}`;
+        }
+      }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end -- ${e}`);
+    };
+
+    window.addEventListener('pay2myapp-hub-sku-authentication-changed',(e) => { 
+      if (e.detail.isAuthenticated) {
+        document.querySelector("#message").innerHTML = `✔ Authenticated with ${e.detail.imparter}`;
+      } else {
+        document.querySelector("#message").innerHTML = '❌ Not Authenticated';
+      }
+    });
+
+    window.addEventListener('pay2myapp-hub-sku-authorization-changed',(e) => { 
+      console.log(`pay2myapp-hub-sku-authorization-changed :: ${JSON.stringify(e.detail, null, 2)}`);
+      if (e.detail.isAuthorized) {
+        document.querySelector("#message").innerHTML = `✔ Authorized for SKU ${e.detail.sku}`;
+      } else {
+        document.querySelector("#message").innerHTML = '❌ Not Authorized';
+      }
+    });
+
+    window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+      // Call back-end and ensure it verifies before saying it's handled.
+      fetch(`${BACKEND_CONNECTION_STRING}/RunFeature`
+        +`?sku=${e.detail.sku}`
+        +`&currency=${e.detail.currency}`
+        +`&from=${e.detail.from}`
+        +`&isTest=${e.detail.isTest}`
+        +`&message=${btoa(e.detail.message)}`
+        +`&signature=${btoa(e.detail.signature)}`)
+        .then(response => {
+          if (response.ok) {
+            document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
+          } else {
+            document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`;
+          }
+      }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${e}`)
+    });
+
+  </script>    
+</html>
