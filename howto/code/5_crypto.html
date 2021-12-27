@@ -7,14 +7,15 @@
 
   <body style="max-width: 350px; margin: auto; display: flex; flex-direction: column; row-gap: 30px">
 
-    <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
+    <pay2myapp-hub id="demo-hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></pay2myapp-hub>      
 
     <pay2myapp-login hubId="demo-hub"
                     overhideSocialMicrosoftEnabled
                     overhideSocialGoogleEnabled
                     overhideSecretTokenEnabled
                     overhideWeb3Enabled
-                    ethereumWeb3Enabled>
+                    ethereumWeb3Enabled
+                    bitcoinEnabled>
     </pay2myapp-login>
 
     <pay2myapp-status hubId="demo-hub"></pay2myapp-status>
@@ -26,7 +27,6 @@
       authorizedMessage="Use Feature"
       unauthorizedTemplate="Subscribe Feature For 2 Minutes ($${topup})"
       overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
-      ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
       withinMinutes="2">
     </pay2myapp-appsell>
 
@@ -35,21 +35,6 @@
   </body>
 
   <script>
-
-    BACKEND_CONNECTION_STRING = `http://localhost:8100`;
-
-    // Set the token from back-end
-    window.onload = (event) => {
-    fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
-      .then(async (response) => {
-        if (response.ok) {
-          const hub = document.querySelector('#demo-hub');
-          hub.setAttribute('token', await response.text());
-        } else {
-          document.querySelector("#message").innerHTML = `error talking to back-end -- ${response.status} -- ${response.statusText}`;
-        }
-      }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end -- ${e}`);
-    };
 
     window.addEventListener('pay2myapp-hub-sku-authentication-changed',(e) => { 
       if (e.detail.isAuthenticated) {
@@ -69,21 +54,7 @@
     });
 
     window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
-      // Call back-end and ensure it verifies before saying it's handled.
-      fetch(`${BACKEND_CONNECTION_STRING}/RunFeature`
-        +`?sku=${e.detail.sku}`
-        +`&currency=${e.detail.currency}`
-        +`&from=${e.detail.from}`
-        +`&isTest=${e.detail.isTest}`
-        +`&message=${btoa(e.detail.message)}`
-        +`&signature=${btoa(e.detail.signature)}`)
-        .then(response => {
-          if (response.ok) {
-            document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
-          } else {
-            document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`;
-          }
-      }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${e}`)
+      document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
     });
 
   </script>    
