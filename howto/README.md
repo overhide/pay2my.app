@@ -194,5 +194,283 @@ The end result here is a button:
 
 ## In-App Purchases (IAP)
 
-Thus far we've covered user logins.  Let's get into making money as developers.
+Thus far we've covered user logins.  
+
+Let's get into making money as developers.
+
+For this example we'll simply add a couple more attributes to the previously introduced [pay2myapp-appsell](https://github.com/overhide/pay2my.app#pay2myapp-appsell-) component.  
+
+The full source code for this example:
+
+
+
+> **</>**
+>
+>  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/3_purchases.html) | [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/3_purchases.html) 
+
+
+
+Take a look at the full snippet of [raw source code on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/3_purchases.html) to follow along.
+
+
+
+As a quick aside, the basic premise of these in-app purchases is checking public ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developers &mdash; public registered token.  The actual payments are made through https://stripe.com/ and tracked on the *overhide* public "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the https://pay2my.app/ site.
+
+> ℹ
+>
+> The user owned "token" is the secret token generated earlier.  The public "address" of this token is what's stored in the public ledger.  The private token is necessarily kept secret.
+>
+> For crypto currencies (later) the blockchain address and a signature are used, as furnished by wallets.  The blockchain is the public ledger.  
+
+
+
+Back to the code, in this example we have both the "status" component and the "button".  The "button" is changed to become a paid-for up-sell:
+
+```
+20.     <pay2myapp-appsell 
+21.       hubId="demo-hub" 
+22.       sku="subscribed-feature"
+23.       priceDollars="3"
+24.       authorizedMessage="Use Feature"
+25.       unauthorizedTemplate="Subscribe Feature For 2 Minutes ($${topup})"
+26.       overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+27.       withinMinutes="2">
+28.     </pay2myapp-appsell>
+```
+
+
+
+Let's unwind the "button" a bit before we click through a basic workflow.
+
+On line 22 we're setting the features SKU as `subscribed-feature`.  We set the cost at $3 USD (line 23, `priceDollars` attribute) and set the feature to expire after two minutes of payment (`withinMinutes` attribute).  As such, in our example, a payment of $3 USD gives the user 2 minutes of usage.  
+
+Keep in mind these are all fake USD payments in this demo, we're using testnets.
+
+
+
+>  ℹ
+>
+> For a better picture of how these payments can be configured &mdash; free/paid/subscriptions &mdash; check out the [demos](https://github.com/overhide/pay2my.app#demos). 
+
+
+
+Next, on line 26, we need to tell the widget which ledger "token" these payments are made to.  This is your &mdash; the developer's &mdash; payment address.  In the demo it's set to my test address, but you need to change this value as per whatever address you onboard (below).
+
+The *overhide* ledger is just a receipts ledger.  The actual value transfer occurs through https://stripe.com &mdash; unlike cryptos whereby the value transfer occurs through the blockchain ledger (later).
+
+> 📢
+>
+> Every single address used as a value in the `overhideAddress` attribute must be an *overhide* ledger [onboarded](https://test.ledger.overhide.io/onboard) address &mdash; whereby this address receives payment receipts of payments you receive on your https://stripe.com account.  
+
+
+
+You onboard onto the *overhide* ledger as per the links at https://pay2my.app/:
+
+- [testnet onboarding](https://test.ledger.overhide.io/onboard) (this demo)
+- [live/prod onboarding](https://ledger.overhide.io/onboard) (when you're ready)
+
+
+
+The onboarding process allows you to click through to https://stripe.com and create an account with them.  
+
+For test purposes, when you're first getting into the swing of things, you can make-pretend onboard with https://stripe.com and skip the form-process.  But this is unavoidable once you want to get paid for real:
+
+![image-20211226161152932](C:\src\pay2my.app\howto\assets\image-20211226161152932.png)
+
+
+
+
+
+Moving past the button code, we also added handling of new DOM events.  The first one is the `pay2myapp-hub-sku-authorization-changed` and informs us when sufficient payments were made for a feature SKU:
+
+```
+44.     window.addEventListener('pay2myapp-hub-sku-authorization-changed',(e) => { 
+45.       console.log(`pay2myapp-hub-sku-authorization-changed :: ${JSON.stringify(e.detail, null, 2)}`);
+46.       if (e.detail.isAuthorized) {
+47.         document.querySelector("#message").innerHTML = `✔ Authorized for SKU ${e.detail.sku}`;
+48.       } else {
+49.         document.querySelector("#message").innerHTML = '❌ Not Authorized';
+50.       }
+51.     });
+```
+
+
+
+The other event handler is for the `pay2myapp-appsell-sku-clicked` event, which tells us when the feature button was clicked:
+
+```
+53.     window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+54.       document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
+55.     });
+```
+
+
+
+On line 44 we have an authorizations `pay2myapp-hub-sku-authorization-changed` event indicating when we're authorized for a certain SKU.  You'll receive one such event for each configured sku, should the expected payments be met on the ledger:  hence the SKU be authorized.
+
+In our case we just change the contents of the `#message` DIV.
+
+Lastly, on line 53 we have the `pay2myapp-appsell-sku-clicked` event indicating an authorized button was clicked.  In our demo, our reaction to such a click is to once again change the contents of the `#message` DIV.
+
+
+
+With the code understood, let's take a look at the experience.  
+
+A user is presented with the following [rendered page](https://overhide.github.io/pay2my.app/howto/code/3_purchases.html):
+
+![image-20211226155036584](C:\src\pay2my.app\howto\assets\image-20211226155036584.png)
+
+Clicking on the "sign-in" blurb in the "status" widget or on the button will allow us to authenticate in the previous manner.
+
+A click on the "status" widget will solely authenticate and pull down tallies of any existing ledger payments.
+
+More interestingly, a click on the "button" will allow a top-up payment, presenting us with a credit card entry widget from https://stripe.com:
+
+
+
+![image-20211226155604498](C:\src\pay2my.app\howto\assets\image-20211226155604498.png)
+
+
+
+This is a make-belief payment using a fake VISA card, as such, the following values are entered (the `4242 4242 4242 4242` VISA number is mandatory)
+
+- `foo@bar.com` for the email address
+- `4242 4242 4242 4242` for the VISA number
+- `05/55` for the expiry date
+- `555` for the CVC
+
+
+
+Once the payment is made, you will see a new message.   You can also click on the "token" in the "status" component to see your public ledger entries (orange arrow):
+
+![refresh](C:\src\pay2my.app\howto\assets\refresh.png)
+
+If you recall our payment is valid for 2 minutes.  Clicking the refresh button (green arrow) will demonstrate this.  No timers setup in this demo.
+
+
+
+## Leveraging a Back-End
+
+Thus far everything we did was in-browser only, no back-end code. 
+
+This may be sufficient for your project and you may want to skip this section, but on the other hand, it may not be.  Consider [this write-up](https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html) to motivate your decision.
+
+Note that you need to standup this back-end locally before the preview link below functions.
+
+
+
+> **</>**
+>
+>  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/4_backend.html) |  [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/4_backend.html) (won't work until back-end running, see below)
+
+
+
+First, some pre-requisites, a browser alone will no longer suffice.  
+
+You will need [node.js](https://nodejs.org/en/download/) to run this particular sample back-end.  Follow the instructions at that link to install it.
+
+You will also need a Web server to host the HTML snippet file to your browser; here we use `http-server` once `npm` is installed:
+
+```
+npm install -g http-server
+```
+
+
+
+We will not provide snippets of the back-end code in this write-up.  The simple [demo back-end source code](https://github.com/overhide/pay2my.app/tree/master/demo-back-end) lives in GitHub.  In fact it is the same back-end code running as Azure functions used for all the [code demos](https://www.npmjs.com/package/pay2my.app#demos) (at least the ones using a back-end).
+
+It's pretty straight forward to get the back-end running locally ([source of truth instructions](https://github.com/overhide/pay2my.app#local-development)) and run this [HTML code snippet](https://github.com/overhide/pay2my.app/blob/master/howto/code/4_backend.html).
+
+To get the back-end running...
+
+- with the `https://github.com/overhide/pay2my.app` repository synced on your local machine
+- with  [node.js](https://nodejs.org/en/download/) installed
+- with `npm install -g http-server` installed
+- with a console prompt in the `/demo-back-end` subfolder of the above repository
+
+... simply start the back-end code:
+
+```
+npm install
+npm run dev
+```
+
+
+
+The back-end will start at port `8100`.
+
+Now, with the back-end humming on port `localhost:8100`, you can point your browser at the [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/4_backend.html) and see it work properly.
+
+
+
+The preview shouldn't be anything new.  The value-add here is that the critical-path of your business flows goes through your back-end:  your feature click-through.
+
+The important code changes start with the configuration of the "hub", it no longer receives an `apiKey`:
+
+```
+10.     <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
+```
+
+Instead, the "hub" will receive an access token (to *overhide* services) from the back-end:
+
+```
+36.     BACKEND_CONNECTION_STRING = `http://localhost:8100`;
+37. 
+38.     // Set the token from back-end
+39.     window.onload = (event) => {
+40.     fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
+41.       .then(async (response) => {
+42.         if (response.ok) {
+43.           const hub = document.querySelector('#demo-hub');
+44.           hub.setAttribute('token', await response.text());
+45.         } else {
+46.           document.querySelector("#message").innerHTML = `error talking to back-end -- ${response.status} -- ${response.statusText}`;
+47.         }
+48.       }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end -- ${e}`);
+49.     };
+```
+
+The back-end connection string is configured on line 36.
+
+> ℹ
+>
+> If you'd like to try this demo snippet with this back-end code as it is currently running in Azure functions, simply change this `BACKEND_CONNECTION_STRING` to `https://demo-back-end.azurewebsites.net/api` and give the HTML file a try.
+
+On line 40 we fetch the token and on line 44 we programmatically provide it to the "hub" component.
+
+
+
+For back-end verifications of our feature click-throughs, we no have:
+
+```
+68.     window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+69.       // Call back-end and ensure it verifies before saying it's handled.
+70.       fetch(`${BACKEND_CONNECTION_STRING}/RunFeature`
+71.         +`?sku=${e.detail.sku}`
+72.         +`&currency=${e.detail.currency}`
+73.         +`&from=${e.detail.from}`
+74.         +`&isTest=${e.detail.isTest}`
+75.         +`&message=${btoa(e.detail.message)}`
+76.         +`&signature=${btoa(e.detail.signature)}`)
+77.         .then(response => {
+78.           if (response.ok) {
+79.             document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
+80.           } else {
+81.             document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`;
+82.           }
+83.       }).catch(e => document.querySelector("#message").innerHTML = `error talking to back-end &mdash; ${e}`)
+84.     });
+```
+
+The `pay2myapp-appsell-sku-clicked` event now goes to the back-end's `GET /RunFeature` endpoint (line 70).
+
+This endpoint is served by a simple [node.js](https://nodejs.org/en/download/)/[express.js](https://expressjs.com/) router as coded in the back-end's [index.js](https://github.com/overhide/pay2my.app/blob/master/demo-back-end/index.js).
+
+All those query parameters (lines 71 through 76) are documented in that route.
+
+The `GET /RunFeature` ends up running the code [here](https://github.com/overhide/pay2my.app/blob/master/demo-back-end/RunFeature/index.js), which makes calls to several [*overhide* remuneration APIs](https://overhide.io/2020/09/06/remuneration-api.html) for authorization checks against ledgers used.
+
+
+
+## Crypto In-App Purchases (IAP)
 
