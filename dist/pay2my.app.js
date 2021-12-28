@@ -201,7 +201,7 @@ ${Ve.a}
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e=>e.copyToClipboard()}" :disabled="${e=>!e.isKeyValid}">${wt.a}</div>
-              <input autocomplete="on" name="token" id="token" class="w3-input" type="text" :value="${e=>e.key||""}" @change="${(e,t)=>e.changeKey(t.event)}" @keyup="${(e,t)=>e.changeKey(t.event)}">
+              <input autocomplete="on" name="password" id="password" class="w3-input" type="password" :value="${e=>e.key||""}" @change="${(e,t)=>e.changeKey(t.event)}" @keyup="${(e,t)=>e.changeKey(t.event)}">
             </div>
             <label>secret token</label>
           </div>
