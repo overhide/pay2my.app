@@ -36,13 +36,13 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form>
+    <form autocomplete="on">
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="token" name="token" id="token" class="w3-input" type="text" :value="${e => e.key || ''}" @change="${(e,c) => e.changeKey(c.event)}" @keyup="${(e,c) => e.changeKey(c.event)}">
+              <input autocomplete="on" name="token" id="token" class="w3-input" type="text" :value="${e => e.key || ''}" @change="${(e,c) => e.changeKey(c.event)}" @keyup="${(e,c) => e.changeKey(c.event)}">
             </div>
             <label>secret token</label>
           </div>

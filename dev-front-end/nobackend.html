@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="./assets/demo.css">
+    <script src="/dist/pay2my.app.js"></script>
+    
+    <script>
+      BACKEND_CONNECTION_STRING = `NONE`
+    </script>
+
+    <script src="./index.js"></script>
+  </head>
+
+  <body>
+    <div id="demo-front-end">
+
+      <style>
+        pay2myapp-appsell {
+          width: 60%;
+        }
+        .visa {
+          position: fixed;
+          top: 0px;
+          right: 0px;
+          z-index: 50;
+          opacity: 0;
+          transition: opacity 1s ease-in 1s;
+          pointer-events: none;
+        }
+      </style>
+      <img class="visa" id="visa" src="./assets/visa.png">
+
+      <pay2myapp-hub id="demo-hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></pay2myapp-hub>      
+
+      <div class="w3-bar w3-border w3-light-grey">
+        <div class="w3-right">
+          <pay2myapp-status hubId="demo-hub"></pay2myapp-status>
+        </div>          
+      </div>
+
+      <!-- info note-->
+      <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
+        <img class="w3-left info" src="./assets/info.png">
+        <p>The basic demo showing off all widgets but without a back-end.  Using features does not cause back-end endpoint invocations.  All business flows are solely in-browser, with all that entails.</p>
+        <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
+        <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.</p>
+        <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  These cause initial login and feature flows &mdash; solely in the front-end &mdash; at different payment tiers.</p>
+        <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>        
+      </div></div>
+
+      <pay2myapp-login hubId="demo-hub"
+                      overhideSocialMicrosoftEnabled
+                      overhideSocialGoogleEnabled
+                      overhideWeb3Enabled
+                      ethereumWeb3Enabled
+                      bitcoinEnabled
+                      overhideSecretTokenEnabled>
+      </pay2myapp-login>
+
+      <div class="w3-row w3-padding-64"><div class="w3-col s4">&nbsp</div><div class="w3-col s4 w3-center">
+        <pay2myapp-appsell 
+          hubId="demo-hub" 
+          loginMessage="Login">
+        </pay2myapp-appsell>
+      </div></div>
+
+      <div class="w3-row" style="display: flex; align-content: stretch;">
+        <div class="w3-col s4 w3-center">
+          <pay2myapp-appsell 
+            hubId="demo-hub" 
+            sku="free-feature"
+            priceDollars="0"
+            authorizedMessage="Use Feature"
+            unauthorizedTemplate="Login to Use Free Feature"
+            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
+          </pay2myapp-appsell>
+        </div>
+        <div class="w3-col s4 w3-center">
+          <pay2myapp-appsell 
+            id="foo"
+            hubId="demo-hub" 
+            sku="paid-feature"
+            priceDollars="2"
+            authorizedMessage="Use Feature"
+            unauthorizedTemplate="Add Feature ($${topup})"
+            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
+          </pay2myapp-appsell>
+        </div>
+        <div class="w3-col s4 w3-center">
+          <pay2myapp-appsell 
+            hubId="demo-hub" 
+            sku="subscribed-feature"
+            priceDollars="3"
+            authorizedMessage="Use Feature"
+            unauthorizedTemplate="Subscribe Feature For 30 Minutes ($${topup})"
+            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
+            ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+            withinMinutes="30">
+          </pay2myapp-appsell>
+        </div>
+      </div>
+
+      <div class="w3-row" style="display: flex; justify-content: center; margin-top: 12em;">
+        <div id="messages" class="w3-col s8 w3-center">
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
