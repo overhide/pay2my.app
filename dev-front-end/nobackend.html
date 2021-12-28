@@ -14,6 +14,60 @@
   </head>
 
   <body>
+
+    <form id="se-pw-reset" action="/account/recover" method="POST" class="d-flex fd-column gs12 gsy">
+      <input type="hidden" name="fkey" value="2a07571d70329a3ba14cb0e9fee1a3784b23824dde34d6c5f370e26b668f54ea">
+      <input type="hidden" name="guid" value="63:3:913,16:41b9028e09bbe7cf,10:1640726063,16:3c1b947efa672156,1:0,112dc0be043c7fa18660eb86e39271cf83723a28e73eea4c3736cf0afb3eae99" />
+
+
+      <div class="d-flex fd-column gs4 gsy wmx3">
+
+
+          <div class="d-flex fd-column gs4 gsy js-auth-item ">
+              <label class="flex--item s-label" for="password">New password</label>
+              <div class="d-flex ps-relative">
+                  <input id="password" class="flex--item s-input" name="password" type="password" value="" />
+                  <svg aria-hidden="true" class="s-input-icon js-alert-icon d-none svg-icon iconAlertCircle" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8ZM8 4v6h2V4H8Zm0 8v2h2v-2H8Z"/></svg>
+              </div>
+                      <p class="s-input-message js-error-message d-none">
+      
+  </p>
+
+          </div>
+
+          <div class="d-flex fd-column gs4 gsy js-auth-item ">
+              <label class="flex--item s-label" for="password2">New password (again)</label>
+              <div class="d-flex ps-relative">
+                  <input id="password2" class="flex--item s-input" name="password2" type="password" value="" />
+                  <svg aria-hidden="true" class="s-input-icon js-alert-icon d-none svg-icon iconAlertCircle" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8ZM8 4v6h2V4H8Zm0 8v2h2v-2H8Z"/></svg>
+              </div>
+                      <p class="s-input-message js-error-message d-none">
+      
+  </p>
+
+          </div>
+
+          <p class="fs-caption fc-light mt4 mb4">
+              Passwords must contain at least eight characters, including at least 1 letter and 1 number.
+          </p>
+
+          <div class="d-flex fd-column gs4 gsy js-auth-item ">
+              <button class="flex--item s-btn s-btn__primary" id="submit-button" name="submit-button">
+                  Recover Account
+              </button>
+                      <p class="s-input-message js-error-message d-none">
+      
+  </p>
+
+          </div>
+          
+      </div>
+
+          <p class="privacy-policy-agreement">
+              By clicking “Recover Account”, you agree to our <a href='https://stackoverflow.com/legal/terms-of-service/public' name='tos' target='_blank' class='-link'>terms of service</a>, <a href='https://stackoverflow.com/legal/privacy-policy' name='privacy' target='_blank' class='-link'>privacy policy</a> and <a href='https://stackoverflow.com/legal/cookie-policy' name='cookie' target='_blank' class='-link'>cookie policy</a><input type="hidden" name="legalLinksShown" value="1" />
+          </p>
+  </form>
+
     <div id="demo-front-end">
 
       <style>
