@@ -7,6 +7,7 @@
 
 
 <hr/>
+
 # pay2my.app widgets
 
 Customizable web-components enabling login and in-app purchases (IAP, paid up-sells) for any Web application to be as simple as possible.
