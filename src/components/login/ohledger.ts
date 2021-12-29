@@ -217,7 +217,7 @@ export class OverhideOhledger extends FASTElement {
     if (this.hub && this.key && this.isKeyValid && this.address) {
       await this.hub.setCurrentImparter(Imparter.ohledger);
 
-      alert(`version 1 ${"PasswordCredential" in window}`);
+      alert(`version 1 ${"PasswordCredential" in window} ${"credentials" in navigator}`);
       if ("PasswordCredential" in window) {
         let credential = new window.PasswordCredential({
           id: `overhide ledger address:  ${this.address}`,
