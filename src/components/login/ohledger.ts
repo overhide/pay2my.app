@@ -20,6 +20,12 @@ import infoIcon from "../../static/icons/info.svg";
 import clipboardIcon from "../../static/icons/clipboard.svg";
 import passphraseIcon from "../../static/icons/passphrase.svg";
 
+declare global {
+  interface Window {
+   PasswordCredential: any;
+  }
+ }
+
 const template = html<OverhideOhledger>`
   <div class="panel w3-panel w3-border w3-round-xxlarge ${e => e.isActive ? 'active' : ''}">
     <div class="w3-row w3-margin">
@@ -36,13 +42,13 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form autocomplete="on">
+    <form autocomplete="on" id="ohledger">
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="on" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e,c) => e.changeKey(c.event)}" @keyup="${(e,c) => e.changeKey(c.event)}">
+              <input autocomplete="on" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e,c) => e.changeKey(c.event)}" @keyup="${(e,c) => e.changeKey(c.event)}">
             </div>
             <label>secret token</label>
           </div>
@@ -82,7 +88,6 @@ const styles = css`
   ${w3Css}
   ${widgetCss}
 `;
-
 
 @customElement({
   name: "pay2myapp-ohledger",
@@ -207,6 +212,16 @@ export class OverhideOhledger extends FASTElement {
   async continue() {
     if (this.hub && this.key && this.isKeyValid && this.address) {
       await this.hub.setCurrentImparter(Imparter.ohledger);
+
+      if ("PasswordCredential" in window) {
+        let credential = new window.PasswordCredential({
+          id: `overhide ledger address:  ${this.address}`,
+          password: this.key
+        });
+
+        await navigator.credentials.store(credential);
+      }
+
       this.$emit('close');
     }
   }
