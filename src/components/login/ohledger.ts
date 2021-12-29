@@ -20,12 +20,6 @@ import infoIcon from "../../static/icons/info.svg";
 import clipboardIcon from "../../static/icons/clipboard.svg";
 import passphraseIcon from "../../static/icons/passphrase.svg";
 
-declare global {
-  interface Window {
-    PasswordCredential: any;
-  }
-}
-
 const template = html<OverhideOhledger>`
   <div class="panel w3-panel w3-border w3-round-xxlarge ${e => e.isActive ? 'active' : ''}">
     <div class="w3-row w3-margin">
@@ -218,13 +212,10 @@ export class OverhideOhledger extends FASTElement {
       await this.hub.setCurrentImparter(Imparter.ohledger);
 
       alert(`version 1 ${"PasswordCredential" in window} ${"credentials" in navigator}`);
-      if ("PasswordCredential" in window) {
-        let credential = new window.PasswordCredential({
-          id: `overhide ledger address:  ${this.address}`,
-          password: this.key
-        });
-        alert(`credential: $${this.address} ${this.key} ${credential}`);
-
+      if ('credentials' in navigator) {
+        let opts: any = {  password: { id: `overhide ledger address:  ${this.address}`, password: this.key }}
+        let credential: any = await navigator.credentials.create(opts);        
+        alert(`credential created: $${this.address} ${this.key} ${credential}`);
         await navigator.credentials.store(credential);
         alert(`credential stored: $${this.address} ${this.key} ${credential}`);
       }
