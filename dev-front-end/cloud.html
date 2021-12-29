@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="./assets/demo.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/dist/pay2my.app.js"></script>
+
+    <script>
+      BACKEND_CONNECTION_STRING = `https://demo-back-end.azurewebsites.net/api`;
+    </script>
+
+    <script src="/demo-front-end/index.js"></script>
+  </head>
+  <body>
+    <div id="pay2myapp-demo"></div>
+  </body>
+  <script>
+    $(document).ready(function() {
+      $('#pay2myapp-demo').load("/demo-front-end/basic.html div#demo-front-end");
+
+      fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
+        .then(async (response) => {
+          if (response.ok) {
+            const hub = document.querySelector('#demo-hub');
+            hub.setAttribute('token', await response.text());
+          } else {
+            console.error(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+          }
+        }).catch(e => console.error(`error talking to back-end &mdash; ${e}`));
+
+    });
+  </script>  
+</html>

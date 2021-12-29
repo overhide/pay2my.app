@@ -22,9 +22,9 @@ import passphraseIcon from "../../static/icons/passphrase.svg";
 
 declare global {
   interface Window {
-   PasswordCredential: any;
+    PasswordCredential: any;
   }
- }
+}
 
 const template = html<OverhideOhledger>`
   <div class="panel w3-panel w3-border w3-round-xxlarge ${e => e.isActive ? 'active' : ''}">
@@ -48,7 +48,7 @@ const template = html<OverhideOhledger>`
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="on" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e,c) => e.changeKey(c.event)}" @keyup="${(e,c) => e.changeKey(c.event)}">
+              <input autocomplete="on" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
             </div>
             <label>secret token</label>
           </div>
@@ -95,7 +95,7 @@ const styles = css`
   styles,
 })
 export class OverhideOhledger extends FASTElement {
-  @attr 
+  @attr
   hubId?: string;
 
   @observable
@@ -114,9 +114,9 @@ export class OverhideOhledger extends FASTElement {
   messageClass: string = 'normalMessage';
 
   @observable
-  message?:any;
+  message?: any;
 
-  hub?: IPay2MyAppHub; 
+  hub?: IPay2MyAppHub;
 
   public constructor() {
     super();
@@ -133,7 +133,7 @@ export class OverhideOhledger extends FASTElement {
           case 'paymentsInfo':
             that.paymentInfoChanged(source.paymentsInfo);
             break;
-        } 
+        }
       }
     }
 
@@ -154,12 +154,16 @@ export class OverhideOhledger extends FASTElement {
     this.isActive = info.currentImparter === Imparter.ohledger && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
 
     if (info.payerPrivateKey[Imparter.ohledger] != this.key) {
-      this.changeKey({target: {value: info.payerPrivateKey[Imparter.ohledger]}});
-    }    
+      this.changeKey({ target: { value: info.payerPrivateKey[Imparter.ohledger] } });
+    }
   }
 
   async changeKey(event: any) {
-    this.key = event.target.value;
+    await this.updateKey(event.target.value);
+  }
+
+  async updateKey(key: string) {
+    this.key = key;
     this.isKeyValid = false;
     this.setNormalMessage();
     if (this.hub && this.key) {
@@ -223,6 +227,16 @@ export class OverhideOhledger extends FASTElement {
       }
 
       this.$emit('close');
+    }
+  }
+
+  async loadFromPasswordManager() {
+    if ('credentials' in navigator) {
+      let opts: any = { password: true };
+      let creds: any = await navigator.credentials.get(opts)
+      if (creds != null && 'password' in creds && creds.password != null) {
+        await this.updateKey(creds.password);
+      }
     }
   }
 }
