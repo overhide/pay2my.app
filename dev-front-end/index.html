@@ -19,7 +19,7 @@
   </body>
   <script>
     $(document).ready(function() {
-      $('#pay2myapp-demo').load("/demo-front-end/basic.html div#demo-front-end");
+      $('#pay2myapp-demo').load("../demo-front-end/basic.html div#demo-front-end");
 
       fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
         .then(async (response) => {
