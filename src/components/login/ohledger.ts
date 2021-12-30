@@ -20,6 +20,12 @@ import infoIcon from "../../static/icons/info.svg";
 import clipboardIcon from "../../static/icons/clipboard.svg";
 import passphraseIcon from "../../static/icons/passphrase.svg";
 
+declare global {
+  interface Window {
+    PasswordCredential: any;
+  }
+}
+
 const template = html<OverhideOhledger>`
   <div class="panel w3-panel w3-border w3-round-xxlarge ${e => e.isActive ? 'active' : ''}">
     <div class="w3-row w3-margin">
@@ -42,7 +48,8 @@ const template = html<OverhideOhledger>`
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="on" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
+              <input autocomplete="username" form="ohledger" name="username" id="username" class="w3-input" type="text" :value="${e => e.address || ''}">
+              <input autocomplete="current-password" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
             </div>
             <label>secret token</label>
           </div>
@@ -70,7 +77,7 @@ const template = html<OverhideOhledger>`
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
-            <input type="submit" class="w3-button w3-blue-grey w3-wide" type="button" value="continue" @click="${e => e.continue()}" :disabled="${e => !e.isKeyValid}">
+            <input type="submit" form="ohledger" class="w3-button w3-blue-grey w3-wide" type="button" @click="${e => e.continue()}" value="continue" :disabled="${e => !e.isKeyValid}">
           </div>
         </div>
       </div>    
@@ -212,13 +219,15 @@ export class OverhideOhledger extends FASTElement {
       await this.hub.setCurrentImparter(Imparter.ohledger);
 
       try {
-        if ('credentials' in navigator) {
-          let opts: any = {  password: { id: `overhide ledger address:  ${this.address}`, password: this.key }}
-          let credential: any = await navigator.credentials.create(opts);        
+        if ("PasswordCredential" in window) {
+          let credential = new window.PasswordCredential({
+            id: `overhide ledger address:  ${this.address}`,
+            password: this.key
+          });      
           await navigator.credentials.store(credential);
         }  
       } catch(e) {
-        alert(e);
+        console.error(e);
       }
 
       this.$emit('close');
@@ -227,7 +236,7 @@ export class OverhideOhledger extends FASTElement {
 
   async loadFromPasswordManager() {
     try {
-      if ('credentials' in navigator) {
+      if ("PasswordCredential" in window) {
         let opts: any = { password: true };
         let creds: any = await navigator.credentials.get(opts)
         if (creds != null && 'password' in creds && creds.password != null) {
@@ -235,7 +244,7 @@ export class OverhideOhledger extends FASTElement {
         }
       }  
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
   }
 }

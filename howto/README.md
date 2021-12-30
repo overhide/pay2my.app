@@ -1,4 +1,6 @@
-# Implement a Minimal Effort "Liberating" User Web-Login and In-App Purchases (IAP):  a How-To Tutorial Guide.
+# Add "Liberating" Logins and In-App Purchases to Your Web Product:  a How-To Tutorial Guide.
+
+
 
 In this guide we will add a user login and an in-app purchase (IAP) button to a Web product (basic HTML file).  We will do this using a couple w3c Web components from https://pay2my.app, some HTML, and some JavaScript.  We'll do this without a back-end, and then iteratively add the optional &mdash; but selectively valuable &mdash; back-end (sample Node.js).
 
@@ -88,7 +90,7 @@ Let's pedal back to line 5 and discuss some of the requisite wiring.
 
 
 ```
-5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.3/dist/pay2my.app.js"></script>
+5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.4/dist/pay2my.app.js"></script>
 ```
 
 The interesting bit on line 5 is our pulling in of the [pay2my.app](https://www.npmjs.com/package/pay2my.app) node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.
