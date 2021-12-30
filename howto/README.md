@@ -88,7 +88,7 @@ Let's pedal back to line 5 and discuss some of the requisite wiring.
 
 
 ```
-5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.2/dist/pay2my.app.js"></script>
+5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.3/dist/pay2my.app.js"></script>
 ```
 
 The interesting bit on line 5 is our pulling in of the [pay2my.app](https://www.npmjs.com/package/pay2my.app) node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.

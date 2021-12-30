@@ -211,13 +211,10 @@ export class OverhideOhledger extends FASTElement {
     if (this.hub && this.key && this.isKeyValid && this.address) {
       await this.hub.setCurrentImparter(Imparter.ohledger);
 
-      alert(`version 1 ${"PasswordCredential" in window} ${"credentials" in navigator}`);
       if ('credentials' in navigator) {
         let opts: any = {  password: { id: `overhide ledger address:  ${this.address}`, password: this.key }}
         let credential: any = await navigator.credentials.create(opts);        
-        alert(`credential created: $${this.address} ${this.key} ${credential}`);
         await navigator.credentials.store(credential);
-        alert(`credential stored: $${this.address} ${this.key} ${credential}`);
       }
 
       this.$emit('close');
@@ -225,13 +222,9 @@ export class OverhideOhledger extends FASTElement {
   }
 
   async loadFromPasswordManager() {
-    alert(`load`);
     if ('credentials' in navigator) {
-      alert(`load creds`);
       let opts: any = { password: true };
       let creds: any = await navigator.credentials.get(opts)
-      alert(`got creds`);
-      alert(`got creds: ${creds.password}`);
       if (creds != null && 'password' in creds && creds.password != null) {
         await this.updateKey(creds.password);
       }
