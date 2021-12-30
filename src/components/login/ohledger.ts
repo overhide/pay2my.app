@@ -4,6 +4,7 @@ import {
   html,
   css,
   attr,
+  ref,
   Observable,
   observable
 } from "@microsoft/fast-element";
@@ -42,13 +43,13 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form autocomplete="on" id="ohledger">
+    <form autocomplete="on" id="ohledger" ${ref('autocompleteForm')}>
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
+          <input autocomplete="username" form="ohledger" name="username" id="username" class="w3-hide" type="email" :value="${e => e.address || ''}">        
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="username" form="ohledger" name="username" id="username" class="w3-input" type="text" :value="${e => e.address || ''}">
               <input autocomplete="current-password" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
             </div>
             <label>secret token</label>
@@ -117,6 +118,8 @@ export class OverhideOhledger extends FASTElement {
   @observable
   message?: any;
 
+  autocompleteForm?: HTMLFormElement;
+
   hub?: IPay2MyAppHub;
 
   public constructor() {
@@ -148,6 +151,10 @@ export class OverhideOhledger extends FASTElement {
 
   connectedCallback() {
     super.connectedCallback();
+
+    if (this.autocompleteForm) {
+      this.autocompleteForm.onsubmit = this.submit;
+    }
   };
 
   paymentInfoChanged(info: PaymentsInfo): void {
@@ -230,8 +237,16 @@ export class OverhideOhledger extends FASTElement {
         console.error(e);
       }
 
+      if (this.autocompleteForm) {
+        this.autocompleteForm.submit();
+      }
+
       this.$emit('close');
     }
+  }
+
+  submit(event: any) {
+    event.preventDefault();
   }
 
   async loadFromPasswordManager() {
