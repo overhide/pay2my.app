@@ -233,12 +233,12 @@ export class OverhideOhledger extends FASTElement {
           });      
           await navigator.credentials.store(credential);
         }  
-      } catch(e) {
-        console.error(e);
-      }
 
-      if (this.autocompleteForm) {
-        this.autocompleteForm.submit();
+        if (this.autocompleteForm) {
+          this.autocompleteForm.submit();
+        }  
+      } catch(e) {
+        alert(e);
       }
 
       this.$emit('close');
