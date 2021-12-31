@@ -255,15 +255,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.4/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.5/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.4/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.5/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.3.4*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.4/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.3.5*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.5/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -274,7 +274,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.3.4",
+  "pay2my.app": "1.3.5",
   ..
 }
 ```
