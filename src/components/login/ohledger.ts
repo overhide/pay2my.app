@@ -43,14 +43,14 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form autocomplete="on" ${ref('autocompleteForm')} action="#" method="get" target="noop">
+    <form ${ref('autocompleteForm')} action="#" method="post" target="noop">
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
-          <input autocomplete="username" name="username" id="username" class="w3-hide" type="text" :value="${e => e.address || ''}">        
+          <input type="email" name="email" :value="${e => `${e.address}@overhide.io` || 'unknown@overhide.io'}" id="email" required="required" autocomplete="off"/>
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="current-password" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
+              <input autocomplete="off" required="required" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
             </div>
             <label>secret token</label>
           </div>
@@ -78,7 +78,7 @@ const template = html<OverhideOhledger>`
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
-            <input type="submit" class="w3-button w3-blue-grey w3-wide" value="continue" :disabled="${e => !e.isKeyValid}" @click="${e => e.continue()}">
+            <button type="submit" class="w3-button w3-blue-grey w3-wide" value="continue" :disabled="${e => !e.isKeyValid}" @click="${e => e.continue()}">
           </div>
         </div>
       </div>    
