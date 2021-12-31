@@ -43,7 +43,7 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form autocomplete="on" ${ref('autocompleteForm')}>
+    <form autocomplete="on" ${ref('autocompleteForm')} action="#" method="get" target="noop">
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <input autocomplete="username" name="username" id="username" class="w3-hide" type="text" :value="${e => e.address || ''}">        
@@ -83,6 +83,7 @@ const template = html<OverhideOhledger>`
         </div>
       </div>    
     </form>
+    <iframe src="#" name="noop" style="display: none"></iframe>
   </div>
 `;
 
@@ -228,9 +229,12 @@ export class OverhideOhledger extends FASTElement {
           await navigator.credentials.store(credential);
         }
 
-        setTimeout(function(){     
-          history.replaceState({success:true}, 'no-op', "/no-op.html");
-        }, 100);
+        //setTimeout(function(){     
+        //  history.replaceState({success:true}, 'login');
+        //}, 100);
+
+        if (this.autocompleteForm) this.autocompleteForm.submit();
+
       } catch(e) {
         console.error(e);
       }
