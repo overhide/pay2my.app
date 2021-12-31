@@ -78,7 +78,7 @@ const template = html<OverhideOhledger>`
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
-            <input type="button" class="w3-button w3-blue-grey w3-wide" value="continue" :disabled="${e => !e.isKeyValid}" @click="${e => e.continue()}">
+            <input type="submit" class="w3-button w3-blue-grey w3-wide" value="continue" :disabled="${e => !e.isKeyValid}" @click="${e => e.continue()}">
           </div>
         </div>
       </div>    
@@ -226,7 +226,11 @@ export class OverhideOhledger extends FASTElement {
             password: this.key
           });      
           await navigator.credentials.store(credential);
-        }  
+        }
+
+        setTimeout(function(){     
+          history.replaceState({success:true}, 'no-op', "/no-op.html");
+        }, 100);
       } catch(e) {
         console.error(e);
       }
