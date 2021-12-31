@@ -43,14 +43,14 @@ const template = html<OverhideOhledger>`
         </span>
       </div>
     </div>
-    <form autocomplete="on" id="ohledger" ${ref('autocompleteForm')}>
+    <form autocomplete="on" ${ref('autocompleteForm')}>
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
-          <input autocomplete="username" form="ohledger" name="username" id="username" class="w3-hide" type="email" :value="${e => e.address || ''}">        
+          <input autocomplete="username" name="username" id="username" class="w3-hide" type="text" :value="${e => e.address || ''}">        
           <div class="input">
             <div class="clipboard">
               <div class="clickable svg2" @click="${e => e.copyToClipboard()}" :disabled="${e => !e.isKeyValid}">${clipboardIcon}</div>
-              <input autocomplete="current-password" form="ohledger" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
+              <input autocomplete="current-password" name="password" id="password" class="w3-input" type="password" :value="${e => e.key || ''}" @change="${(e, c) => e.changeKey(c.event)}" @keyup="${(e, c) => e.changeKey(c.event)}" @click="${e => e.loadFromPasswordManager()}">
             </div>
             <label>secret token</label>
           </div>
@@ -78,7 +78,7 @@ const template = html<OverhideOhledger>`
       <div class="w3-row w3-margin">
         <div class="w3-col s12">
           <div class="input">
-            <input type="submit" form="ohledger" class="w3-button w3-blue-grey w3-wide" type="button" @click="${e => e.continue()}" value="continue" :disabled="${e => !e.isKeyValid}">
+            <input type="button" class="w3-button w3-blue-grey w3-wide" value="continue" :disabled="${e => !e.isKeyValid}" @click="${e => e.continue()}">
           </div>
         </div>
       </div>    
@@ -151,10 +151,6 @@ export class OverhideOhledger extends FASTElement {
 
   connectedCallback() {
     super.connectedCallback();
-
-    if (this.autocompleteForm) {
-      this.autocompleteForm.onsubmit = this.submit;
-    }
   };
 
   paymentInfoChanged(info: PaymentsInfo): void {
@@ -223,8 +219,6 @@ export class OverhideOhledger extends FASTElement {
 
   async continue() {
     if (this.hub && this.key && this.isKeyValid && this.address) {
-      await this.hub.setCurrentImparter(Imparter.ohledger);
-
       try {
         if ("PasswordCredential" in window) {
           let credential = new window.PasswordCredential({
@@ -233,20 +227,13 @@ export class OverhideOhledger extends FASTElement {
           });      
           await navigator.credentials.store(credential);
         }  
-
-        if (this.autocompleteForm) {
-          this.autocompleteForm.submit();
-        }  
       } catch(e) {
-        alert(e);
+        console.error(e);
       }
 
+      await this.hub.setCurrentImparter(Imparter.ohledger);
       this.$emit('close');
     }
-  }
-
-  submit(event: any) {
-    event.preventDefault();
   }
 
   async loadFromPasswordManager() {
