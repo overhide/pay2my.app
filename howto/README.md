@@ -2,7 +2,7 @@
 
 
 
-In this guide we will add a user login and an in-app purchase (IAP) button to a Web product (basic HTML file).  We will do this using a couple w3c Web components from https://pay2my.app, some HTML, and some JavaScript.  We'll do this without a back-end, and then iteratively add the optional &mdash; but selectively valuable &mdash; back-end (sample Node.js).
+In this guide we will add a user login and an in-app purchase (IAP) button to a Web product (basic HTML file).  We will do this using a couple w3c Web components from <a target="_blank" href="https://pay2my.app">https://pay2my.app</a>, some HTML, and some JavaScript.  We'll do this without a back-end, and then iteratively add the optional &mdash; but selectively valuable &mdash; back-end (sample Node.js).
 
 The word "liberating" in the title of this tutorial is somewhat overloaded, on purpose:
 
@@ -22,15 +22,33 @@ With that out of the way, let's look at some code.
 
 
 
+## Simple Code Listings
+
+For brevity, full code listings are not part of this write-up, but are referenced in each section from the code callouts:
+
+
+
+> **</>**  FULL CODE 
+>
+> **[!!]**  ENDERED PREVIEW
+
+
+
+All front-end code listings are at the <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/howto/code">/howto/code</a> folder of the <a target="_blank" href="https://github.com/overhide/pay2my.app">widget's repo</a>.
+
+
+
 ## Basic User Login
 
-The first code snippet we look at is a basic user login.  
+The first code snippet we look at is a basic user login:
 
 
 
-> **</>**
+> **</>**  <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/howto/code/1_first.html">FULL CODE</a> 
 >
->  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/1_first.html) | [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/1_first.html) 
+> **[!!]**   <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/1_first.html">RENDERED PRVIEW</a>
+
+
 
 Take a look at the full snippet of raw source code on github &mdash; first link above &mdash; to follow along.
 
@@ -38,13 +56,13 @@ We'll go through this file focusing on the interesting bits and skipping boilerp
 
 Starting with the rendered page &mdash; second link above &mdash; we see something like the below:
 
-![image-20211226135705577](C:\src\pay2my.app\howto\assets\image-20211226135705577.png)
+![image-20211226135705577](https://overhide.github.io/pay2my.app/howto/assets/image-20211226135705577.png)
 
 These are the visual components we wired in with our HTML:
 
-![code2ux](C:\src\pay2my.app\howto\assets\code2ux.png)
+![code2ux](https://overhide.github.io/pay2my.app/howto/assets/code2ux.png)
 
-The [pay2myapp-status](https://github.com/overhide/pay2my.app#pay2myapp-status-) component specified on line 18 is what allows the user to login: change the "login" state of our user in our Web app.  
+The <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-status-">pay2myapp-status</a> component specified on line 18 is what allows the user to login: change the "login" state of our user in our Web app.  
 
 Such a component is usually put in the top-right corner of a Web page as part of some "navbar"; but here, it's our main interactive component for demonstration purposes.
 
@@ -61,15 +79,15 @@ This change is specified on lines 26 through 32, as a reaction to a `pay2myapp-h
 31.       }
 ```
 
-This event is raised to the DOM event listeners by the [pay2my.app](https://www.npmjs.com/package/pay2my.app) components in response to user actions &mdash; logging in and out via the widgets.
+This event is raised to the DOM event listeners by the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app">pay2my.app</a> components in response to user actions &mdash; logging in and out via the widgets.
 
 For example, on this page, when a user clicks on the "sign-in" text, they will be presented with a sign-in modal.  On a successful sign-in, the above `pay2myapp-hub-sku-authentication-changed`  DOM event is raised.
 
 A sample "sign-in" flow using a generated secret token is shown below:
 
-![uxworkflow](C:\src\pay2my.app\howto\assets\uxworkflow.PNG)
+![uxworkflow](https://overhide.github.io/pay2my.app/howto/assets/uxworkflow.PNG)
 
-Here a user clicks on the "sign-in" rendered by the [pay2myapp-status](https://github.com/overhide/pay2my.app#pay2myapp-status-) component [1], which opens a modal presenting login options.  Since we're a new user, we click on "generate new" to generate a new login token [2], and "continue" [3] to actually login.  We will be prompted with additional anti-bot validation before our "account" (new token) is accepted.
+Here a user clicks on the "sign-in" rendered by the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-status-">pay2myapp-status</a> component [1], which opens a modal presenting login options.  Since we're a new user, we click on "generate new" to generate a new login token [2], and "continue" [3] to actually login.  We will be prompted with additional anti-bot validation before our "account" (new token) is accepted.
 
 We've just created a login token for authenticating into subsequent sessions and tracking our in-app purchases (later).
 
@@ -93,7 +111,7 @@ Let's pedal back to line 5 and discuss some of the requisite wiring.
 5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.5/dist/pay2my.app.js"></script>
 ```
 
-The interesting bit on line 5 is our pulling in of the [pay2my.app](https://www.npmjs.com/package/pay2my.app) node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.
+The interesting bit on line 5 is our pulling in of the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app">pay2my.app</a> node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.
 
 
 
@@ -103,29 +121,29 @@ The first component we wire in is the "hub":
 10.     <pay2myapp-hub id="demo-hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></pay2myapp-hub>     
 ```
 
-On line 10 we add the [pay2myapp-hub](https://github.com/overhide/pay2my.app#pay2myapp-hub-) Web component into our DOM.  This is a non-visual component that ties our whole ecosystem of components together.  The "hub" brokers interaction of all the other components with the various open sourced [overhide services](https://github.com/overhide) as well as in-browser crypto wallets. It's the glue between the Web components and external services.
+On line 10 we add the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-hub-">pay2myapp-hub</a> Web component into our DOM.  This is a non-visual component that ties our whole ecosystem of components together.  The "hub" brokers interaction of all the other components with the various open sourced <a target="_blank" href="https://github.com/overhide">overhide services</a> as well as in-browser crypto wallets. It's the glue between the Web components and external services.
 
 > ℹ
 >
-> In our demo we add Web components directly into the DOM of our simple HTML page, but all these low level Web components can just as well be wrapped by higher-level components of application frameworks such as [React](https://reactjs.org/): see [the React demos]().
+> In our demo we add Web components directly into the DOM of our simple HTML page, but all these low level Web components can just as well be wrapped by higher-level components of application frameworks such as <a target="_blank" href="https://reactjs.org/">React</a>: see <a target="_blank" href="https://github.com/overhide/pay2my.app-react-demo">the React demos</a>.
 
 
 
 We ID the "hub" component as a `demo-hub`.  We will use this ID to tie all the components into a single ecosystem controlled by this particular "hub" instance.  
 
-This `id="demo-hub"` specification is optional.  Alternatively (to using HTML element IDs) the components can be wired together into an ecosystem programmatically with JavaScript (see ["Setting the pay2myapp-hub Programmatically" in the repo README](https://github.com/overhide/pay2my.app#setting-the-pay2myapp-hub-programatically) for more information).
+This `id="demo-hub"` specification is optional.  Alternatively (to using HTML element IDs) the components can be wired together into an ecosystem programmatically with JavaScript (see <a target="_blank" href="https://github.com/overhide/pay2my.app#setting-the-pay2myapp-hub-programatically">"Setting the pay2myapp-hub Programmatically" in the repo README</a> for more information).
 
 
 
-The `apiKey` attribute indicates  who the system-using application is.  Each of your applications will use an `apiKey` as registered with the pay2my.app/overhide.io services at https://token.overhide.io/register.
+The `apiKey` attribute indicates  who the system-using application is.  Each of your applications will use an `apiKey` as registered with the pay2my.app/overhide.io services at <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register</a>.
 
-The provided `apiKey` (`"0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___"`) is a demo-only API key (for this here demo).  For your own applications you will replace this with your own API key(s) retrieved from https://token.overhide.io/register.
+The provided `apiKey` (`"0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___"`) is a demo-only API key (for this here demo).  For your own applications you will replace this with your own API key(s) retrieved from <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register</a>.
 
 > **⚠**
 >
-> For a test instance (using fake money/testnets), such as this demo, ensure to generate a "Test only API key" at https://token.overhide.io/register.  
+> For a test instance (using fake money/testnets), such as this demo, ensure to generate a "Test only API key" at <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register</a>.  
 
-You don't need to understand the details of the `apiKey`, but if you want to, see ["Enabling with Token" in the repo README](https://github.com/overhide/pay2my.app#enabling-with-token) for more information.
+You don't need to understand the details of the `apiKey`, but if you want to, see <a target="_blank" href="https://github.com/overhide/pay2my.app#enabling-with-token">"Enabling with Token" in the repo README</a> for more information.
 
 
 
@@ -133,7 +151,7 @@ Lastly, take special note of the `isTest` attribute above on line 10.  This indi
 
 
 
-The "hub" takes care of talking to external services and ledgers, acting as a glue between those and the various other components rendered.  The first component rendered on our page &mdash; albeit as a modal in reaction to clicks on other components &mdash; will be the [pay2myapp-login](https://github.com/overhide/pay2my.app#pay2myapp-login-) component:
+The "hub" takes care of talking to external services and ledgers, acting as a glue between those and the various other components rendered.  The first component rendered on our page &mdash; albeit as a modal in reaction to clicks on other components &mdash; will be the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-login-">pay2myapp-login</a> component:
 
 ```
 12.     <pay2myapp-login hubId="demo-hub"
@@ -147,7 +165,7 @@ This component is tied to our "hub" via the specified `hubId` attribute.
 
 > ℹ
 >
-> Again, the `hubId` specification is optional and the components can be wired together into an ecosystem programmatically, see ["Setting the pay2myapp-hub Programmatically" in the repo README](https://github.com/overhide/pay2my.app#setting-the-pay2myapp-hub-programatically) for more information.
+> Again, the `hubId` specification is optional and the components can be wired together into an ecosystem programmatically, see <a target="_blank" href="https://github.com/overhide/pay2my.app#setting-the-pay2myapp-hub-programatically">"Setting the pay2myapp-hub Programmatically" in the repo README</a> for more information.
 
 This "login" component specifies the various approaches to authentication and payments available to our application.
 
@@ -165,23 +183,25 @@ With the "login" component setup, whenever a user attempts to authenticate , the
 
 ## User Login via Button
 
-In  the first example we provided a user login via the  [pay2myapp-status](https://github.com/overhide/pay2my.app#pay2myapp-status-) component.
+In  the first example we provided a user login via the  <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-status-">pay2myapp-status</a> component.
 
 This is a somewhat rigid component meant to be placed in a navbar.
 
-In this example we do same, except with a button that can be [fully customized](https://github.com/overhide/pay2my.app#slots-2) via standard Web component `slots`.
+In this example we do same, except with a button that can be <a target="_blank" href="https://github.com/overhide/pay2my.app#slots-2">fully customized</a> via standard Web component `slots`.
 
 
 
-> **</>**
+> **</>**  <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/howto/code/2_button.html">FULL CODE</a>
 >
->  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/2_button.html) | [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/2_button.html) 
+>  **[!!]**  <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/2_button.html">RENDERED PREVIEW</a> 
+
+
 
 Again, take a look at the full snippet of raw source code on github &mdash; first link above &mdash; to follow along.  The rendered version is the second link.
 
 
 
-The main difference from the first example is the absence of the [pay2myapp-status](https://github.com/overhide/pay2my.app#pay2myapp-status-) component, being replaced by the [pay2myapp-appsell](https://github.com/overhide/pay2my.app#pay2myapp-appsell-) component on lines 18 through 21:
+The main difference from the first example is the absence of the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-status-">pay2myapp-status</a> component, being replaced by the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-appsell-">pay2myapp-appsell</a> component on lines 18 through 21:
 
 ```
 18.     <pay2myapp-appsell 
@@ -190,11 +210,11 @@ The main difference from the first example is the absence of the [pay2myapp-stat
 21.     </pay2myapp-appsell>
 ```
 
-This component is more customizable, starting with the `loginMessage` attribute.  See the [component documentation](https://github.com/overhide/pay2my.app#pay2myapp-appsell-) for details.
+This component is more customizable, starting with the `loginMessage` attribute.  See the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-appsell-">component documentation</a> for details.
 
 The end result here is a button:
 
-![image-20211226150515503](C:\src\pay2my.app\howto\assets\image-20211226150515503.png)
+![image-20211226150515503](https://overhide.github.io/pay2my.app/howto/assets/image-20211226150515503.png)
 
 ## In-App Purchases (IAP)
 
@@ -202,21 +222,23 @@ Thus far we've covered user logins.
 
 Let's get into making money as developers.  In this snippet we're focusing on US dollars.  Getting paid in cryptos is covered in a later snippet.
 
-Regardless of currency, as this example shows, to get paid we only need to add a couple more attributes to the previously introduced [pay2myapp-appsell](https://github.com/overhide/pay2my.app#pay2myapp-appsell-) component.  
+Regardless of currency, as this example shows, to get paid we only need to add a couple more attributes to the previously introduced <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-appsell-">pay2myapp-appsell</a> component.  
 
 The full source code for this example:
 
 
 
-> **</>**
+> **</>**  <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/howto/code/3_purchases.html">FULL CODE</a> 
 >
->  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/3_purchases.html) | [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/3_purchases.html) 
+>  **[!!]**  <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/3_purchases.html">RENDERED PREVIEW</a> 
+
+
 
 Again, take a look at the full snippet of raw source code on github &mdash; first link above &mdash; to follow along.  The rendered version is the second link.
 
 
 
-As a quick aside, the basic premise of these in-app purchases is checking public ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developer's &mdash; public registered token.  The actual payments are made through https://stripe.com/ and tracked on the *overhide* public "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the https://pay2my.app/ site.
+As a quick aside, the basic premise of these in-app purchases is checking public ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developer's &mdash; public registered token.  The actual payments are made through <a target="_blank" href="https://stripe.com/">https://stripe.com</a> and tracked on the *overhide* public "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the <a target="_blank" href="https://pay2my.app/">https://pay2my.app</a> site.
 
 > ℹ
 >
@@ -252,32 +274,32 @@ Keep in mind these are all fake USD payments in this demo, we're using testnets.
 
 >  ℹ
 >
-> For a better picture of how these payments can be configured &mdash; free/paid/subscriptions &mdash; check out the [demos](https://github.com/overhide/pay2my.app#demos). 
+> For a better picture of how these payments can be configured &mdash; free/paid/subscriptions &mdash; check out the <a target="_blank" href="https://github.com/overhide/pay2my.app#demos">demos</a>. 
 
 
 
 Next, on line 26, we need to tell the widget which ledger "token" these payments are made to: who is the recipient.  This is your &mdash; the developer's &mdash; payment address.  In the demo it's set to my test address, but you need to change this value as per whatever address you onboard (below).
 
-The *overhide* ledger is just a receipts ledger.  The actual value transfer occurs through https://stripe.com &mdash; unlike cryptos whereby the value transfer occurs through the blockchain ledger (later).
+The *overhide* ledger is just a receipts ledger.  The actual value transfer occurs through <a target="_blank" href="https://stripe.com">https://stripe.com</a> &mdash; unlike cryptos whereby the value transfer occurs through the blockchain ledger (later).
 
 > 📢
 >
-> Every single address used as a value in the `overhideAddress` attribute must be an *overhide* ledger [onboarded](https://test.ledger.overhide.io/onboard) address &mdash; whereby this address receives payment receipts of payments you receive to your https://stripe.com account.  
+> Every single address used as a value in the `overhideAddress` attribute must be an *overhide* ledger <a target="_blank" href="https://test.ledger.overhide.io/onboard">onboarded</a> address &mdash; whereby this address receives payment receipts of payments you receive to your <a target="_blank" href="https://stripe.com">https://stripe.com</a> account.  
 
 
 
-You onboard onto the *overhide* ledger as per the links at https://pay2my.app/:
+You onboard onto the *overhide* ledger as per the links at https://pay2my.app:
 
-- [testnet onboarding](https://test.ledger.overhide.io/onboard) (this demo)
-- [live/prod onboarding](https://ledger.overhide.io/onboard) (when you're ready)
+- <a target="_blank" href="https://test.ledger.overhide.io/onboard">testnet onboarding</a> (this demo)
+- <a target="_blank" href="https://ledger.overhide.io/onboard">live/prod onboarding</a> (when you're ready)
 
 
 
-The onboarding process gives you the option to click through to https://stripe.com and create an account with them.  
+The onboarding process gives you the option to click through to <a target="_blank" href="https://stripe.com">https://stripe.com</a> and create an account with them.  
 
 You do not need to do that just yet, when testing.  You cans skip registering with Stripe for now:
 
-![image-20211226161152932](C:\src\pay2my.app\howto\assets\image-20211226161152932.png)
+![image-20211226161152932](https://overhide.github.io/pay2my.app/howto/assets/image-20211226161152932.png)
 
 But creating an actual account with Stripe is unavoidable once you want to get paid in US dollars for real &mdash; unless you want to solely accept cryptos (later).
 
@@ -318,19 +340,19 @@ Lastly, on line 53 we have the `pay2myapp-appsell-sku-clicked` event indicating 
 
 With the code understood, let's take a look at the experience.  
 
-A user is presented with the following [rendered page](https://overhide.github.io/pay2my.app/howto/code/3_purchases.html):
+A user is presented with the following <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/3_purchases.html">rendered page</a>:
 
-![image-20211226155036584](C:\src\pay2my.app\howto\assets\image-20211226155036584.png)
+![image-20211226155036584](https://overhide.github.io/pay2my.app/howto/assets/image-20211226155036584.png)
 
 Clicking on the "sign-in" blurb in the "status" widget or on the button will allow us to authenticate in the previous manner.
 
 A click on the "status" widget will solely authenticate and pull down tallies of any existing ledger payments.
 
-More interestingly, a click on the "button" will allow a top-up payment, presenting us with a credit card entry widget from https://stripe.com:
+More interestingly, a click on the "button" will allow a top-up payment, presenting us with a credit card entry widget from <a target="_blank" href="https://stripe.com">https://stripe.com</a>:
 
 
 
-![image-20211226155604498](C:\src\pay2my.app\howto\assets\image-20211226155604498.png)
+![image-20211226155604498](https://overhide.github.io/pay2my.app/howto/assets/image-20211226155604498.png)
 
 
 
@@ -345,7 +367,7 @@ This is a make-belief payment using a fake VISA card, as such, the following val
 
 Once the payment is made, you will see a new message.   You can also click on the "token" in the "status" component to see your public ledger entries (orange arrow):
 
-![refresh](C:\src\pay2my.app\howto\assets\refresh.png)
+![refresh](https://overhide.github.io/pay2my.app/howto/assets/refresh.png)
 
 If you recall our payment is valid for 2 minutes.  You can prove this to yourself by clicking the refresh button (green arrow) after two minutes have passed.  No timers setup in this demo, but you can do so in your own code.
 
@@ -365,9 +387,11 @@ The full source code for this example:
 
 
 
-> **</>**
+> **</>**  <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/howto/code/4_crypto.html">FULL CODE</a> 
 >
->  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/4_crypto.html) | [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/4_crypto.html) 
+>  **[!!]**   <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/4_crypto.html">RENDERED PREVIEW</a> 
+
+
 
 Take a look at the full snippet of raw source code on github &mdash; first link above &mdash; to follow along.  The rendered version is the second link.
 
@@ -379,13 +403,13 @@ We will click-through the user experience after we cover the minor code changes 
 >
 > The click-through will only work if you have a *web3.js* wallet attached to your browser: 
 >
-> - the [Opera browser](https://www.opera.com/) has one built in
-> - https://metamask.io/ is a good wallet for Edge and Chrome
-> - https://liquality.io/ is a good wallet for Edge and Chrome
+> - the <a target="_blank" href="https://www.opera.com">Opera browser</a> has one built in
+> - <a target="_blank" href="https://metamask.io/">https://metamask.io</a> is a good wallet for Edge and Chrome
+> - <a target="_blank" href="https://liquality.io/">https://liquality.io</a> is a good wallet for Edge and Chrome
 
 
 
-There are very few code changes to get Ethereum and Bitcoin enabled.  We need to tell the [pay2myapp-login](https://github.com/overhide/pay2my.app#pay2myapp-login-) component that we want to allow the use of Ethereum and Bitcoin:
+There are very few code changes to get Ethereum and Bitcoin enabled.  We need to tell the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-login-">pay2myapp-login</a> component that we want to allow the use of Ethereum and Bitcoin:
 
 ```
 12.     <pay2myapp-login hubId="demo-hub"
@@ -398,11 +422,11 @@ There are very few code changes to get Ethereum and Bitcoin enabled.  We need to
 
 On line 17 we allow the use of Ethereum and on line 18 we do the same for Bitcoin.
 
-Line 16 configures usage of an Ethereum *web3.js* wallet, such as [Metamask](https://metamask.io/), for US dollar *overhide* ledger transactions.  
+Line 16 configures usage of an Ethereum *web3.js* wallet, such as <a target="_blank" href="https://metamask.io/">Metamask</a>, for US dollar *overhide* ledger transactions.  
 
 > 📢 
 >
-> The https://pay2my.app components allow use of *web3.js* crypto wallets as user credential storage for US dollar in-app purchases.
+> The <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> components allow use of *web3.js* crypto wallets as user credential storage for US dollar in-app purchases.
 
 
 
@@ -434,7 +458,7 @@ With just the above configuration points we've enabled logins through crytpo wal
 
 
 
-With the code understood, and an in-browser Ethereum wall installed ([Metamask](https://metamask.io/) in our case), let's click through a sample flow.  
+With the code understood, and an in-browser Ethereum wall installed (<a target="_blank" href="https://metamask.io/">Metamask</a> in our case), let's click through a sample flow.  
 
 
 
@@ -444,7 +468,7 @@ With the code understood, and an in-browser Ethereum wall installed ([Metamask](
 >
 > 
 >
-> ![image-20211227112415326](C:\src\pay2my.app\howto\assets\image-20211227112415326.png)
+> ![image-20211227112415326](https://overhide.github.io/pay2my.app/howto/assets/image-20211227112415326.png)
 
 
 
@@ -452,13 +476,13 @@ With the code understood, and an in-browser Ethereum wall installed ([Metamask](
 
 Other than the wallet interaction, the page doesn't look any different:
 
-![image-20211227111621995](C:\src\pay2my.app\howto\assets\image-20211227111621995.png)
+![image-20211227111621995](https://overhide.github.io/pay2my.app/howto/assets/image-20211227111621995.png)
 
 We do now have new login options:
 
 
 
-![image-20211227111711882](C:\src\pay2my.app\howto\assets\image-20211227111711882.png)
+![image-20211227111711882](https://overhide.github.io/pay2my.app/howto/assets/image-20211227111711882.png)
 
 
 
@@ -466,19 +490,19 @@ Clicking on the "ethereum login" we're taken to our wallet:
 
 
 
-![image-20211227111843427](C:\src\pay2my.app\howto\assets\image-20211227111843427.png)
+![image-20211227111843427](https://overhide.github.io/pay2my.app/howto/assets/image-20211227111843427.png)
 
 
 
 The various "signature request" prompts are needed to authenticate:  for free logins as an example.
 
-Payments are made through the wallet in the usual way &mdash; out of scope of this write-up.  But in general, the flow is quite similar to US dollars flows already seen.  One caveat, crypto in-app purchases require more time and are more expensive, transaction-fee wise, than the US dollar counterparts.  This will/can be alleviated as new cryptos are embraced by the https://pay2my.app widgets.
+Payments are made through the wallet in the usual way &mdash; out of scope of this write-up.  But in general, the flow is quite similar to US dollars flows already seen.  One caveat, crypto in-app purchases require more time and are more expensive, transaction-fee wise, than the US dollar counterparts.  This will/can be alleviated as new cryptos are embraced by the <a target="_blank" href="https://pay2my.app">https://pay2my.app</A> widgets.
 
 
 
 Of note, if we click on the "wallet login" instead of the "ethereum login" we're also asked to interact with the Ethereum wallet for signatures, but  we aren't asked to use it to send money.   The regular Stripe credit card prompt is presented.
 
-![usdflow](C:\src\pay2my.app\howto\assets\usdflow.png)
+![usdflow](https://overhide.github.io/pay2my.app/howto/assets/usdflow.png)
 
 
 
@@ -486,40 +510,40 @@ Of note, if we click on the "wallet login" instead of the "ethereum login" we're
 
 Thus far everything we did was in-browser only, no back-end code. 
 
-This may be sufficient for your project and you may want to skip this section, but on the other hand, it may not be.  Consider [this write-up](https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html) to motivate your decision.
+This may be sufficient for your project and you may want to skip this section, but on the other hand, it may not be.  Consider <a target="_blank" href="https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html">this write-up</a> to motivate your decision.
 
 Note that you need to standup this back-end locally before the preview link below functions.
 
 
 
-> **</>**
+> **</>**  <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/howto/code/5_backend.html">FULL CODE</a> 
 >
->  [source on github](https://github.com/overhide/pay2my.app/blob/master/howto/code/5_backend.html) |  [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/5_backend.html) (won't work until back-end running, see below)
+> **[!!]**  <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/5_backend.html">RENDERED PREVIEW</a> (won't work until back-end running, see below)
 
 
 
 First, some pre-requisites, a browser alone will no longer suffice.  
 
-You will need [node.js](https://nodejs.org/en/download/) to run this particular sample back-end.  
+You will need <a target="_blank" href="https://nodejs.org/en/download/">node.js</a> to run this particular sample back-end.  
 
 
 
-Next, we need the actual [demo back-end source code](https://github.com/overhide/pay2my.app/tree/master/demo-back-end) in addition to the browser-side front-end code snippet.
+Next, we need the actual <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> in addition to the browser-side front-end code snippet.
 
 > **</>**
 >
-> To study snippets of the back-end code used in this write-up please see the simple [demo back-end source code](https://github.com/overhide/pay2my.app/tree/master/demo-back-end) as it lives in GitHub.  
+> To study snippets of the back-end code used in this write-up please see the simple <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> as it lives in GitHub.  
 
-This the same back-end code running as Azure functions used for all the [code demos](https://www.npmjs.com/package/pay2my.app#demos) (at least the ones using a back-end).
+This the same back-end code running as Azure functions used for all the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app#demos">code demos</a> (at least the ones using a back-end).
 
 
 
-It's pretty straight forward to get this back-end running locally ([source of truth instructions](https://github.com/overhide/pay2my.app#local-development)).
+It's pretty straight forward to get this back-end running locally (<a target="_blank" href="https://github.com/overhide/pay2my.app#local-development">source of truth instructions</a>).
 
 To get the back-end running...
 
 - with the `https://github.com/overhide/pay2my.app` repository synced on your local machine
-- with  [node.js](https://nodejs.org/en/download/) installed
+- with <a target="_blank" href="https://nodejs.org/en/download/">node.js</a> installed
 - with a console prompt in the `/demo-back-end` subfolder of the above repository
 
 ... simply start the back-end code:
@@ -533,7 +557,7 @@ npm run dev
 
 The back-end will start at port `8100`.
 
-Now, with the back-end humming on port `localhost:8100`, you can point your browser at the [rendered preview from github](https://overhide.github.io/pay2my.app/howto/code/5_backend.html) and see it work properly.
+Now, with the back-end humming on port `localhost:8100`, you can point your browser at the <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/code/5_backend.html">rendered preview from github</a> and see it work properly.
 
 
 
@@ -598,25 +622,25 @@ For back-end verifications of our feature click-throughs, we no have:
 
 The `pay2myapp-appsell-sku-clicked` event now goes to the back-end's `GET /RunFeature` endpoint (line 75).
 
-This endpoint is served by a simple [node.js](https://nodejs.org/en/download/)/[express.js](https://expressjs.com/) router as coded in the back-end's [index.js](https://github.com/overhide/pay2my.app/blob/master/demo-back-end/index.js).
+This endpoint is served by a simple <a target="_blank" href="https://nodejs.org/en/download/">node.js</a>/<a target="_blank" href="https://expressjs.com/">express.js</a> router as coded in the back-end's <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/demo-back-end/index.js">index.js</a>.
 
 All those query parameters (lines 76 through 81) are documented in that route.
 
-The `GET /RunFeature` ends up running the code [here](https://github.com/overhide/pay2my.app/blob/master/demo-back-end/RunFeature/index.js), which makes calls to several [*overhide* remuneration APIs](https://overhide.io/2020/09/06/remuneration-api.html) for authorization checks against ledgers used.
+The `GET /RunFeature` ends up running the code <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/demo-back-end/RunFeature/index.js">here</a>, which makes calls to several <a target="_blank" href="https://overhide.io/2020/09/06/remuneration-api.html">*overhide* remuneration APIs</a> for authorization checks against ledgers used.
 
 
 
 ## Appendix A:  Workflow Introduction
 
-The https://pay2my.app site offers many materials introducing "Ledger-Based Authorizations", the mechanism used throughout this tutorial vis a vis the Web components.
+The <a target="_blank" href="https://pay2my.app">https://pay2my.app</A> site offers many materials introducing "Ledger-Based Authorizations", the mechanism used throughout this tutorial vis a vis the Web components.
 
 But let's attempt to quickly introduce the gist of it all with a simple business flow diagram.
 
-The [full resolution version is here](drawings/flow.png).
+The <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/drawings/flow.png">full resolution version is here</a>.
 
 
 
-![flow](C:\src\pay2my.app\howto\drawings\flow.png)
+![flow](https://overhide.github.io/pay2my.app/howto/drawings/flow.png)
 
 
 
@@ -639,22 +663,22 @@ But all provide a signature leading to authentication.
 
 Similarly, the details of the in-app purchase step varies depending on the ledger:
 
-- US dollars leverages https://stripe.com for value transfer and uses the public *overhide* ledger for receipts
+- US dollars leverages <a target="_blank" href="https://stripe.com">https://stripe.com</a> for value transfer and uses the public *overhide* ledger for receipts
 - Cryptos leverage a wallet for value transfers on public blockchains
 
-But at the end of the day, all these disparate ledgers are abstracted via a couple [simple APIs](https://overhide.io/2020/09/06/remuneration-api.html) enabling a unified flow leading to authorization and enablement of features.
+But at the end of the day, all these disparate ledgers are abstracted via a couple <a target="_blank" href="https://overhide.io/2020/09/06/remuneration-api.html">simple APIs</a> enabling a unified flow leading to authorization and enablement of features.
 
 
 
 ## Appendix B:  Matrix of Usability Versus Ownership 
 
-The https://pay2my.app Web components offer a gamut of login approaches:
+The <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> Web components offer a gamut of login approaches:
 
 - social login
 - crypto wallet login
 - secret token login
 
-The "social login" is the common OAuth2 Authorization Code flow.  To our Web app users it's the regular "login with ...", be it Google or Microsoft (for now).  This flow leverages a cloud provider to authenticate and a [special service in the *overhide* cluster](https://github.com/overhide/overhide-social) to generate tokens and provide signatures &mdash; the secret tokens are never sent over the wire.
+The "social login" is the common OAuth2 Authorization Code flow.  To our Web app users it's the regular "login with ...", be it Google or Microsoft (for now).  This flow leverages a cloud provider to authenticate and a <a target="_blank" href="https://github.com/overhide/overhide-social">special service in the *overhide* cluster</a> to generate tokens and provide signatures &mdash; the secret tokens are never sent over the wire.
 
 The "crypto wallet login" allows the user's login credentials to be stored and only known to your user's crypto wallet.  The Web app need only use the wallet's public address and signatures.  Secrets never make it out  of the wallet.
 
@@ -670,7 +694,7 @@ Each choice of login has different pros and cons as it comes to:
 
 
 
-![matrix](C:\src\pay2my.app\howto\drawings\matrix.png)
+![matrix](https://overhide.github.io/pay2my.app/howto/drawings/matrix.png)
 
 
 
@@ -694,6 +718,6 @@ The secret token provides the same ownership of access as a wallet.
 
 
 
-As such, the https://pay2my.app widgets allow our users to choose whichever login they're comfortable with and whichever risks they're willing to accept.
+As such, the <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> widgets allow our users to choose whichever login they're comfortable with and whichever risks they're willing to accept.
 
 It's an onramp to wallet adoption without forcing people's hand.
