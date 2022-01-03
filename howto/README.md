@@ -8,11 +8,11 @@ The word "liberating" in the title of this tutorial is somewhat overloaded, on p
 
 - as a developer you're free to limit your application to front-end only, or leverage a back-end, yet enable user logins and make money regardless:  bring in a back-end for your features, not user management
 - your customers have freedom to login into your product using social login, crypto wallets, or a secret passphrase they manage themselves
-- as a developer you're freed from implementing payment-gateway integrations and user data-stores, just because you want to get paid for your offering
+- as a developer you're freed from implementing payment-gateway integrations and user data-stores, despite wanting to get paid for your offering
 - as a developer you're free to focus on your app's functionality instead of worrying about GDPR and managing personable identifiable information, just to get paid for your efforts
 - you're free to take this, own it, and modify it, protocols and code are free, open-sourced
 
-The brunt of this article will be some very simple code -- we'll jump right into that.  This is very much a practical tutorial introducing how easy it is to use several standard w3c Web components to add user logins ("authenticate via signatures") and in-app purchases ("authorize via ledgers") to your Web offering.
+The brunt of this article is some very simple code -- we'll jump right into that.  This is very much a practical tutorial introducing how easy it is to use several standard w3c Web components to add user logins ("authenticate via signatures") and in-app purchases ("authorize via ledgers") to your Web offering.
 
 But nothing needs to stay black-box.  I'll cover a high level explanation of what's going on behind the scenes at the end of the write-up, as an aside, for those interested.  There is nothing hidden or closed off here.  All the concepts of Ledger-Based Authorizations, the mechanisms, the APIs, the libraries, are documented in several blog posts, articles, slide shows, all available at https://pay2my.app.  The code backing what's discussed herein is open sourced and can be browsed at your leisure.  If something isn't to your liking, making it your way is a pull-request away, community agreeing of course.
 
@@ -36,6 +36,8 @@ For brevity, full code listings are not part of this write-up, but are reference
 
 All front-end code listings are at the <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/howto/code">/howto/code</a> folder of the <a target="_blank" href="https://github.com/overhide/pay2my.app">widget's repo</a>.
 
+To follow along you need to be comfortable with basic HTML and JavaScript as it relates to the DOM.
+
 
 
 ## Basic User Login
@@ -58,7 +60,7 @@ Starting with the rendered page &mdash; second link above &mdash; we see somethi
 
 ![image-20211226135705577](https://overhide.github.io/pay2my.app/howto/assets/image-20211226135705577.png)
 
-These are the visual components we wired in with our HTML:
+These are the visual components we wired in with that simple HTML page:
 
 ![code2ux](https://overhide.github.io/pay2my.app/howto/assets/code2ux.png)
 
@@ -91,13 +93,13 @@ Here a user clicks on the "sign-in" rendered by the <a target="_blank" href="htt
 
 We've just created a login token for authenticating into subsequent sessions and tracking our in-app purchases (later).
 
-For subsequent sign-ins the user will need to remember this secret token &mdash; copy using the clipboard icon and store in some password manager.  Any new "generation" is effectively a new login.
+For subsequent sign-ins the user will likely want their in-browser password manager remember this secret token &mdash; or copy using the clipboard icon and store elsewhere.  Any new "generation" is effectively a new login.
 
 The social login alternatives shown (Microsoft and Google) can be used to let users leverage their pre-existing Microsoft or Google accounts, to the same effect.  Feel free to try these out as well.  
 
 > ℹ
 >
-> Note that using a new social login will automatically generate a secret token behind the scenes and use it to track transactions for that login.  When using social login providers the user need not remember their secret token, it's tracked on their behalf.  But the user is now dependent on their social login.
+> Note that using a new social login will automatically generate a secret token behind the scenes and use it to track transactions for that login, in perpetuity.  When using social login providers the user need not remember their secret token, it's tracked on their behalf.  But the user is now dependent on their social login.
 
 
 
@@ -135,7 +137,7 @@ This `id="demo-hub"` specification is optional.  Alternatively (to using HTML el
 
 
 
-The `apiKey` attribute indicates  who the system-using application is.  Each of your applications will use an `apiKey` as registered with the pay2my.app/overhide.io services at <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register</a>.
+The `apiKey` attribute indicates  who the system-using application is.  Each of your applications will use an `apiKey` as registered with the pay2my.app/overhide.io services at <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register:</a> not much of a registration, just an anti-bot button click.
 
 The provided `apiKey` (`"0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___"`) is a demo-only API key (for this here demo).  For your own applications you will replace this with your own API key(s) retrieved from <a target="_blank" href="https://token.overhide.io/register">https://token.overhide.io/register</a>.
 
@@ -147,7 +149,13 @@ You don't need to understand the details of the `apiKey`, but if you want to, se
 
 
 
-Lastly, take special note of the `isTest` attribute above on line 10.  This indicates to the "hub" to use "test-net" services for its work.  Leaving this attribute out will use the various production/live services and ledgers, and real money.
+Lastly, take special note of the `isTest` attribute above on line 10.  This indicates to the "hub" to use "testnet" services for its work.  Leaving this attribute out will use the various production/live services and ledgers, and real money.
+
+> ℹ
+>
+> A *testnet* is an orchestration of all the bits and pieces involved in real production workflows, but with make-pretend money for testing purposes.
+>
+> All *overhide* services and all crypto currencies provided by the widgets provide a *testnet*.  Fake credit card entry will be covered later when we get to it.
 
 
 
@@ -169,7 +177,7 @@ This component is tied to our "hub" via the specified `hubId` attribute.
 
 This "login" component specifies the various approaches to authentication and payments available to our application.
 
-In this example we allow Microsoft social login, Google social login, and a user provided "secret token" (think password) for authentication.  All of this is setup via the three attributes on lines 13-15:
+In this example we allow Microsoft social login, Google social login, and a user provided "secret token" (think password) for authentication.  All of this is wired-in by simply specifying the three attributes on lines 13-15:
 
 - overhideSocialMicrosoftEnabled
 - overhideSocialGoogleEnabled
@@ -177,7 +185,7 @@ In this example we allow Microsoft social login, Google social login, and a user
 
 
 
-With the "login" component setup, whenever a user attempts to authenticate , they will be present with a modal providing all three options:
+With the "login" component setup, whenever a user attempts to authenticate , they will be presented with a modal providing all three options:
 
 
 
@@ -210,11 +218,15 @@ The main difference from the first example is the absence of the <a target="_bla
 21.     </pay2myapp-appsell>
 ```
 
-This component is more customizable, starting with the `loginMessage` attribute.  See the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-appsell-">component documentation</a> for details.
+This component is somewhat customizable through attributes and  <a target="_blank" href="https://github.com/overhide/pay2my.app#slots-2">significantly more customizable</a> &mdash; with a bit more effort &mdash; using standard Web component `slots`.  The one customization above is our use of the `loginMessage` attribute.  This sets the title of the button and instructs the button to act as a persistent login button.  See the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-appsell-">component documentation</a> for details.
 
-The end result here is a button:
+The end result is our page has an ever-present button allowing our user to open the login modal:
 
 ![image-20211226150515503](https://overhide.github.io/pay2my.app/howto/assets/image-20211226150515503.png)
+
+Other than that, the page acts in the same manner as the previous example.
+
+
 
 ## In-App Purchases (IAP)
 
@@ -238,13 +250,13 @@ Again, take a look at the full snippet of raw source code on github &mdash; firs
 
 
 
-As a quick aside, the basic premise of these in-app purchases is checking public ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developer's &mdash; public registered token.  The actual payments are made through <a target="_blank" href="https://stripe.com/">https://stripe.com</a> and tracked on the *overhide* public "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the <a target="_blank" href="https://pay2my.app/">https://pay2my.app</a> site.
+As a quick aside, the basic premise of these in-app purchases is checking ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developer's &mdash; public registered token.  The actual payments are made through <a target="_blank" href="https://stripe.com/">https://stripe.com</a> and tracked on the *overhide* "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the <a target="_blank" href="https://pay2my.app/">https://pay2my.app</a> site.
 
 > ℹ
 >
-> The user owned "token" is the secret token generated earlier.  The public "address" of this token is what's stored in the public ledger.  The private token is necessarily kept secret.
+> The user owned "token" is the secret token generated earlier.  The public "address" of this token is what's stored in the ledger.  The private token is necessarily kept secret.
 >
-> For crypto currencies (later) the blockchain address and a signature are used, as furnished by wallets.  The blockchain is the public ledger.  
+> For crypto currencies (later) the blockchain address and a signature are used, as furnished by wallets.  The blockchain is the ledger.  
 
 
 
@@ -365,7 +377,7 @@ This is a make-belief payment using a fake VISA card, as such, the following val
 
 
 
-Once the payment is made, you will see a new message.   You can also click on the "token" in the "status" component to see your public ledger entries (orange arrow):
+Once the payment is made, you will see a new message.   You can also click on the "token" in the "status" component to see your ledger entries (orange arrow):
 
 ![refresh](https://overhide.github.io/pay2my.app/howto/assets/refresh.png)
 
@@ -375,7 +387,7 @@ If you recall our payment is valid for 2 minutes.  You can prove this to yoursel
 
 ## Crypto In-App Purchases (IAP)
 
-All of the previously discussed snippets used the *overhide* ledger; which is a public centralized US dollar receipts ledger of receipts from select https://stripe.com transactions.  
+All of the previously discussed snippets used the *overhide* ledger; which is a centralized US dollar receipts ledger of receipts from select https://stripe.com transactions.  
 
 These https://pay2my.app components support other ledgers &mdash; cryptocurrency ledgers &mdash; with very few code changes.
 
@@ -647,7 +659,7 @@ The <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/drawing
 The main flow is shown with the green boxes and arrows.  It comprises two main steps that use the various subsystems abstracted by our Web components:
 
 - the "authentication" step (lower left) stems from requiring a "signature" for whatever secret token is being used to login
-- the "authorization" step (upper right) stems from adding and checking for payment transactions on public ledgers
+- the "authorization" step (upper right) stems from adding and checking for payment transactions on ledgers
 
 
 
@@ -663,8 +675,8 @@ But all provide a signature leading to authentication.
 
 Similarly, the details of the in-app purchase step varies depending on the ledger:
 
-- US dollars leverages <a target="_blank" href="https://stripe.com">https://stripe.com</a> for value transfer and uses the public *overhide* ledger for receipts
-- Cryptos leverage a wallet for value transfers on public blockchains
+- US dollars leverages <a target="_blank" href="https://stripe.com">https://stripe.com</a> for value transfer and uses the *overhide* ledger for receipts
+- Cryptos leverage a wallet for value transfers on blockchains
 
 But at the end of the day, all these disparate ledgers are abstracted via a couple <a target="_blank" href="https://overhide.io/2020/09/06/remuneration-api.html">simple APIs</a> enabling a unified flow leading to authorization and enablement of features.
 
@@ -680,7 +692,7 @@ The <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> Web comp
 
 The "social login" is the common OAuth2 Authorization Code flow.  To our Web app users it's the regular "login with ...", be it Google or Microsoft (for now).  This flow leverages a cloud provider to authenticate and a <a target="_blank" href="https://github.com/overhide/overhide-social">special service in the *overhide* cluster</a> to generate tokens and provide signatures &mdash; the secret tokens are never sent over the wire.
 
-The "crypto wallet login" allows the user's login credentials to be stored and only known to your user's crypto wallet.  The Web app need only use the wallet's public address and signatures.  Secrets never make it out  of the wallet.
+The "crypto wallet login" allows the user's login credentials to be stored and only known to your user's crypto wallet.  The Web app need only use the wallet's public "address" and signatures.  Secrets never make it out  of the wallet.
 
 The "secret token login" is somewhat similar to the good old username+password, all in one, albeit neither being user generated.  The token is specifically auto-generated via libraries.  Unfortunately, the security of these tokens needs to be manually managed by the user:  just like passwords used to be.
 
