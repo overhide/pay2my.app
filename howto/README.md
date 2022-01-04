@@ -87,7 +87,7 @@ For example, on this page, when a user clicks on the "sign-in" text, they will b
 
 A sample "sign-in" flow using a generated secret token is shown below:
 
-![uxworkflow](https://overhide.github.io/pay2my.app/howto/assets/uxworkflow.PNG)
+![uxworkflow](https://overhide.github.io/pay2my.app/howto/assets/genworkflow.png)
 
 Here a user clicks on the "sign-in" rendered by the <a target="_blank" href="https://github.com/overhide/pay2my.app#pay2myapp-status-">pay2myapp-status</a> component [1], which opens a modal presenting login options.  Since we're a new user, we click on "generate new" to generate a new login token [2], and "continue" [3] to actually login.  We will be prompted with additional anti-bot validation before our "account" (new token) is accepted.
 
