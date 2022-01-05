@@ -56,11 +56,11 @@ Take a look at the full snippet of raw source code on github &mdash; first link 
 
 We'll go through this file focusing on the interesting bits and skipping boilerplate.
 
-Starting with the rendered page &mdash; second link above &mdash; we see something like the below:
+Starting with the rendered page &mdash; second link above &mdash; we see something like the below in our browser tab:
 
 ![image-20211226135705577](https://overhide.github.io/pay2my.app/howto/assets/image-20211226135705577.png)
 
-These are the visual components we wired in with that simple HTML page:
+These are the visual components we wired in with a bit of simple HTML code:
 
 ![code2ux](https://overhide.github.io/pay2my.app/howto/assets/code2ux.png)
 
