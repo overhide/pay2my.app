@@ -250,11 +250,11 @@ Again, take a look at the full snippet of raw source code on github &mdash; firs
 
 
 
-As a quick aside, the basic premise of these in-app purchases is checking ledgers for payments made from some obfuscated pseudonymous user owned token to your &mdash; the Web developer's &mdash; public registered token.  The actual payments are made through <a target="_blank" href="https://stripe.com/">https://stripe.com</a> and tracked on the *overhide* "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the <a target="_blank" href="https://pay2my.app/">https://pay2my.app</a> site.
+As a quick aside, the basic premise of these in-app purchases is checking ledgers for payments receipts from some obfuscated, pseudonymous, user-owned, token, to your &mdash; the Web developer's &mdash; public token.  The actual payments are made through <a target="_blank" href="https://stripe.com/">https://stripe.com</a> and tracked on the *overhide* "receipts" ledger.  This is explained and covered ad nauseam in the various write-ups on the <a target="_blank" href="https://pay2my.app/">https://pay2my.app</a> site.
 
 > ℹ
 >
-> The user owned "token" is the secret token generated earlier.  The public "address" of this token is what's stored in the ledger.  The private token is necessarily kept secret.
+> The user-owned "token" is the secret token generated earlier when logging in.  The public "address" of this token is what's stored in the ledger.  The private token is necessarily kept secret.
 >
 > For crypto currencies (later) the blockchain address and a signature are used, as furnished by wallets.  The blockchain is the ledger.  
 
@@ -280,23 +280,23 @@ Let's unwind this "button" code a bit.  We'll look at a sample click-through of 
 
 On line 22 we're setting the features SKU as `subscribed-feature`.  We set the cost at $3 USD (line 23, `priceDollars` attribute) and set the feature to expire after two minutes of payment (`withinMinutes` attribute).  As such, in our example, a payment of $3 USD gives the user 2 minutes of feature usage.  
 
-Keep in mind these are all fake USD payments in this demo, we're using testnets.
+Keep in mind, in this demo, these are all fake USD payments using testnets.
 
 
 
 >  ℹ
 >
-> For a better picture of how these payments can be configured &mdash; free/paid/subscriptions &mdash; check out the <a target="_blank" href="https://github.com/overhide/pay2my.app#demos">demos</a>. 
+> For more examples of how these payment buttons can be configured &mdash; free/paid/subscriptions &mdash; check out the <a target="_blank" href="https://github.com/overhide/pay2my.app#demos">demos</a>. 
 
 
 
-Next, on line 26, we need to tell the widget which ledger "token" these payments are made to: who is the recipient.  This is your &mdash; the developer's &mdash; payment address.  In the demo it's set to my test address, but you need to change this value as per whatever address you onboard (below).
+Next, on line 26, we specify which ledger "token" these payments are made to: who is the recipient.  This is your &mdash; the developer's &mdash; payment address.  In the demo it's set to my test address `"0x046c88317b23dc57F6945Bf4140140f73c8FC80F"` &mdash; the one I registered to my Stripe account at <a target="_blank" href="https://test.ledger.overhide.io/onboard">testnet onboarding</a>  &mdash; but you need to change this value as per whatever address you onboard.
 
-The *overhide* ledger is just a receipts ledger.  The actual value transfer occurs through <a target="_blank" href="https://stripe.com">https://stripe.com</a> &mdash; unlike cryptos whereby the value transfer occurs through the blockchain ledger (later).
+The *overhide* ledger is just a receipts ledger.  The actual value transfer occurs through <a target="_blank" href="https://stripe.com">https://stripe.com</a>.
 
 > 📢
 >
-> Every single address used as a value in the `overhideAddress` attribute must be an *overhide* ledger <a target="_blank" href="https://test.ledger.overhide.io/onboard">onboarded</a> address &mdash; whereby this address receives payment receipts of payments you receive to your <a target="_blank" href="https://stripe.com">https://stripe.com</a> account.  
+> Every address set as the `overhideAddress` attribute must be an *overhide* ledger <a target="_blank" href="https://test.ledger.overhide.io/onboard">onboarded</a> address &mdash; think of it as a registered address receiving receipts of payments to your <a target="_blank" href="https://stripe.com">https://stripe.com</a> account.  
 
 
 
@@ -317,7 +317,7 @@ But creating an actual account with Stripe is unavoidable once you want to get p
 
 
 
-Moving past the button code, we also added handling of new DOM events.  The first one is the `pay2myapp-hub-sku-authorization-changed` event which informs us when sufficient payments were made for a feature SKU:
+Moving past the button code, we also added handling of some new DOM events.  The first one is the `pay2myapp-hub-sku-authorization-changed` event which informs us when sufficient payments were made for a feature SKU:
 
 ```
 44.     window.addEventListener('pay2myapp-hub-sku-authorization-changed',(e) => { 
@@ -332,7 +332,7 @@ Moving past the button code, we also added handling of new DOM events.  The firs
 
 
 
-The other event handler is for the `pay2myapp-appsell-sku-clicked` event, which tells us when the feature button was clicked:
+The other event handler is for the `pay2myapp-appsell-sku-clicked` event, which tells us when the feature button was clicked while sufficiently funded:
 
 ```
 53.     window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
@@ -342,9 +342,9 @@ The other event handler is for the `pay2myapp-appsell-sku-clicked` event, which 
 
 
 
-On line 44 we have an authorizations `pay2myapp-hub-sku-authorization-changed` event indicating when we're authorized for a certain SKU.  You'll receive one such event for each configured SKU, should the expected payments be met on the ledger:  hence the SKU be authorized.
+On line 44 we have an authorizations `pay2myapp-hub-sku-authorization-changed` event indicating when we're authorized for a certain SKU.  You'll receive one such event for each configured SKU (each button), should the expected payments be met on the ledger:  hence the SKU be authorized.
 
-In our case we just change the contents of the `#message` DIV.
+In our demo we react to such events by simplisticly changing the contents of the `#message` DIV.
 
 Lastly, on line 53 we have the `pay2myapp-appsell-sku-clicked` event indicating an authorized button was clicked.  In our demo, our reaction to such a click is to once again change the contents of the `#message` DIV.
 
@@ -377,11 +377,11 @@ This is a make-belief payment using a fake VISA card, as such, the following val
 
 
 
-Once the payment is made, you will see a new message.   You can also click on the "token" in the "status" component to see your ledger entries (orange arrow):
+Once a payment is made you will see a new message.   You can also click on the "token" in the "status" component to see your ledger entries (orange arrow below):
 
 ![refresh](https://overhide.github.io/pay2my.app/howto/assets/refresh.png)
 
-If you recall our payment is valid for 2 minutes.  You can prove this to yourself by clicking the refresh button (green arrow) after two minutes have passed.  No timers setup in this demo, but you can do so in your own code.
+If you recall our payment is valid for 2 minutes.  You can prove this to yourself by clicking the refresh button (green arrow above) after two minutes have passed.  We don't have any timers setup in this demo, but you can do so in your own code.
 
 
 
@@ -393,7 +393,7 @@ These https://pay2my.app components support other ledgers &mdash; cryptocurrency
 
 In fact, you could use https://pay2my.app solely with cryptocurrencies, not enabling your users to pay for in-app purchases in US dollars.  But it might be too early for that.
 
-Let's take a look at what it takes to let our users use ethers (bitcoins also available but not covered).
+Let's take a look at what it takes to let our users use ethers (bitcoins also available but not covered in this write-up).
 
 The full source code for this example:
 
@@ -460,9 +460,9 @@ On line 30 we provide our ethereum address for the Rinkeby testnet.  Once again,
 
 
 
-Interestingly, on line 31 we see the `overhideAddress` as being the same as the `ethereumAddress`.  Although the `ethereumAddress` is used to receive ethers from in-app purchases and the `overhideAddress` is used to receive US dollars from in-app purchases, they're both the same.
+Interestingly, on line 31 we see the `overhideAddress` as being the same as the `ethereumAddress`.  They're both `"0x046c88317b23dc57F6945Bf4140140f73c8FC80F"`.  Although the `ethereumAddress` is used to receive ethers from in-app purchases and the `overhideAddress` is used to receive US dollars from in-app purchases, I chose to set them as the same address in this demo.
 
-This is because the *overhide* ledger uses Ethereum key infrastructure.  As such Ethereum in-browser wallets can be used to secure *overhide* ledger secrets and the same addresses can be used for both ledgers.
+I can to this because the *overhide* ledger uses Ethereum key infrastructure.  As such Ethereum in-browser wallets can be used to secure *overhide* ledger secrets.  The same addresses can be used for both ledgers.
 
 
 
@@ -470,13 +470,13 @@ With just the above configuration points we've enabled logins through crytpo wal
 
 
 
-With the code understood, and an in-browser Ethereum wall installed (<a target="_blank" href="https://metamask.io/">Metamask</a> in our case), let's click through a sample flow.  
+With the code understood, and an in-browser Ethereum wallet installed (<a target="_blank" href="https://metamask.io/">Metamask</a> in our case), let's click through a sample flow.  
 
 
 
 > 📢
 >
-> Before anything else, when you load this HTML snippet in your browser, ensure your in-browser wallet is connected to the page with one or your addresses and is on the Rinkeby testnet.
+> Before anything else, when you load this HTML snippet in your browser, ensure your in-browser wallet is connected to the page with one of your addresses.  Make sure your in-browser wallet is on the **Rinkeby** testnet.
 >
 > 
 >
@@ -486,11 +486,11 @@ With the code understood, and an in-browser Ethereum wall installed (<a target="
 
 
 
-Other than the wallet interaction, the page doesn't look any different:
+Other than the wallet interaction, our demo rendered page doesn't look any different:
 
 ![image-20211227111621995](https://overhide.github.io/pay2my.app/howto/assets/image-20211227111621995.png)
 
-We do now have new login options:
+Although now we do have more login options:
 
 
 
@@ -512,7 +512,7 @@ Payments are made through the wallet in the usual way &mdash; out of scope of th
 
 
 
-Of note, if we click on the "wallet login" instead of the "ethereum login" we're also asked to interact with the Ethereum wallet for signatures, but  we aren't asked to use it to send money.   The regular Stripe credit card prompt is presented.
+Of note, if we click on the "wallet login" instead of the "ethereum login" we're also asked to interact with the Ethereum wallet for signatures, but  we aren't asked to use the wallet to fund features &mdash; which makes sense as this login funds with US dollars not ethers.   The regular Stripe credit card prompt is presented.
 
 ![usdflow](https://overhide.github.io/pay2my.app/howto/assets/usdflow.png)
 
@@ -524,7 +524,7 @@ Thus far everything we did was in-browser only, no back-end code.
 
 This may be sufficient for your project and you may want to skip this section, but on the other hand, it may not be.  Consider <a target="_blank" href="https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html">this write-up</a> to motivate your decision.
 
-Note that you need to standup this back-end locally before the preview link below functions.
+Note, you need to standup a back-end discussed in this section *before* the preview link below functions.
 
 
 
@@ -534,25 +534,27 @@ Note that you need to standup this back-end locally before the preview link belo
 
 
 
-First, some pre-requisites, a browser alone will no longer suffice.  
+First, some pre-requisites, a browser alone will no longer suffice for this example.  
 
 You will need <a target="_blank" href="https://nodejs.org/en/download/">node.js</a> to run this particular sample back-end.  
 
 
 
-Next, we need the actual <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> in addition to the browser-side front-end code snippet.
+Next, we need the actual <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> in addition to the browser-side front-end code snippet above.
+
+
 
 > **</>**
 >
 > To study snippets of the back-end code used in this write-up please see the simple <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> as it lives in GitHub.  
 
-This the same back-end code running as Azure functions used for all the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app#demos">code demos</a> (at least the ones using a back-end).
+Note: the source code above is the same back-end running as Azure functions used for <a target="_blank" href="https://www.npmjs.com/package/pay2my.app#demos">the other in-repo code demos</a>.
 
 
 
 It's pretty straight forward to get this back-end running locally (<a target="_blank" href="https://github.com/overhide/pay2my.app#local-development">source of truth instructions</a>).
 
-To get the back-end running...
+To get the back-end running on your computer...
 
 - with the `https://github.com/overhide/pay2my.app` repository synced on your local machine
 - with <a target="_blank" href="https://nodejs.org/en/download/">node.js</a> installed
@@ -575,13 +577,15 @@ Now, with the back-end humming on port `localhost:8100`, you can point your brow
 
 The preview shouldn't be anything new.  The value-add here is that the critical-path of your business flows goes through your back-end:  your feature click-through.
 
-The important code changes start with the configuration of the "hub", it no longer receives an `apiKey`:
+
+
+To accomplish all of the above on the front-end, the important front-end code changes start with the configuration of the "hub", it no longer receives an `apiKey`:
 
 ```
 10.     <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
 ```
 
-Instead, the "hub" will receive an access token (to *overhide* services) from the back-end:
+Instead, the "hub" is programmatically wired to receive an access token (to *overhide* services) from the back-end:
 
 ```
 41.     BACKEND_CONNECTION_STRING = `http://localhost:8100`;
@@ -610,7 +614,7 @@ On line 45 we fetch the token and on line 49 we programmatically provide it to t
 
 
 
-For back-end verifications of our feature click-throughs, we no have:
+For back-end verifications of our feature click-throughs, we now have:
 
 ```
 73.     window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
@@ -632,7 +636,7 @@ For back-end verifications of our feature click-throughs, we no have:
 89.     });
 ```
 
-The `pay2myapp-appsell-sku-clicked` event now goes to the back-end's `GET /RunFeature` endpoint (line 75).
+The `pay2myapp-appsell-sku-clicked` event is now directed to the back-end's `GET /RunFeature` endpoint (line 75).
 
 This endpoint is served by a simple <a target="_blank" href="https://nodejs.org/en/download/">node.js</a>/<a target="_blank" href="https://expressjs.com/">express.js</a> router as coded in the back-end's <a target="_blank" href="https://github.com/overhide/pay2my.app/blob/master/demo-back-end/index.js">index.js</a>.
 
@@ -658,8 +662,8 @@ The <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/drawing
 
 The main flow is shown with the green boxes and arrows.  It comprises two main steps that use the various subsystems abstracted by our Web components:
 
-- the "authentication" step (lower left) stems from requiring a "signature" for whatever secret token is being used to login
-- the "authorization" step (upper right) stems from adding and checking for payment transactions on ledgers
+- the "authentication" step (lower left) furnishes a "signature" for whatever secret token is being used to login
+- the "authorization" step (upper right) is all about adding and checking of payment transactions on ledgers
 
 
 
@@ -676,7 +680,7 @@ But all provide a signature leading to authentication.
 Similarly, the details of the in-app purchase step varies depending on the ledger:
 
 - US dollars leverages <a target="_blank" href="https://stripe.com">https://stripe.com</a> for value transfer and uses the *overhide* ledger for receipts
-- Cryptos leverage a wallet for value transfers on blockchains
+- Cryptos leverage a wallet to initiate value transfers on blockchains
 
 But at the end of the day, all these disparate ledgers are abstracted via a couple <a target="_blank" href="https://overhide.io/2020/09/06/remuneration-api.html">simple APIs</a> enabling a unified flow leading to authorization and enablement of features.
 
@@ -690,9 +694,9 @@ The <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> Web comp
 - crypto wallet login
 - secret token login
 
-The "social login" is the common OAuth2 Authorization Code flow.  To our Web app users it's the regular "login with ...", be it Google or Microsoft (for now).  This flow leverages a cloud provider to authenticate and a <a target="_blank" href="https://github.com/overhide/overhide-social">special service in the *overhide* cluster</a> to generate tokens and provide signatures &mdash; the secret tokens are never sent over the wire.
+The "social login" is the well known OAuth2 Authorization Code flow.  To our Web app users it's the regular "login with ...", be it Google or Microsoft (for now).  This flow leverages a cloud provider to authenticate and a <a target="_blank" href="https://github.com/overhide/overhide-social">special service in the *overhide* cluster</a> to generate tokens and provide signatures &mdash; the secret tokens are never sent over the wire.
 
-The "crypto wallet login" allows the user's login credentials to be stored and only known to your user's crypto wallet.  The Web app need only use the wallet's public "address" and signatures.  Secrets never make it out  of the wallet.
+The "crypto wallet login" allows the user's login credentials to be stored and only known to your user's crypto wallets.  The Web app need only use the wallet's public "address" and signatures.  Secrets never make it out of any wallet.
 
 The "secret token login" is somewhat similar to the good old username+password, all in one, albeit neither being user generated.  The token is specifically auto-generated via libraries.  Unfortunately, the security of these tokens needs to be manually managed by the user:  just like passwords used to be.
 
@@ -710,9 +714,9 @@ Each choice of login has different pros and cons as it comes to:
 
 
 
-Social login allows the least control and ownership of access.  The user's ability to login and leverage in-app purchases is dependent on a third party.  A Microsoft or Google outage may mean you cannot access this unrelated Web app, until resolved.
+Social login allows the least control and ownership of access.  The user's ability to login and leverage in-app purchases is dependent on a third party.  A Microsoft or Google outage may mean your user cannot access your Web app, until resolved, despite no other coupling of your Web app to Microsoft or Google.
 
-Social login is a boon to ease-of-use however.
+But, as we all know, social login is a boon to ease-of-use.
 
 
 
@@ -722,14 +726,14 @@ Crypto wallets aren't universally known and used.  As such &mdash; although this
 
 
 
-The "secret token" login is universally known as the username+password prompts.  Although here it's a single token that isn't invented by the user, which might be a learning curve.  A such this approach suffers somewhat on the "familiarity" axis.
+The "secret token" login is universally known as the username+password prompts.  Although, here, it's a single token that isn't invented by the user &mdash; which might be a learning curve.  A such this approach suffers somewhat on the "familiarity" axis.
 
-It's very easy to mismanage a secret token just as it was a password.  As such, this is the least safe method for users who do not have good password management hygiene.
+It's easy to forget or mismanage a secret token just as it was a password.  As such, this is the least safe method for users who do not have good password management hygiene.
 
 The secret token provides the same ownership of access as a wallet.
 
 
 
-As such, the <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> widgets allow our users to choose whichever login they're comfortable with and whichever risks they're willing to accept.
+With all that said, the <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> widgets allow our users to choose whichever login they're comfortable with and whichever risks they're willing to accept.
 
-It's an onramp to wallet adoption without forcing people's hand.
+It's an onramp to wallet adoption without forcing people's hands.
