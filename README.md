@@ -20,7 +20,7 @@ The authentication and authorization mechanism used herein is the [Ledger-Based 
 
 
 
-> 👁👁  For the impatient, jump to the [demos](#demos).
+> 👉 For the impatient, jump to the [demos](#demos).
 
 
 
