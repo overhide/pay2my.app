@@ -195,7 +195,7 @@ The [/demo-front-end/no-back-end.html](/demo-front-end/no-back-end.html) shows t
 
 ##### Back-End
 
-Most demos run their feature-flows via our  [/demo-back-end](/demo-back-end): when a user clicks a feature, the back-end is interrogated to complete the feature flow.  
+Most of the above demos run their feature-flows via our  [/demo-back-end](/demo-back-end): when a user clicks a feature, the back-end is interrogated to complete the feature flow.  
 
 Note that the back-end verifies authentication and authorization as per credentials provided and monies paid on a ledger of choice.
 
