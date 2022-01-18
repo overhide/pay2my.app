@@ -37,18 +37,18 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   isTest?: boolean | null = false;
 
   @attr
-  apiKey?: string | null; 
+  apiKey?: string | null;
 
   @attr
-  token?: string | null; 
+  token?: string | null;
 
   // payments object
-  @observable 
+  @observable
   public paymentsInfo: PaymentsInfo = {
     currentCurrency: Currency.unknown,
     currentImparter: Imparter.unknown,
     currentSocial: Social.unknown,
-   
+
     isOnLedger: {
       "btc-manual": false,
       "eth-web3": false,
@@ -100,16 +100,16 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     },
 
     loginElement: null,
-    pendingTransaction: <IPay2MyAppPendingTransactionEvent> {isPending: false, currency: null},
+    pendingTransaction: <IPay2MyAppPendingTransactionEvent>{ isPending: false, currency: null },
 
     skuAuthorizations: {},
     skuComponents: {},
 
     ordinal: 0
   };
-  
+
   // set error if any
-  @observable 
+  @observable
   public error?: string | null;
 
   rootElement?: HTMLElement;
@@ -119,13 +119,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   private allowNetworkType: NetworkType = NetworkType.prod;
   private isWiredUp = false;
   private ordinal = 1;
-  
+
   // cache of outstanding results
-  private tallyCache: {[key: string]: Promise<{tally: number | null, asOf: string | null}>} = {};
+  private tallyCache: { [key: string]: Promise<{ tally: number | null, asOf: string | null }> } = {};
 
   connectedCallback() {
     super.connectedCallback();
-    
+
     this.isWiredUp = true;
     if (this.rootElement?.hasAttribute('isTest')) {
       this.isTestChanged(false, true);
@@ -139,7 +139,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     this.initSession().then(() => {
       this.initCallbacks();
       this.initNetworks();
-      this.pingApplicationState();  
+      this.pingApplicationState();
     });
   };
 
@@ -171,7 +171,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @param {Imparter} imparter - to set
   // @returns {bool} true if success or cancel, false if some problem
   public setCurrentImparter = async (imparter: Imparter): Promise<boolean> => {
-    const oldInfo = {...this.paymentsInfo};
+    const oldInfo = { ...this.paymentsInfo };
     try {
       this.refresh(imparter); // reset outstanding cache
       this.paymentsInfo.currentImparter = imparter;
@@ -181,16 +181,15 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
         await this.authenticate(imparter);
       }
 
-      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: imparter, isAuthenticated: this.isAuthenticated(imparter)};
-      this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
+      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ imparter: imparter, isAuthenticated: this.isAuthenticated(imparter) };
+      this.$emit("pay2myapp-hub-sku-authentication-changed", event);
 
       this.pingApplicationState();
-      sessionStorage.setItem('paymentsInfo', JSON.stringify({...this.paymentsInfo, skuComponents: {}, loginElement: null}));
+      sessionStorage.setItem('paymentsInfo', JSON.stringify({ ...this.paymentsInfo, skuComponents: {}, loginElement: null }));
       return true;
     }
-    catch (e) 
-    {
-      this.paymentsInfo = {...oldInfo};
+    catch (e) {
+      this.paymentsInfo = { ...oldInfo };
       this.error = e;
       if (e == 'user close') {
         return true; // cancel
@@ -209,7 +208,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       this.paymentsInfo.currentSocial = social;
     }
 
-    await oh$.setCredentials(Imparter.ohledgerSocial, {provider: social, address: this.paymentsInfo.payerAddress[Imparter.ohledgerSocial]});
+    await oh$.setCredentials(Imparter.ohledgerSocial, { provider: social, address: this.paymentsInfo.payerAddress[Imparter.ohledgerSocial] });
   }
 
   // Sets credentials secret key for non-wallet workflow
@@ -220,7 +219,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     try {
       if (imparter === Imparter.unknown) this.error = 'cannot set secret, imparter not set';
       if (!this.paymentsInfo.wallet[imparter]) {
-        return await oh$.setCredentials(imparter, {secret: newKey});
+        return await oh$.setCredentials(imparter, { secret: newKey });
       }
     } catch (error) {
     }
@@ -235,7 +234,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     try {
       if (imparter === Imparter.unknown) this.error = 'cannot set secret, imparter not set';
       if (!this.paymentsInfo.wallet[imparter]) {
-        return await oh$.setCredentials(imparter, {address: newAddress});
+        return await oh$.setCredentials(imparter, { address: newAddress });
       }
     } catch (error) {
     }
@@ -247,14 +246,14 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // No-op if current currency has a wallet set.
   // @param {Imparter} imparter - to set 
   public generateNewKeys = async (imparter: Imparter) => {
-    const oldInfo = {...this.paymentsInfo};
+    const oldInfo = { ...this.paymentsInfo };
     try {
       if (imparter === Imparter.unknown) this.error = 'cannot generate new key, imparter not set';
       if (!this.paymentsInfo.wallet[imparter]) {
-        await oh$.generateCredentials(imparter,null);
+        await oh$.generateCredentials(imparter, null);
       }
     } catch (error) {
-      this.paymentsInfo = {...oldInfo};
+      this.paymentsInfo = { ...oldInfo };
       this.error = `${typeof error == 'object' && 'message' in error ? error.message : error}`;
     }
   }
@@ -264,13 +263,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @returns {boolean} after checking signature and whether ledger has any transactions (to anyone)
   public isAuthenticated = (imparter: Imparter) => {
     return this.paymentsInfo.isOnLedger[imparter] && !!this.paymentsInfo.payerSignature[imparter];
-  }  
+  }
 
   // Get tally as per current imparter, to a certain address, within a certain time.
   // @param {string} to - address of recepient
   // @param {number} minutes - number of minutes to look back (since) on the ledger
   // @returns {{amount: number | null, asOf: string | null}} balance in dollars, null if not yet known, and as-of timestamp
-  public getTally = async (to: string, tallyMinutes: number | null): Promise<{tally: number | null, asOf: string | null}> => {
+  public getTally = async (to: string, tallyMinutes: number | null): Promise<{ tally: number | null, asOf: string | null }> => {
     const currency = this.getCurrentCurrency();
     const imparter = this.getCurrentImparter();
     if (currency === Currency.unknown || imparter === Imparter.unknown) throw `unknown current currency/imparter in getOutstanding`;
@@ -278,14 +277,14 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     if (key in this.tallyCache) {
       return this.tallyCache[key];
     }
-    this.tallyCache[key] = new Promise<{tally: number | null, asOf: string | null}>(async (resolve) => {
-      const oldInfo = {...this.paymentsInfo};
+    this.tallyCache[key] = new Promise<{ tally: number | null, asOf: string | null }>(async (resolve) => {
+      const oldInfo = { ...this.paymentsInfo };
       try {
         let tally;
         let asOf;
         const creds = await oh$.getCredentials(imparter);
         if (!creds || !creds.address) {
-          resolve({tally: null, asOf: null});
+          resolve({ tally: null, asOf: null });
         };
         if (tallyMinutes) {
           let since = new Date();
@@ -297,13 +296,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
           const result = await oh$.getTallyDollars(imparter, { address: to }, null);
           tally = result['tally'];
           asOf = result['as-of'];
-        } 
-        resolve({tally, asOf});
+        }
+        resolve({ tally, asOf });
       } catch (error) {
-        this.paymentsInfo = {...oldInfo};
+        this.paymentsInfo = { ...oldInfo };
         this.error = `${typeof error == 'object' && 'message' in error ? error.message : error}`;
-        resolve({tally: null, asOf: null});
-      }    
+        resolve({ tally: null, asOf: null });
+      }
     });
     return this.tallyCache[key];
   }
@@ -313,17 +312,17 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @param {string} to - address of recepient
   // @param {number} minutes - number of minutes to look back (since) on the ledger
   // @returns {{delta: number | null, asOf: string | null}} differnce in dollars, $0 if authorized, null if not yet known, and as-of timestamp
-  public getOutstanding = async (costInDollars: number, to: string, tallyMinutes: number | null): Promise<{delta: number | null, asOf: string | null}> => {
-    let {tally, asOf} = await this.getTally(to, tallyMinutes);
+  public getOutstanding = async (costInDollars: number, to: string, tallyMinutes: number | null): Promise<{ delta: number | null, asOf: string | null }> => {
+    let { tally, asOf } = await this.getTally(to, tallyMinutes);
 
     if (!tally) {
-      return {delta: null, asOf: null};
+      return { delta: null, asOf: null };
     }
-        
+
     var delta = costInDollars - tally;
     delta = delta < 0 ? 0 : delta;
 
-    return {delta: delta, asOf: asOf};
+    return { delta: delta, asOf: asOf };
   }
 
   // Do the actual topup to authorize
@@ -332,45 +331,45 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @returns {Promise<boolean>} with status of topup -- successful or not.
   public topUp = async (amountDollars: number, toAddress: string | null): Promise<boolean> => {
     const imparter = this.getCurrentImparter();
-    const oldInfo = {...this.paymentsInfo};
+    const oldInfo = { ...this.paymentsInfo };
     if (!toAddress && amountDollars > 0) throw `cannot topUp: toAddress null and a non-0 amount`;
     toAddress = !toAddress ? oldInfo.payerAddress[imparter] : toAddress;
     try {
-      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{isPending: true, currency: this.paymentsInfo.currentCurrency};
+      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{ isPending: true, currency: this.paymentsInfo.currentCurrency };
       this.$emit('pay2myapp-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
       const amount = Math.ceil(amountDollars == 0 ? amountDollars : await oh$.getFromDollars(imparter, amountDollars));
-      const aDayAgo = new Date((new Date()).getTime() - 24*60*60*1000);     // we compare tallies...
+      const aDayAgo = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);     // we compare tallies...
       if (amount > 0) {
-        var before = await oh$.getTallyDollars(imparter, {address: toAddress}, aDayAgo);  // ... by taking a sample before
+        var before = await oh$.getTallyDollars(imparter, { address: toAddress }, aDayAgo);  // ... by taking a sample before
       }
       let options = this.paymentsInfo.payerSignature[imparter] && this.paymentsInfo.messageToSign[imparter] && {
-          message: this.paymentsInfo.messageToSign[imparter], 
-          signature: this.paymentsInfo.payerSignature[imparter]
-        };
+        message: this.paymentsInfo.messageToSign[imparter],
+        signature: this.paymentsInfo.payerSignature[imparter]
+      };
       const result = await oh$.createTransaction(imparter, amount, toAddress, options);
       if (amount > 0) {
         for (var i = 0; i < 15; i++) {
           let now = await oh$.getTallyDollars(imparter, { address: toAddress }, aDayAgo); // ... we take a sample now
           if (now.tally || 0 > before.tally || 0) break;                           // ... and exit out as soon as decentralized
-                                                                                   //     ledger is consistent between the wallet's
-                                                                                   //     node and ledgers.js node
+          //     ledger is consistent between the wallet's
+          //     node and ledgers.js node
           if (imparter != Imparter.btcManual) {
             await this.delay(5000);                                                // ... else wait 5 seconds
           } else {
             await this.delay(65000);
           }
-        }  
+        }
       }
-      this.paymentsInfo.isOnLedger[imparter] = result;      
+      this.paymentsInfo.isOnLedger[imparter] = result;
       this.refresh(imparter);
       this.setCurrentImparter(imparter);
       return result;
     } catch (error) {
-      this.paymentsInfo = {...oldInfo};
+      this.paymentsInfo = { ...oldInfo };
       this.error = `${typeof error == 'object' && 'message' in error ? error.message : error}`;
       return false;
     } finally {
-      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{isPending: false, currency: this.paymentsInfo.currentCurrency};
+      this.paymentsInfo.pendingTransaction = <IPay2MyAppPendingTransactionEvent>{ isPending: false, currency: this.paymentsInfo.currentCurrency };
       this.$emit('pay2myapp-hub-pending-transaction', this.paymentsInfo.pendingTransaction);
       this.pingApplicationState();
     }
@@ -394,8 +393,8 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       oh$.setCredentials(null);
     }
 
-    const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent> {imparter: Imparter.unknown, isAuthenticated: false};
-    this.$emit("pay2myapp-hub-sku-authentication-changed", event);    
+    const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ imparter: Imparter.unknown, isAuthenticated: false };
+    this.$emit("pay2myapp-hub-sku-authentication-changed", event);
 
     this.pingApplicationState();
   }
@@ -417,8 +416,8 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @param {Imparter} imparter -- which imparter to refresh for or null for all
   public refresh = (imparter: Imparter | null) => {
     if (imparter) {
-      let newCache: {[key: string]: Promise<{tally: number | null, asOf: string | null}>} = {}; 
-      for(const key in this.tallyCache) {
+      let newCache: { [key: string]: Promise<{ tally: number | null, asOf: string | null }> } = {};
+      for (const key in this.tallyCache) {
         if (!key.startsWith(imparter)) {
           newCache[key] = this.tallyCache[key];
         }
@@ -434,17 +433,17 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     if (sku in this.paymentsInfo.skuAuthorizations) {
       if (this.paymentsInfo.skuAuthorizations[sku] == authorized) {
         return;
-      }      
+      }
     }
     this.paymentsInfo.skuAuthorizations[sku] = authorized;
-    const event: IPay2MyAppSkuAuthorizationChangedEvent = <IPay2MyAppSkuAuthorizationChangedEvent> {sku: sku, isAuthorized: authorized};
+    const event: IPay2MyAppSkuAuthorizationChangedEvent = <IPay2MyAppSkuAuthorizationChangedEvent>{ sku: sku, isAuthorized: authorized };
     this.$emit("pay2myapp-hub-sku-authorization-changed", event);
   }
 
   public isSkuAuthorized = (sku: string): boolean => {
     if (sku in this.paymentsInfo.skuAuthorizations) {
       return this.paymentsInfo.skuAuthorizations[sku];
-    }    
+    }
     return false;
   }
 
@@ -471,19 +470,19 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   }
 
   private getKey(imparter: Imparter, to: string, tallyMinutes: number | null): string {
-    return `${imparter}_${to}_${tallyMinutes}`;    
+    return `${imparter}_${to}_${tallyMinutes}`;
   }
-  
+
   // Authenticate for the specific imparter.
   // @param {Imparter} imparter - to set 
   private authenticate = async (imparter: Imparter) => {
     this.refresh(imparter); // reset outstanding cache
     if ((!this.paymentsInfo.payerSignature[imparter]
-          || !this.paymentsInfo.messageToSign[imparter])) {
+      || !this.paymentsInfo.messageToSign[imparter])) {
       await this.sign(imparter);
     }
     const options = this.paymentsInfo.payerSignature[imparter] && this.paymentsInfo.messageToSign[imparter] && {
-      message: this.paymentsInfo.messageToSign[imparter], 
+      message: this.paymentsInfo.messageToSign[imparter],
       signature: this.paymentsInfo.payerSignature[imparter]
     };
     await this.isOnLedger(imparter, options);
@@ -506,12 +505,12 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   private async tokenChanged(oldValue: string, newValue: string) {
     if (!this.isWiredUp) return;
     await this.initLib(newValue);
-  }  
+  }
 
   // @returns {Currency} 
   private getCurrentCurrency = () => {
     return this.paymentsInfo.currentCurrency;
-  }  
+  }
 
   // @returns {Imparter} 
   private getCurrentImparter = () => {
@@ -520,9 +519,9 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
 
   // Trigger redraw via application state update
   private pingApplicationState = () => {
-    this.paymentsInfo = {...this.paymentsInfo, ordinal: this.ordinal++};
+    this.paymentsInfo = { ...this.paymentsInfo, ordinal: this.ordinal++ };
   }
-  
+
   // Check current credentials for any transactions on current ledger.
   // @param {Imparter} imparter - to set 
   // @param {} options - to leverage
@@ -540,7 +539,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // Sign a challenge with current credentials and set to the payments info.
   private sign = async (imparter: Imparter) => {
     try {
-      const challenge = this.makePretendChallenge();
+      const challenge = this.getChallenge();
       var signature = await oh$.sign(imparter, challenge);
       if (imparter == Imparter.ohledgerSocial) {
         this.setCredentials(imparter, oh$.getCredentials(imparter).address, null);
@@ -578,7 +577,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     this.paymentsInfo.payerAddress[imparter] = payerAddress;
     this.paymentsInfo.payerPrivateKey[imparter] = payerPrivateKey;
     this.paymentsInfo.messageToSign[imparter] = null;
-    this.paymentsInfo.payerSignature[imparter] = null;    
+    this.paymentsInfo.payerSignature[imparter] = null;
     this.pingApplicationState();
   }
 
@@ -597,7 +596,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       if (result.status === 200) {
         return result.text();
       } else {
-        throw(JSON.stringify({url: url, status: result.status, error: result.statusText}));
+        throw (JSON.stringify({ url: url, status: result.status, error: result.statusText }));
       }
     }).then(token => {
       return token;
@@ -633,10 +632,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   }
 
   private initNetworks = () => {
-    oh$.setNetwork('ohledger', { currency: 'USD', mode: this.allowNetworkType == NetworkType.test ? 'test' : 'prod' }); 
-    oh$.setNetwork('ohledger-web3', { currency: 'USD', mode: this.allowNetworkType  == NetworkType.test ? 'test' : 'prod' });
-    oh$.setNetwork('ohledger-social', { currency: 'USD', mode: this.allowNetworkType  == NetworkType.test ? 'test' : 'prod' });
-    oh$.setNetwork('btc-manual', { mode: this.allowNetworkType  == NetworkType.test ? 'test' : 'prod' });
+    oh$.setNetwork('ohledger', { currency: 'USD', mode: this.allowNetworkType == NetworkType.test ? 'test' : 'prod' });
+    oh$.setNetwork('ohledger-web3', { currency: 'USD', mode: this.allowNetworkType == NetworkType.test ? 'test' : 'prod' });
+    oh$.setNetwork('ohledger-social', { currency: 'USD', mode: this.allowNetworkType == NetworkType.test ? 'test' : 'prod' });
+    oh$.setNetwork('btc-manual', { mode: this.allowNetworkType == NetworkType.test ? 'test' : 'prod' });
   }
 
   private initSession = async () => {
@@ -733,7 +732,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       const imparter: Imparter = e.imparterTag;
       // don't update if wallet not set/unset:  perhaps network error above.
       if (imparter === Imparter.ethWeb3 && !this.paymentsInfo.wallet[imparter]) return;
-      if (imparter === Imparter.ohledgerWeb3 && !this.paymentsInfo.wallet[imparter]) return;      
+      if (imparter === Imparter.ohledgerWeb3 && !this.paymentsInfo.wallet[imparter]) return;
 
       await this.setCredentials(imparter, e.address, 'secret' in e ? e.secret : null);
     });
@@ -747,15 +746,16 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   /**
    * @returns {string} a challenge
    */
-  public makePretendChallenge(): string {
-    return `please sign this challenge proving you own this address :: ${(new Date()).getTime() / 1000}`; // make pretend challenge
+  public getChallenge(): string {
+    if (!this.token) throw `token not initialized`;
+    return this.token;
   }
-  
+
   /**
    * @param {number} t - millis to delay
    * @returns {Promise} completing when delay is done
    */
   public delay(t: number): Promise<any> {
     return new Promise(resolve => setTimeout(resolve.bind(null), t));
-  };  
+  };
 }

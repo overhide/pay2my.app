@@ -52,7 +52,7 @@ const template = html<OverhideOhWeb3>`
         </div>
         <div class="w3-col s6">
           <div class="input">
-            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.address}">
+            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.address || !e.challenge || !e.signature}">
           </div>
         </div>
       </div>    
@@ -91,6 +91,8 @@ export class OverhideOhWeb3 extends FASTElement {
   hasWallet?: boolean;
 
   hub?: IPay2MyAppHub; 
+  challenge?: string | null;
+  signature?: string | null;
 
   public constructor() {
     super();
@@ -130,6 +132,8 @@ export class OverhideOhWeb3 extends FASTElement {
     }
     this.isActive = info.currentImparter === Imparter.ohledgerWeb3 && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
     this.hasWallet = info.wallet[Imparter.ohledgerWeb3];
+    this.challenge = info.messageToSign[info.currentImparter];
+    this.signature = info.payerSignature[info.currentImparter];
   }
 
   setNormalMessage() {
@@ -147,8 +151,8 @@ export class OverhideOhWeb3 extends FASTElement {
   }
 
   showTransactions() {
-    if (this.hub && this.address) {
-      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}`,
+    if (this.hub && this.address && this.signature) {
+      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${this.challenge}`,
         'targetWindow',
         'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
     }

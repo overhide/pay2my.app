@@ -64,7 +64,7 @@ const template = html<OverhideOhledger>`
         </div>
         <div class="w3-col s6">
           <div class="input">
-            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.isKeyValid}">
+            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.isKeyValid || !e.challenge || !e.signature}">
           </div>
         </div>
       </div>
@@ -122,6 +122,8 @@ export class OverhideOhledger extends FASTElement {
   autocompleteForm?: HTMLFormElement;
 
   hub?: IPay2MyAppHub;
+  challenge?: string | null;
+  signature?: string | null;
 
   public constructor() {
     super();
@@ -157,6 +159,8 @@ export class OverhideOhledger extends FASTElement {
   paymentInfoChanged(info: PaymentsInfo): void {
     this.address = info.payerAddress[Imparter.ohledger];
     this.isActive = info.currentImparter === Imparter.ohledger && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
+    this.challenge = info.messageToSign[info.currentImparter];
+    this.signature = info.payerSignature[info.currentImparter];
 
     if (info.payerPrivateKey[Imparter.ohledger] != this.key) {
       this.changeKey({ target: { value: info.payerPrivateKey[Imparter.ohledger] } });
@@ -211,8 +215,8 @@ export class OverhideOhledger extends FASTElement {
   }
 
   showTransactions() {
-    if (this.hub && this.key && this.isKeyValid && this.address) {
-      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}`,
+    if (this.hub && this.key && this.isKeyValid && this.address && this.signature) {
+      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${this.challenge}`,
         'targetWindow',
         'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
     }

@@ -195,6 +195,8 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
   hub?: IPay2MyAppHub | null; 
   currentImparter?: Imparter | null;
   isSignedIn: boolean = false;
+  challenge?: string | null;
+  signature?: string | null;
   loginElement?: IPay2MyAppLogin | null;
 
   public constructor() {
@@ -244,6 +246,8 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
     this.currentImparter = info.currentImparter;
     this.isSignedIn = !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
     this.address = this.isSignedIn ? info.payerAddress[info.currentImparter] : 'sign-in';
+    this.challenge = info.messageToSign[info.currentImparter];
+    this.signature = info.payerSignature[info.currentImparter];
     this.loginElement = info.loginElement;
     this.canLogout = false;
     this.canGetTransactions = false;
@@ -324,7 +328,8 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
         case Imparter.ohledger:
         case Imparter.ohledgerWeb3:
         case Imparter.ohledgerSocial:
-          window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}`,
+          if (!this.signature || !this.challenge) throw `signed in but no signature`;
+          window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${this.signature}&t-challenge=${this.challenge}`,
           'targetWindow',
           'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
           break;

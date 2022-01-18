@@ -52,7 +52,7 @@ const template = html<OverhideOhSocialMs>`
         </div>
         <div class="w3-col s6">
           <div class="input">
-            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.address || !e.isActive}">
+            <input class="w3-button w3-border w3-border-grey" type="button" @click="${e => e.showTransactions()}" value="show transactions" :disabled="${e => !e.address || !e.isActive || !e.challenge || !e.signature}">
           </div>
         </div>
       </div>    
@@ -88,6 +88,8 @@ export class OverhideOhSocialMs extends FASTElement {
   message?:any;
 
   hub?: IPay2MyAppHub; 
+  challenge?: string | null;
+  signature?: string | null;
 
   public constructor() {
     super();
@@ -123,6 +125,8 @@ export class OverhideOhSocialMs extends FASTElement {
   paymentInfoChanged(info: PaymentsInfo): void {
     this.address = info.payerAddress[Imparter.ohledgerSocial];
     this.isActive = info.currentImparter === Imparter.ohledgerSocial && info.currentSocial === Social.microsoft && !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
+    this.challenge = info.messageToSign[info.currentImparter];
+    this.signature = info.payerSignature[info.currentImparter];
   }
 
   setNormalMessage() {
@@ -136,8 +140,8 @@ export class OverhideOhSocialMs extends FASTElement {
   }
 
   showTransactions() {
-    if (this.hub && this.address) {
-      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}`,
+    if (this.hub && this.address && this.signature) {
+      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${this.challenge}`,
         'targetWindow',
         'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
     }

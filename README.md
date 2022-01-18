@@ -3,7 +3,7 @@
 <p align="center"><a href="https://overhide.io"><img src="https://overhide.github.io/pay2my.app/assets/logo.png" width="200px"/></a></p>
 
 
-<p align="center"><a href="https://overhide.io">pay2my.app by overhide.io</a></p><p style="width: 500px; margin: auto">A free and open-sourced ecosystem of widgets, a front-end library, and back-end services &mdash; to make addition of "logins" and "in-app-purchases" (IAP) to your app as banal as possible.</p>
+<p align="center"><a href="https://overhide.io">pay2my.app by overhide.io</a></p><p style="width: 500px; margin: auto">A free and fully open-sourced ecosystem of widgets, a front-end library, and back-end services &mdash; to make addition of "logins" and "in-app-purchases" (IAP) to your app as banal as possible.</p>
 
 
 <hr/>
@@ -14,7 +14,7 @@ Customizable web-components enabling login and in-app purchases (IAP, paid up-se
 
 The web-components are backed by the [legers.js library](https://www.npmjs.com/package/ledgers.js) in the browser and [renumeration APIs](https://overhide.io/2020/09/06/remuneration-api.html) to allow IAP in US dollars, ethers, and bitcoins (easily extensible to other cryptos).
 
-Everything is open-source except for the US dollar microservice.
+Everything is open-source.
 
 The authentication and authorization mechanism used herein is the [Ledger-Based Authorizations](https://overhide.io/2020/10/11/what.html): crypto authorization concepts abstracted out for use with US dollars and any ledger based currency.
 
@@ -22,7 +22,7 @@ The authentication and authorization mechanism used herein is the [Ledger-Based 
 
 > 👉 For the impatient, jump to the [demos](#demos).
 
-
+> For help, reach out on [r/overhide](https://www.reddit.com/r/overhide/).
 
 It's simple to add IAPs to your Web application &mdash;  check out the "simplest" [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) ([code](/demo-front-end/simplest.html))  &mdash; it's essentially:
 
@@ -255,15 +255,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.6/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.0/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.3.6/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.0/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.3.6*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.3.6/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.0*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.0/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -274,7 +274,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.3.6",
+  "pay2my.app": "1.4.0",
   ..
 }
 ```
