@@ -289,11 +289,19 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
         if (tallyMinutes) {
           let since = new Date();
           since.setMinutes(since.getMinutes() - tallyMinutes);
-          const result = await oh$.getTallyDollars(imparter, { address: to }, since);
+          const result = await oh$.getTallyDollars(imparter, { 
+            address: to,
+            token: this.paymentsInfo.messageToSign[imparter],
+            signature: this.paymentsInfo.payerSignature[imparter]  
+          }, since);
           tally = result['tally'];
           asOf = result['as-of'];
         } else {
-          const result = await oh$.getTallyDollars(imparter, { address: to }, null);
+          const result = await oh$.getTallyDollars(imparter, { 
+            address: to,
+            token: this.paymentsInfo.messageToSign[imparter],
+            signature: this.paymentsInfo.payerSignature[imparter]  
+          }, null);
           tally = result['tally'];
           asOf = result['as-of'];
         }
@@ -340,16 +348,25 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       const amount = Math.ceil(amountDollars == 0 ? amountDollars : await oh$.getFromDollars(imparter, amountDollars));
       const aDayAgo = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);     // we compare tallies...
       if (amount > 0) {
-        var before = await oh$.getTallyDollars(imparter, { address: toAddress }, aDayAgo);  // ... by taking a sample before
+        var before = await oh$.getTallyDollars(imparter, { 
+          address: toAddress,
+          token: this.paymentsInfo.messageToSign[imparter],
+          signature: this.paymentsInfo.payerSignature[imparter]
+        }, aDayAgo);  // ... by taking a sample before
       }
       let options = this.paymentsInfo.payerSignature[imparter] && this.paymentsInfo.messageToSign[imparter] && {
         message: this.paymentsInfo.messageToSign[imparter],
-        signature: this.paymentsInfo.payerSignature[imparter]
+        signature: this.paymentsInfo.payerSignature[imparter],
+        isPrivate: true
       };
       const result = await oh$.createTransaction(imparter, amount, toAddress, options);
       if (amount > 0) {
         for (var i = 0; i < 15; i++) {
-          let now = await oh$.getTallyDollars(imparter, { address: toAddress }, aDayAgo); // ... we take a sample now
+          let now = await oh$.getTallyDollars(imparter, { 
+            address: toAddress,
+            token: this.paymentsInfo.messageToSign[imparter],
+            signature: this.paymentsInfo.payerSignature[imparter]  
+          }, aDayAgo); // ... we take a sample now
           if (now.tally || 0 > before.tally || 0) break;                           // ... and exit out as soon as decentralized
           //     ledger is consistent between the wallet's
           //     node and ledgers.js node

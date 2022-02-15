@@ -23,8 +23,9 @@ app.use(allow_cors);
  *   - 'featureName', see keys in 'feesSchedule.js' -- the gated feature name
  *   - 'currency', one of 'dollars', 'ethers', 'bitcoins'
  *   - 'address', ledger specific address
- *   - 'message', message signed to prove ownership of 'address'
- *   - 'signature', signature of 'message' for 'address'
+ *   The header of the request must have an `Authorization` header in the format `Bearer ${token}:${tokenSignature}`.
+ *   - 'token', base64 string containing token to be signed to prove ownership of 'address': will be the token retrieved by `getToken` earlier.
+ *   - 'tokenSignature', base64 string containing signature of 'token', signed by 'from'
  * @param {body:..} res -- will contain the response 'res' which is a JSON payload `{featureUsed:true|false}` 
  *   indicating whether the feature was "make-pretend" used by the back-end
  */

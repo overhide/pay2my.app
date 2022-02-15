@@ -329,7 +329,7 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
         case Imparter.ohledgerWeb3:
         case Imparter.ohledgerSocial:
           if (!this.signature || !this.challenge) throw `signed in but no signature`;
-          window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${this.signature}&t-challenge=${this.challenge}`,
+          window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${btoa(this.challenge)}`,
           'targetWindow',
           'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
           break;

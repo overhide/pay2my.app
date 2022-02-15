@@ -34,20 +34,23 @@ async function getToken() {
  * 
  * @param {string} uri - of overhide remuneration provider API
  * @param {string} from - tally transactions from this address 
+ * @param {string} token - valid token to be signed by `from`: : will be the token retrieved by `getToken` earlier and provided back from client.
+ * @param {string} signature - signature for `token` signed by `from`.
  * @param {string} to - tally transactions to this address
  * @param {Date} date - 'null' for all-time, or date since when to tally transactions
  * @returns {string} tally in remuneration provider's denomination
  */ 
-async function getTallyDollars(uri, from, to, date) {
+async function getTallyDollars(uri, from, token, signature, to, date) {
   let since = '';
   if (date) {
     since = `&since=${date.toISOString()}`;
   }
 
-  uri = `${uri}/get-transactions/${from}/${to}?tally-only=true&tally-dollars=true${since}`;
+  const signedTokenB64 = Buffer.from(signature).toString('base64')
+  uri = `${uri}/get-transactions/${from}/${to}?tally-only=true&tally-dollars=true${since}&signature=${signedTokenB64}`;
   console.log(`remunaration API >> getTally call (${uri})`);
 
-  return await fetch(uri, {headers: { "Authorization": `Bearer ${await getToken()}` }})
+  return await fetch(uri, {headers: { "Authorization": `Bearer ${token}` }})
     .then(res => res.json())
     .then(res => {
       console.log('remunaration API >> getTally call OK');
@@ -69,21 +72,43 @@ module.exports = {
   getToken: getToken,
 
   /**
+   * Extracts token and corresponding signature of said token from `Authorization` header value passed in: parses this header value.
+   * 
+   * The client is to send an authorization header matching:  `Bearer ${token}:${signature}` 
+   * 
+   * where:
+   *   - ${token} is the base64 value of the token retrieved earlier with the above `getToken(..)`.
+   *   - ${signature} is the base64 value of the signature of ${token}, signed with the `from`  addressed passed into these functions.
+   * 
+   * @param {string} headerValue - the header value to parse
+   * @returns {[token,signature]} strings containing the token and signature
+   */
+  extractTokenFromHeader: (headerValue) => {
+    const tokenBase64 = headerValue.match(/Bearer ([^:]+):([^:]+)/)[1];
+    const tokenSignatureBase64 = headerValue.match(/Bearer ([^:]+):([^:]+)/)[2];
+    const token = Buffer.from(tokenBase64, 'base64').toString();
+    const tokenSignature = Buffer.from(tokenSignatureBase64, 'base64').toString();
+    return [token, tokenSignature];
+  },
+
+  /**
    * Determine if cost is covered withing the number of days on the ledger
    * 
    * @param {string} uri - of overhide remuneration provider API
    * @param {string} from - tally transactions from this address
+   * @param {string} token - valid token to be signed by `from`: : will be the token retrieved by `getToken` earlier and provided back from client.
+   * @param {string} signature - signature for `token` signed by `from`.
    * @param {string} to - tally transactions to this address
    * @param {number} costDollars - amount of dollars (USD) to cover
    * @param {number} tallyMinutes - if null, all time, else number of minutes since now
    */
-  isCostCovered: async (uri, from, to, costDollars, tallyMinutes) => {
+  isCostCovered: async (uri, from, token, signature, to, costDollars, tallyMinutes) => {
     if (tallyMinutes) {
       let since = new Date();
       since.setMinutes(since.getMinutes() - tallyMinutes);
-      var tallyDollars = await getTallyDollars(uri, from, to, since);
+      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, since);
     } else {
-      var tallyDollars = await getTallyDollars(uri, from, to, null);
+      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, null);
     }
     var delta = costDollars - tallyDollars;
     return delta <= 0;
@@ -94,14 +119,14 @@ module.exports = {
    * 
    * @param {string} uri - of overhide remuneration provider API
    * @param {string} address - to check
-   * @param {string} message - that's signed in signature
-   * @param {string} signature - to check for address
+   * @param {string} token - valid token to be signed by `from`: : will be the token retrieved by `getToken` earlier and provided back from client.
+   * @param {string} signature - signature for `token` signed by `from`.
    * @returns {boolean}
    */
-  isValidOnLedger: async (uri, address, message, signature) => {
+  isValidOnLedger: async (uri, address, token, signature) => {
     const body = JSON.stringify({
       signature: Buffer.from(signature).toString('base64'),
-      message: Buffer.from(message).toString('base64'),
+      message: Buffer.from(token).toString('base64'),
       address: address
     });
     uri = `${uri}/is-signature-valid`

@@ -4,13 +4,15 @@ const overhide = require('../SharedCode/overhide.js');
 /**
  * @param {res:..} context -- will contain the response 'res' which is a JSON payload `{featureUsed:true|false}` 
  *   indicating whether the feature was "make-pretend" used by the back-end
- * @param {query:..} req -- request object whereby query should have:
+ * @param {query:..,headers} req -- request object whereby query should have:
  *   - 'sku', see keys in 'feesSchedule.js' -- the gated feature name
  *   - 'currency', one of 'dollars', 'ethers', 'bitcoins'
  *   - 'from', ledger specific address of the customer (the 'from')
- *   - 'message', message signed to prove ownership of 'address'  (NOTE, this is base64 encoded)
- *   - 'signature', signature of 'message' for 'from'
  *   - 'isTest', whether testnet ledgers should be used for authorization
+ *   
+ *   The header of the request must have an `Authorization` header in the format `Bearer ${message}:${signature}`.
+ *   - 'token', base64 string containing token to be signed to prove ownership of 'address': will be the token retrieved by `getToken` earlier.
+ *   - 'tokenSignature', base64 string containing signature of 'token', signed by 'from'
  */
 module.exports = async function (context, req) {
 
@@ -21,8 +23,8 @@ module.exports = async function (context, req) {
     const currency = req.query.currency;
     const from = req.query.from;
     const isTest = req.query.isTest;
-    const message = Buffer.from(req.query.message, 'base64').toString();
-    const signature = Buffer.from(req.query.signature, 'base64').toString();
+    const authZ = req.headers['authorization'];
+    const [token, tokenSignature] = overhide.extractTokenFromHeader(authZ);
     const to = feesSchedule[sku].address[currency];
     const costDollars = +feesSchedule[sku].costDollars;
     const expiryMinutes = +feesSchedule[sku].expiryMinutes || null;
@@ -41,9 +43,9 @@ module.exports = async function (context, req) {
         throw `invalid currency: ${currency}}`;
     } 
 
-    if (await overhide.isValidOnLedger(uri, from, message, signature)
+    if (await overhide.isValidOnLedger(uri, from, token, tokenSignature)
         && (costDollars === 0 
-          || await overhide.isCostCovered(uri, from, to, costDollars, expiryMinutes))) {
+          || await overhide.isCostCovered(uri, from, token, tokenSignature, to, costDollars, expiryMinutes))) {
       featureUsed = true;
     }
   } catch (e) {

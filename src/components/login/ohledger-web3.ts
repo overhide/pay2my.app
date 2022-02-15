@@ -151,8 +151,8 @@ export class OverhideOhWeb3 extends FASTElement {
   }
 
   showTransactions() {
-    if (this.hub && this.address && this.signature) {
-      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${this.challenge}`,
+    if (this.hub && this.address && this.signature && this.challenge) {
+      window.open(`${this.hub.getUrl(Imparter.ohledger)}/ledger.html?address=${this.address}&t-signature=${btoa(this.signature)}&t-challenge=${btoa(this.challenge)}`,
         'targetWindow',
         'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=300')
     }

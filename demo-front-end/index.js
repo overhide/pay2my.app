@@ -55,9 +55,13 @@ window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => {
     +`?sku=${e.detail.sku}`
     +`&currency=${e.detail.currency}`
     +`&from=${e.detail.from}`
-    +`&isTest=${e.detail.isTest}`
-    +`&message=${btoa(e.detail.message)}`
-    +`&signature=${btoa(e.detail.signature)}`)
+    +`&isTest=${e.detail.isTest}`,
+    { 
+      headers: { 
+        // note `e.detail.message` is the overhide api `token` retrieved by the library
+        // note `e.detail.signature` is the signature of the above `token`, signed with the `from` address (user address)
+        "Authorization": `Bearer ${btoa(e.detail.message)}:${btoa(e.detail.signature)}`
+    }})
     .then(response => {
       if (response.ok) {
         addMessage(e.detail.sku);

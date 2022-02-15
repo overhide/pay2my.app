@@ -94,6 +94,11 @@ export interface PaymentsInfo {
  * Passing the `asOf` timestamp to your back-end is an important optimization.  The overhide 
  * services already checked these transactions as part of this front-end work.  The `asOf` timestamp
  * ensures we re-load these resutls from cache and do not get rate-limited in the back-end.
+ * 
+ * The provided `message` is the overhide token retrieved from the overhide cluster.  The provided
+ * `signature` is this token signed by `from`.  These can be passed to a back-end to call the
+ * `get-transactions` endpoint of overhide remuneration API as an Authorization header (`Bearer ${token}`)
+ * and `signature` query param.  Where required.
  */
  export interface IPay2MyAppSkuClickedEvent {
   sku: string,
