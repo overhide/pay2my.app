@@ -244,7 +244,7 @@ The end result is our page has an ever-present button allowing our user to open 
 
 ![image-20211226150515503](https://overhide.github.io/pay2my.app/howto/intro/assets/image-20211226150515503.png)
 
-Other than that, the page acts in the same manner as the previous example.
+Other than that, the page acts in the same manner as the previous example, except, it doesn't provide an explicit logout button and status.  You can switch logins easily enough by clicking through the "Login" button experience.  
 
 
 
