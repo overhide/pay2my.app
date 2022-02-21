@@ -93,7 +93,7 @@ Here a user clicks on the "sign-in" rendered by the <a target="_blank" href="htt
 
 We've just created a login token for authenticating into subsequent sessions and tracking our in-app purchases (later).
 
-For subsequent sign-ins the user will likely want their in-browser password manager remember this secret token &mdash; or copy using the clipboard icon and store elsewhere.  Any new "generation" is effectively a new login.
+For subsequent sign-ins the user will likely want their in-browser password manager to remember this secret token &mdash; or copy using the clipboard icon and store elsewhere.  Any new "generation" is effectively a new login.
 
 The social login alternatives shown (Microsoft and Google) can be used to let users leverage their pre-existing Microsoft or Google accounts, to the same effect.  Feel free to try these out as well.  
 
