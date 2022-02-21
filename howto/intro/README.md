@@ -30,7 +30,7 @@ For brevity, full code listings are not part of this write-up, but are reference
 
 > **</>**  FULL CODE 
 >
-> **[!!]**  ENDERED PREVIEW
+> **[!!]**  RENDERED PREVIEW
 
 
 
