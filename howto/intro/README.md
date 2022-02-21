@@ -115,11 +115,11 @@ Now logout by clicking on the logout icon:
 
  ![](https://overhide.github.io/pay2my.app/howto/intro/assets/logout.png) 
 
-Notice the "❌ Not Authenticated" message reappeared upon logout. 
+Notice the "❌ Not Authenticated" message reappears upon logout. 
 
 
 
-Feel free to try the three login options -- if you use Google and Microsoft accounts -- logging out in between.
+Feel free to play around with the three login options — if you use Google and Microsoft accounts — logging out in between.
 
 
 
@@ -298,7 +298,7 @@ Back to the code, in this example we have both the "status" component and the "b
 
 Let's unwind this "button" code a bit.  We'll look at a sample click-through of the user experience afterwards.
 
-On line 22 we're setting the features SKU as `subscribed-feature`.  We set the cost at $3 USD (line 23, `priceDollars` attribute) and set the feature to expire after two minutes of payment (`withinMinutes` attribute).  As such, in our example, a payment of $3 USD gives the user 2 minutes of feature usage.  
+On line 22 we're setting the feature's SKU as `subscribed-feature`.  We set the cost at $3 USD (line 23, `priceDollars` attribute) and set the feature to expire after two minutes of payment (`withinMinutes` attribute).  As such, in our example, a payment of $3 USD gives the user 2 minutes of feature usage.  
 
 Keep in mind, in this demo, these are all fake USD payments using testnets.
 
@@ -364,9 +364,9 @@ The other event handler is for the `pay2myapp-appsell-sku-clicked` event, which 
 
 On line 44 we have an authorizations `pay2myapp-hub-sku-authorization-changed` event indicating when we're authorized for a certain SKU.  You'll receive one such event for each configured SKU (each button), should the expected payments be met on the ledger:  hence the SKU be authorized.
 
-In our demo we react to such events by simplisticly changing the contents of the `#message` DIV.
+In our demo we react to such events by simplistically changing the contents of the `#message` DIV.
 
-Lastly, on line 53 we have the `pay2myapp-appsell-sku-clicked` event indicating an authorized button was clicked.  In our demo, our reaction to such a click is to once again change the contents of the `#message` DIV.
+Lastly, on line 53, we have the `pay2myapp-appsell-sku-clicked` event indicating an authorized button was clicked.  In our demo, our reaction to such a click is to once again change the contents of the `#message` DIV.
 
 
 
@@ -401,7 +401,7 @@ Once a payment is made you will see a new message.   You can also click on the "
 
 ![refresh](https://overhide.github.io/pay2my.app/howto/intro/assets/refresh.png)
 
-If you recall our payment is valid for 2 minutes.  You can prove this to yourself by clicking the refresh button (green arrow above) after two minutes have passed.  We don't have any timers setup in this demo, but you can do so in your own code.
+If you recall our payment is valid for 2 minutes.  You can prove this to yourself by clicking the refresh button (green arrow above) after two minutes have passed.  We don't have any timers setup in this demo to refresh automatically, but you can do so in your own code.
 
 
 
@@ -458,7 +458,7 @@ Line 16 configures usage of an Ethereum *web3.js* wallet, such as <a target="_bl
 
 > 📢 
 >
-> The <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> components allow use of *web3.js* crypto wallets as user credential storage for US dollar in-app purchases.
+> Note that the <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> components also allow use of *web3.js* crypto wallets as user credential storage for US dollar in-app purchases.  Neat!
 
 
 
@@ -643,9 +643,9 @@ For back-end verifications of our feature click-throughs, we now have:
 76.         +`?sku=${e.detail.sku}`
 77.         +`&currency=${e.detail.currency}`
 78.         +`&from=${e.detail.from}`
-79.         +`&isTest=${e.detail.isTest}`
-80.         +`&message=${btoa(e.detail.message)}`
-81.         +`&signature=${btoa(e.detail.signature)}`)
+79.         +`&isTest=${e.detail.isTest}`,
+80.         { headers: {
+81.             "Authorization": `Bearer ${btoa(e.detail.message)}:${btoa(e.detail.signature)}` }})
 82.         .then(response => {
 83.           if (response.ok) {
 84.             document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;

@@ -76,9 +76,9 @@
         +`?sku=${e.detail.sku}`
         +`&currency=${e.detail.currency}`
         +`&from=${e.detail.from}`
-        +`&isTest=${e.detail.isTest}`
-        +`&message=${btoa(e.detail.message)}`
-        +`&signature=${btoa(e.detail.signature)}`)
+        +`&isTest=${e.detail.isTest}`,
+        { headers: { 
+            "Authorization": `Bearer ${btoa(e.detail.message)}:${btoa(e.detail.signature)}` }})
         .then(response => {
           if (response.ok) {
             document.querySelector("#message").innerHTML = `⚙ Used feature with SKU ${e.detail.sku}`;
