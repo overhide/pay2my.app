@@ -22,6 +22,14 @@ With that out of the way, let's look at some code.
 
 
 
+------
+
+Questions, comments?  Let's discuss at [r/overhide](https://www.reddit.com/r/overhide/).
+
+------
+
+
+
 ## Simple Code Listings
 
 For brevity, full code listings are not part of this write-up, but are referenced in each section from the code callouts:
@@ -34,7 +42,7 @@ For brevity, full code listings are not part of this write-up, but are reference
 
 
 
-All front-end code listings are at the <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/howto/intro/code">/howto/intro/code</a> folder of the <a target="_blank" href="https://github.com/overhide/pay2my.app">widget's repo</a>.
+All front-end code listings are at the <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/howto/intro/code">/howto/intro/code</a> folder of the <a target="_blank" href="https://github.com/overhide/pay2my.app">widgets' repo</a>.
 
 To follow along you need to be comfortable with basic HTML and JavaScript as it relates to the DOM.
 
@@ -95,13 +103,17 @@ We've just created a login token for authenticating into subsequent sessions and
 
 For subsequent sign-ins the user will likely want their in-browser password manager to remember this secret token &mdash; or copy using the clipboard icon and store elsewhere.  Any new "generation" is effectively a new login.
 
-The social login alternatives shown (Microsoft and Google) can be used to let users leverage their pre-existing Microsoft or Google accounts, to the same effect.  Feel free to try these out as well.  
+The social login alternatives shown (Microsoft and Google) can be used to let users leverage their pre-existing Microsoft or Google accounts, to the same effect.   
 
 > ℹ
 >
 > Note that using a new social login will automatically generate a secret token behind the scenes and use it to track transactions for that login, in perpetuity.  When using social login providers the user need not remember their secret token, it's tracked on their behalf.  But the user is now dependent on their social login.
 
 
+
+Now logout by clicking on the ![](https://overhide.github.io/pay2my.app/howto/intro/assets/logout.png) icon.  Notice the "❌ Not Authenticated" message reappeared upon logout. 
+
+Feel free to try the various logins, logging out in between. 
 
 That was it for the login, but we jumped ahead to line 18 to discuss it.
 
