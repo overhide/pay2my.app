@@ -656,7 +656,7 @@ The <a target="_blank" href="https://overhide.github.io/pay2my.app/howto/intro/d
 
 
 
-![flow](https://overhide.github.io/pay2my.app/howto/drawings/flow.png)
+![flow](https://overhide.github.io/pay2my.app/howto/intro/drawings/flow.png)
 
 
 
@@ -710,7 +710,7 @@ Each choice of login has different pros and cons as it comes to:
 
 
 
-![matrix](https://overhide.github.io/pay2my.app/howto/drawings/matrix.png)
+![matrix](https://overhide.github.io/pay2my.app/howto/intro/drawings/matrix.png)
 
 
 
