@@ -2,7 +2,7 @@
 
 
 
-In this guide we will add a user login and an in-app purchase (IAP) button to a Web product (basic HTML file).  We will do this using a couple w3c Web components from <a target="_blank" href="https://pay2my.app">https://pay2my.app</a>, some HTML, and some JavaScript.  We'll do this without a back-end, and then iteratively add the optional &mdash; but selectively valuable &mdash; back-end (sample Node.js).
+In this guide we will add a user login and an in-app purchase (IAP) button to a Web product (basic HTML file).  We will do this using a couple w3c Web components from <a target="_blank" href="https://pay2my.app">https://pay2my.app</a> FOSS, some HTML, and some JavaScript.  We'll do this without a back-end, and then iteratively add the optional &mdash; but selectively valuable &mdash; back-end (sample Node.js).
 
 The word "liberating" in the title of this tutorial is somewhat overloaded, on purpose:
 
