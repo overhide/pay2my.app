@@ -111,9 +111,17 @@ The social login alternatives shown (Microsoft and Google) can be used to let us
 
 
 
-Now logout by clicking on the ![](https://overhide.github.io/pay2my.app/howto/intro/assets/logout.png) icon.  Notice the "❌ Not Authenticated" message reappeared upon logout. 
+Now logout by clicking on the logout icon:
 
-Feel free to try the various logins, logging out in between. 
+ ![](https://overhide.github.io/pay2my.app/howto/intro/assets/logout.png) 
+
+Notice the "❌ Not Authenticated" message reappeared upon logout. 
+
+
+
+Feel free to try the three login options -- if you use Google and Microsoft accounts -- logging out in between.
+
+
 
 That was it for the login, but we jumped ahead to line 18 to discuss it.
 
