@@ -74,7 +74,7 @@ Most demos in this repo have business flows incorporating a simple back-end.  Th
 The below infographic conveys at-a-glance what you get with these widgets:
 
 <p align="center"><a href="https://overhide.github.io/pay2my.app/assets/widgets.svg" target="_blank"><img src="https://overhide.github.io/pay2my.app/assets/widgets.svg" width="75%"/></a></p>
-The top-left shows a sample Web app with a nav-bar housing the [pay2myapp-status](#pay2myapp-status) component.  It also shows three purchase buttons.  Clicking any of these will open up the [pay2myapp-login](#pay2myapp-login-) component which serves as our "login widget".
+The top-left shows a sample Web app with a nav-bar housing the [pay2myapp-status](#pay2myapp-status-) component.  It also shows three purchase buttons.  Clicking any of these will open up the [pay2myapp-login](#pay2myapp-login-) component which serves as our "login widget".
 
 When a user wants to authorize for a feature; different UI experiences will present themselves depending on whether the feature is free, the user wants to pay in dollars, or the user wants to pay using a wallet, e.g., above, see:
 
@@ -113,46 +113,46 @@ The remainder of the steps are actual code changes in your Web application.
    - optional, you don't need this if you just want to accept cryptos or don't want in-app purchases at all (just authentication)
   - but, keep in mind, it's too early to just accept cryptos &mdash; most people online won't have any just yet and it's prudent to give them the option to pay in dollars
    - you will create a new [Stripe](https://stripe.com) account or connect your existing [Stripe](https://stripe.com) account
-   - you will provide the above address as the *overhideAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell) components (the feature buttons)
+   - you will provide the above address as the *overhideAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell-) components (the feature buttons)
 
 2. onboard onto Ethereum (optional, recommended)
 
    - use a wallet such as [MetaMask](https://metamask.io/) to generate your credentials
-   - you will provide your Ethereum public address as the *ethereumAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell) components
+   - you will provide your Ethereum public address as the *ethereumAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell-) components
 
 3. onboard onto Bitcoin (optional)
 
    - use a wallet such as [Electrum](https://electrum.org/#home) to generate your credentials
-   - you will provide your Bitcoin public address as the *bitcoinAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell) components
+   - you will provide your Bitcoin public address as the *bitcoinAddress* attribute in all your [pay2myapp-appsell](#pay2myapp-appsell-) components
 
 4. pull in the `pay2my.app.js` component into your app, see [CDN](#cdn).
 
-5. add an [pay2myapp-hub](#pay2myapp-hub) component to your DOM or [initialize programatically](#setting-the-pay2myapp-hub-programatically)
+5. add an [pay2myapp-hub](#pay2myapp-hub-) component to your DOM or [initialize programatically](#setting-the-pay2myapp-hub-programatically)
 
    - assign an *id* attribute to the hub if other components will de-reference this hub via their *hubId* attribtues; otherwise, call the *setHub(..)* explicitly on each of those components from script
    - configure the *token* attribute or *apiKey* (see [Enabling with Token](#enabling-with-token))
    - specify the *isTest* attribute if this is a testnet application, otherwise leave it out
 
-6. add an [pay2myapp-login](#pay2myapp-login) component to your DOM
+6. add an [pay2myapp-login](#pay2myapp-login-) component to your DOM
 
-   - configure the *id* of the [pay2myapp-hub](#pay2myapp-hub) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
-   - list all the desired authentication/authorization methods for this application, the various *overhide..Enabled* attributes in [pay2myapp-login](#pay2myapp-login)
-     - *overhideSocialMicrosoftEnabled* if you want Microsoft social-login against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
-     - *overhideSocialGoogleEnabled* if you want Google social-login against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
-     - *overhideWeb3Enabled* if you want customers to manage their US dollar ledger credentials with their Ethereum wallet such as [MetaMask](https://metamask.io/)  &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
-     - *ethereumWeb3Enabled* if you want to allow payments in ethers for customers with their Ethereum wallet such as [MetaMask](https://metamask.io/)  &mdash; must onboard step [2] above and specify *ethereumAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
-     - *bitcoinEnabled* if you want to allow payments in bitcoins for customers with their Bitcoin wallet such as [Electrum](https://electrum.org/#home)  &mdash; must onboard step [3] above and specify *bitcoinAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
-     - *overhideSecretTokenEnabled* if you want user-managed secret-token access against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell) elements
+   - configure the *id* of the [pay2myapp-hub](#pay2myapp-hub-) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
+   - list all the desired authentication/authorization methods for this application, the various *overhide..Enabled* attributes in [pay2myapp-login](#pay2myapp-login-)
+     - *overhideSocialMicrosoftEnabled* if you want Microsoft social-login against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
+     - *overhideSocialGoogleEnabled* if you want Google social-login against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
+     - *overhideWeb3Enabled* if you want customers to manage their US dollar ledger credentials with their Ethereum wallet such as [MetaMask](https://metamask.io/)  &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
+     - *ethereumWeb3Enabled* if you want to allow payments in ethers for customers with their Ethereum wallet such as [MetaMask](https://metamask.io/)  &mdash; must onboard step [2] above and specify *ethereumAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
+     - *bitcoinEnabled* if you want to allow payments in bitcoins for customers with their Bitcoin wallet such as [Electrum](https://electrum.org/#home)  &mdash; must onboard step [3] above and specify *bitcoinAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
+     - *overhideSecretTokenEnabled* if you want user-managed secret-token access against the US dollar ledger &mdash; must onboard step [1] above and specify *overhideAddress* in your [pay2myapp-appsell](#pay2myapp-appsell-) elements
 
-7. add an [pay2myapp-appsell](#pay2myapp-appsell) component as an explicit "login" button (non-feature) to your DOM
+7. add an [pay2myapp-appsell](#pay2myapp-appsell-) component as an explicit "login" button (non-feature) to your DOM
 
    1. optional, as the feature buttons &mdash; when clicked &mdash;  will login your users if they're not yet logged in
-   2. configure the *id* of the [pay2myapp-hub](#pay2myapp-hub) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
-   3. do not provide any [pay2myapp-appsell](#pay2myapp-appsell) attributesexcept for the *hubId* (above) and the *loginMessage*
+   2. configure the *id* of the [pay2myapp-hub](#pay2myapp-hub-) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
+   3. do not provide any [pay2myapp-appsell](#pay2myapp-appsell-) attributesexcept for the *hubId* (above) and the *loginMessage*
 
-8. add [pay2myapp-appsell](#pay2myapp-appsell) components to your DOM for each feature
+8. add [pay2myapp-appsell](#pay2myapp-appsell-) components to your DOM for each feature
 
-   1. configure the *id* of the [pay2myapp-hub](#pay2myapp-hub) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
+   1. configure the *id* of the [pay2myapp-hub](#pay2myapp-hub-) element via the *hubId*, or call this elements's *setHub(..)* setter to set the hub element programatically
    2. provide a unique *sku* attribute per button
    3. provide the desired *priceDollars* attribute, or 0 if setting up a for-free feature
    4. provide the *authorizedMessage* attribute to be displayed when user is already authorized and just needs to click on the feature to enable / use
@@ -169,7 +169,7 @@ We have several component demo files in [/demo-front-end](/demo-front-end):
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
 | basic                                                        | [demo](https://overhide.github.io/pay2my.app/demo-front-end/basic.html) | [code](/demo-front-end/basic.html)                           | ✔                 | the basic demo &mdash; *pay2myapp-status* in the nav-bar, a login button, 3 feature buttons. |
 | no back-end                                                  | [demo](https://overhide.github.io/pay2my.app/demo-front-end/no-back-end.html) | [code](/demo-front-end/no-back-end.html)                     | ✖                 | a no  [back-end](#back-end) demo, everything just in-browser &mdash; same as basic otherwise |
-| custom buttons                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/custom.html) | [code](/demo-front-end/custom.html)                          | ✔                 | same as basic demo but the login button has different colors and the feature buttons are ice cream desserts &mdash; see [slots](#slots-2) section of the [pay2myapp-appsell](#pay2myapp-appsell) component below |
+| custom buttons                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/custom.html) | [code](/demo-front-end/custom.html)                          | ✔                 | same as basic demo but the login button has different colors and the feature buttons are ice cream desserts &mdash; see [slots](#slots-2) section of the [pay2myapp-appsell](#pay2myapp-appsell-) component below |
 | javascript-hub                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/javascript-hub.html) | [code](/demo-front-end/javascript-hub.html)                  | ✔                 | same as basic demo but the *pay2myapp-hub* component is not in the DOM, it's wired in via script |
 | simplest                                                     | [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) | [code](/demo-front-end/simplest.html)                        | ✖                 | bare bones single button demo &mdash; the simplest demo, no [back-end](#back-end) |
 | ![](./assets/react.png)<br /><br />[pay2my.app React.js Demo app](https://github.com/overhide/pay2my.app-react-demo) | [demo](https://github.com/overhide/pay2my.app-react-demo) | [code](https://github.com/overhide/pay2my.app-react-demo) | ✔                 | React.js version of these demos.                             |
@@ -178,14 +178,14 @@ We have several component demo files in [/demo-front-end](/demo-front-end):
 
 Most demos show:
 
-- a nav-bar at the top with an [pay2myapp-status](#pay2myapp-status) web-component flush to the right.
-- a login button (which is just an [pay2myapp-appsell](#pay2myapp-appsell) component with a *loginMessage* attribute instead of a *sku*)
-- 3 feature buttons ([pay2myapp-appsell](#pay2myapp-appsell) components):
+- a nav-bar at the top with an [pay2myapp-status](#pay2myapp-status-) web-component flush to the right.
+- a login button (which is just an [pay2myapp-appsell](#pay2myapp-appsell-) component with a *loginMessage* attribute instead of a *sku*)
+- 3 feature buttons ([pay2myapp-appsell](#pay2myapp-appsell-) components):
   - free
   - $2 up-sell
   - $3 subscription for 30 minutes
 
-Everything is optional except for the non-visible [pay2myapp-hub](#pay2myapp-hub)  web-component that can be wired via DOM or JavaScript (see the [javascript-hub demo](/demo-front-end/javascript-hub.html) for JS wiring).
+Everything is optional except for the non-visible [pay2myapp-hub](#pay2myapp-hub-)  web-component that can be wired via DOM or JavaScript (see the [javascript-hub demo](/demo-front-end/javascript-hub.html) for JS wiring).
 
 You could just have a single up-sell / in-app purchase button, no status, no explicit login, and it will allow all the functionality (see "simplest"  [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) ([code](/demo-front-end/simplest.html)).
 
@@ -201,7 +201,7 @@ Note that the back-end verifies authentication and authorization as per credenti
 
 The back-end serves three purposes on behalf of our front-ends:
 
-- retrieves [an overhide token](https://token.overhide.io/swagger.html) for use with *overhide* APIs &mdash; browser front-end code calls this to get the token and provide to the [pay2myapp-hub](#pay2myapp-hub)  component.
+- retrieves [an overhide token](https://token.overhide.io/swagger.html) for use with *overhide* APIs &mdash; browser front-end code calls this to get the token and provide to the [pay2myapp-hub](#pay2myapp-hub-)  component.
 - retrieves the fees-schedule (not actually leveraged in demos for simplicity, but provided for completness)
   - usually you'll want a single source of truth for your feature fees schedule
 - runs the feature-flow business logic on the back-end when corresponding feature button clicked in the front-end (`/RunFeature` endpoints)
@@ -241,7 +241,7 @@ Within your front-end projects; using *npm* simply:  `npm install pay2my.app --s
 
 #### Enabling with Token
 
-APIs abstracted by *pay2my.app* require a bearer-token.  The `token` is passed in to the `<pay2myapp-hub token="..">` component (see the [pay2myapp-hub](#pay2myapp-hub) component section for details).
+APIs abstracted by *pay2my.app* require a bearer-token.  The `token` is passed in to the `<pay2myapp-hub token="..">` component (see the [pay2myapp-hub](#pay2myapp-hub-) component section for details).
 
 The component either takes a `token=".."` retrieved from a back-end (optional) or an `apiKey=".."` provided statically &mdash; less bad-actor proof, but OK for some projects.
 
@@ -255,15 +255,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.3/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.3/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.4.3*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.3/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.4*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -274,7 +274,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.4.3",
+  "pay2my.app": "1.4.4",
   ..
 }
 ```
@@ -465,17 +465,17 @@ The login widget.
 
 The login providers you want to make available to your users can be customized here.
 
-This component must be in your DOM, the other components such as [pay2myapp-appsell](#pay2myapp-appsell) and [pay2myapp-status](#pay2myapp-status) will trigger this component to raise a modal showing login providers &mdash; when necessary.
+This component must be in your DOM, the other components such as [pay2myapp-appsell](#pay2myapp-appsell-) and [pay2myapp-status](#pay2myapp-status-) will trigger this component to raise a modal showing login providers &mdash; when necessary.
 
-All login providers configured here should have corresponding addresses configured on all your [pay2myapp-appsell](#pay2myapp-appsell) buttons.
+All login providers configured here should have corresponding addresses configured on all your [pay2myapp-appsell](#pay2myapp-appsell-) buttons.
 
 ##### Attributes
 
 *hubId*
 
 - connect to the one and only hub shared among all components in this eco-system
-- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub) in the document model
-- if the [pay2myapp-hub](#pay2myapp-hub) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
+- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub-) in the document model
+- if the [pay2myapp-hub](#pay2myapp-hub-) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
 
 *overhideSocialMicrosoftEnabled*
 
@@ -483,7 +483,7 @@ All login providers configured here should have corresponding addresses configur
 
 ![](/assets/overhideSocialMicrosoftEnabled.png)
 
-- requires that your [pay2myapp-appsell](#pay2myapp-appsell) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
+- requires that your [pay2myapp-appsell](#pay2myapp-appsell-) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
 
 *overhideSocialGoogleEnabled*
 
@@ -491,7 +491,7 @@ All login providers configured here should have corresponding addresses configur
 
 ![](/assets/overhideSocialGoogleEnabled.png)
 
-- requires that your [pay2myapp-appsell](#pay2myapp-appsell) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
+- requires that your [pay2myapp-appsell](#pay2myapp-appsell-) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
 
 *ethereumWeb3Enabled*
 
@@ -499,7 +499,7 @@ All login providers configured here should have corresponding addresses configur
 
 ![](/assets/ethereumWeb3Enabled.png)
 
-- requires that your [pay2myapp-appsell](#pay2myapp-appsell) components specify your *ethereumAddress* attribute (you're onboarded onto the pay2myapp-ledger)
+- requires that your [pay2myapp-appsell](#pay2myapp-appsell-) components specify your *ethereumAddress* attribute (you're onboarded onto the pay2myapp-ledger)
 
 *bitcoinEnabled*
 
@@ -507,7 +507,7 @@ All login providers configured here should have corresponding addresses configur
 
 ![](/assets/bitcoinEnabled.png)
 
-- requires that your [pay2myapp-appsell](#pay2myapp-appsell) components specify your *bitcoinAddress* attribute (you're onboarded onto Bitcoin)
+- requires that your [pay2myapp-appsell](#pay2myapp-appsell-) components specify your *bitcoinAddress* attribute (you're onboarded onto Bitcoin)
 
 *overhideSecretTokenEnabled*
 
@@ -515,7 +515,7 @@ All login providers configured here should have corresponding addresses configur
 
 ![](/assets/overhideSecretTokenEnabled.png)
 
-- requires that your [pay2myapp-appsell](#pay2myapp-appsell) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
+- requires that your [pay2myapp-appsell](#pay2myapp-appsell-) components specify your *overhideAddress* attribute (you're onboarded onto the pay2myapp-ledger)
 
 ##### Properties / Methods
 
@@ -576,8 +576,8 @@ These widgets are fully customizable through [slots](https://developer.mozilla.o
 *hubId*
 
 - connect to the one and only hub shared among all components in this eco-system
-- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub) in the document model
-- if the [pay2myapp-hub](#pay2myapp-hub) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
+- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub-) in the document model
+- if the [pay2myapp-hub](#pay2myapp-hub-) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
 
 *orientation*
 
@@ -603,7 +603,7 @@ These widgets are fully customizable through [slots](https://developer.mozilla.o
 
 - if this button should always show the login modal when clicked
 - set to true when no means to logout is provided &mdash; enables user to always choose authorization method
-- likely shouldn't be set if a button with *loginMessage* is provided or an [pay2myapp-status](#pay2myapp-status) component is used in the page &mdash; as those buttons allow re-login
+- likely shouldn't be set if a button with *loginMessage* is provided or an [pay2myapp-status](#pay2myapp-status-) component is used in the page &mdash; as those buttons allow re-login
 - useful for donation buttons when they're the sole button on the page
 
 *authorizedMessage*
@@ -739,8 +739,8 @@ When logged out, clicking the "sign-in" text triggers login.
 *hubId*
 
 - connect to the one and only hub shared among all components in this eco-system
-- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub) in the document model
-- if the [pay2myapp-hub](#pay2myapp-hub) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
+- this is the actual element ID of the [pay2myapp-hub](#pay2myapp-hub-) in the document model
+- if the [pay2myapp-hub](#pay2myapp-hub-) is not in the DOM or doesn't have an ID, you'll need to use the `setHub(..)` method (see [setting the hub programatically](#setting-the-pay2myapp-hub-programatically)).
 
 ##### Properties / Methods
 
