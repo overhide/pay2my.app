@@ -107,6 +107,7 @@ export interface PaymentsInfo {
   from: string,
   to: string,
   currency: Currency,
+  imparter: Imparter,
   isTest: boolean,
   asOf: string
 }

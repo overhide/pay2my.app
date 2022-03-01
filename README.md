@@ -255,15 +255,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.5/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.5/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.4.4*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.4/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.5*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.5/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -274,7 +274,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.4.4",
+  "pay2my.app": "1.4.5",
   ..
 }
 ```
@@ -378,6 +378,11 @@ Here, the components wired into the DOM do not have a `hubId=..` attribute speci
 
 - set on element to indicate that all transactions/checks should be done against testnets
 - leave out if production / live environment
+
+*noCache*
+
+- set on element to indicate login metadata should not be persisted in the browser-local session cache; to aide perserve data across browser refreshes
+- usually left out
 
 *apiKey*
 
@@ -691,6 +696,7 @@ See the [custom buttons demo](https://overhide.github.io/pay2my.app/demo-front-e
   from: string,
   to: string,
   currency: Currency,
+  imparter: Imparter,
   isTest: boolean,
   asOf: string
 }

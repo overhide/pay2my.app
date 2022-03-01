@@ -36,6 +36,9 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   @attr({ mode: 'boolean' })
   isTest?: boolean | null = false;
 
+  @attr({ mode: 'boolean' })
+  noCache?: boolean | null = false;
+
   @attr
   apiKey?: string | null;
 
@@ -118,6 +121,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
 
   private allowNetworkType: NetworkType = NetworkType.prod;
   private isWiredUp = false;
+  private isSkippingCache = false;
   private ordinal = 1;
 
   // cache of outstanding results
@@ -129,6 +133,9 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     this.isWiredUp = true;
     if (this.rootElement?.hasAttribute('isTest')) {
       this.isTestChanged(false, true);
+    }
+    if (this.rootElement?.hasAttribute('noCache')) {
+      this.noCacheChanged(false, true);
     }
     if (this.rootElement?.hasAttribute('apiKey')) {
       this.apiKeyChanged('', this.rootElement.getAttribute('apiKey') || '');
@@ -171,33 +178,38 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   // @param {Imparter} imparter - to set
   // @returns {bool} true if success or cancel, false if some problem
   public setCurrentImparter = async (imparter: Imparter): Promise<boolean> => {
-    const oldInfo = { ...this.paymentsInfo };
-    try {
-      this.refresh(imparter); // reset outstanding cache
-      this.paymentsInfo.currentImparter = imparter;
-      this.paymentsInfo.currentCurrency = CURRENCY_BY_IMPARTER[imparter];
-
-      if (imparter !== Imparter.unknown && !this.isAuthenticated(imparter)) {
-        await this.authenticate(imparter);
+    return this.setCurrentImparterByFn(
+      imparter,
+      async () => {
+        if (imparter !== Imparter.unknown && !this.isAuthenticated(imparter)) {
+          await this.authenticate(imparter);
+        }  
       }
-
-      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ imparter: imparter, isAuthenticated: this.isAuthenticated(imparter) };
-      this.$emit("pay2myapp-hub-sku-authentication-changed", event);
-
-      this.pingApplicationState();
-      sessionStorage.setItem('paymentsInfo', JSON.stringify({ ...this.paymentsInfo, skuComponents: {}, loginElement: null }));
-      return true;
-    }
-    catch (e) {
-      this.paymentsInfo = { ...oldInfo };
-      this.error = e;
-      if (e == 'user close') {
-        return true; // cancel
-      }
-      sessionStorage.removeItem('paymentsInfo');
-      return false;
-    }
+    )
   }
+
+  // Set current imparter is signed message checks out against signature for address: if on ledger
+  // @param {Imparter} imparter - to set
+  // @param {string|null} message
+  // @param {string|null} signature
+  // @param {string|null} address - if imparter is from wallet, wallet will be interrogated for addres, but will not be asked to sign
+  // @returns {bool} true if success or cancel, false if some problem
+  public setCurrentImparterChecked = async (
+    imparter: Imparter,
+    message: string|null,
+    signature: string|null,
+    address: string|null
+    ): Promise<boolean> => {
+    return this.setCurrentImparterByFn(
+      imparter,
+      async () => {
+        if (oh$.canSetCredentials(imparter)) {
+          oh$.setCredentials({address});
+        }
+        await this.isOnLedger(imparter, {message, signature});
+      }
+    )
+  }  
 
   public setCurrentSocial = async (social: Social) => {
     if (this.paymentsInfo.currentSocial != social) {
@@ -511,6 +523,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     this.initNetworks();
   }
 
+  private noCacheChanged(oldValue: boolean, newValue: boolean) {
+    this.isSkippingCache = newValue;
+  }
+
   private async apiKeyChanged(oldValue: string, newValue: string) {
     if (!this.isWiredUp) return;
     const token = await this.initToken(newValue);
@@ -538,6 +554,34 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   private pingApplicationState = () => {
     this.paymentsInfo = { ...this.paymentsInfo, ordinal: this.ordinal++ };
   }
+
+  // Set current imparter common bits, with passed in fuction doing the setting.
+  private setCurrentImparterByFn = async (imparter: Imparter, fn: ()=>{}): Promise<boolean> => {
+    const oldInfo = { ...this.paymentsInfo };
+    try {
+      this.refresh(imparter); // reset outstanding cache
+      this.paymentsInfo.currentImparter = imparter;
+      this.paymentsInfo.currentCurrency = CURRENCY_BY_IMPARTER[imparter];
+
+      await fn();
+
+      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ imparter: imparter, isAuthenticated: this.isAuthenticated(imparter) };
+      this.$emit("pay2myapp-hub-sku-authentication-changed", event);
+
+      this.pingApplicationState();
+      sessionStorage.setItem('paymentsInfo', JSON.stringify({ ...this.paymentsInfo, skuComponents: {}, loginElement: null }));
+      return true;
+    }
+    catch (e) {
+      this.paymentsInfo = { ...oldInfo };
+      this.error = e;
+      if (e == 'user close') {
+        return true; // cancel
+      }
+      sessionStorage.removeItem('paymentsInfo');
+      return false;
+    }
+  }  
 
   // Check current credentials for any transactions on current ledger.
   // @param {Imparter} imparter - to set 
@@ -656,6 +700,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
   }
 
   private initSession = async () => {
+    if (this.noCache) {
+      console.log(`no cache enabled, not loading session storage`);
+      return;
+    }
     const fromStorage = window.sessionStorage.getItem('paymentsInfo');
     if (fromStorage) {
       this.paymentsInfo = JSON.parse(fromStorage);

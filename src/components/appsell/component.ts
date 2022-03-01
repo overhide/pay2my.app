@@ -284,6 +284,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       sku: this.sku,
       topup: this.topupDollars,
       currency: this.lastInfo.currentCurrency,
+      imparter: this.currentImparter,
       from: this.lastInfo.payerAddress[this.currentImparter],
       isTest: this.hub?.getNetworkType() == NetworkType.test,
       message: this.lastInfo.messageToSign[this.currentImparter],
