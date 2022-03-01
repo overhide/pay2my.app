@@ -83,7 +83,6 @@ const template = html<OverhideOhledger>`
         </div>
       </div>    
     </form>
-    <iframe src="#" name="noop" style="display: none"></iframe>
   </div>
 `;
 
