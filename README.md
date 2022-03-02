@@ -2,12 +2,9 @@
 
 <p align="center"><a href="https://overhide.io"><img src="https://overhide.github.io/pay2my.app/assets/logo.png" width="200px"/></a></p>
 
-
 <p align="center"><a href="https://overhide.io">pay2my.app by overhide.io</a></p><p style="width: 500px; margin: auto">A free and fully open-sourced ecosystem of widgets, a front-end library, and back-end services &mdash; to make addition of "logins" and "in-app-purchases" (IAP) to your app as banal as possible.</p>
 
-
 <hr/>
-
 # pay2my.app widgets
 
 Customizable web-components enabling login and in-app purchases (IAP, paid up-sells) for any Web application to be as simple as possible.
@@ -255,15 +252,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.6/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.6/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.4.6*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.6/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.7*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -274,9 +271,22 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.4.6",
+  "pay2my.app": "1.4.7",
   ..
 }
+```
+
+
+
+## Content-Security-Policy
+
+If you're serving pages with these components from a server that sets the `Content-Security-Policy` header, you'll need the following adjustments to your CSP:
+
+```
+script-src 'self' *.overhide.io *.stripe.com
+style-src 'self' 'unsafe-inline'
+frame-src 'self' overhide.github.io
+frame-ancestors 'self'
 ```
 
 
