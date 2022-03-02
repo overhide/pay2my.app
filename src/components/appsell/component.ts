@@ -245,7 +245,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
 
   public async click(): Promise<void> {
     if (this.loginElement && (this.loginMessage || this.alwaysLogin || (!this.inhibitLogin && !this.isLogedIn))) {
-      await this.loginElement.open();
+      if (!await this.loginElement.open()) return;
     }
 
     if (this.loginMessage) {

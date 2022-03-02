@@ -87,10 +87,14 @@ export class OverhideOhSocialGoogle extends FASTElement {
   @observable
   message?:any;
 
-  hub?: IPay2MyAppHub; 
+  @observable
   challenge?: string | null;
+
+  @observable
   signature?: string | null;
 
+  hub?: IPay2MyAppHub; 
+  
   public constructor() {
     super();
     this.setNormalMessage();

@@ -252,15 +252,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.8/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.8/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.4.7*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.7/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.8*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.8/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -271,7 +271,7 @@ In [npm](https://www.npmjs.com/) based app projects, include the components and 
 ```
 "dependencies": {
   ..
-  "pay2my.app": "1.4.7",
+  "pay2my.app": "1.4.8",
   ..
 }
 ```
@@ -284,8 +284,10 @@ If you're serving pages with these components from a server that sets the `Conte
 
 ```
 script-src 'self' *.overhide.io *.stripe.com
+connect-src *.overhide.io *.stripe.com
 style-src 'self' 'unsafe-inline'
-frame-src 'self' overhide.github.io
+default-src 'self' *.stripe.com
+frame-src 'self' *.overhide.io overhide.github.io overhide.b2clogin.com *.stripe.com
 frame-ancestors 'self'
 ```
 
@@ -422,6 +424,9 @@ N/A &mdash; this is an invisible element and not customizable via slots.
 
 ```
 export interface IPay2MyAppSkuAuthenticationChangedEvent {
+  message: string,
+  signature: string,
+  from: string,
   imparter: Imparter,
   isAuthenticated: boolean;
 }

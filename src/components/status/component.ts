@@ -192,9 +192,11 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
   @observable
   canGetTransactions?: boolean | null;
 
-  hub?: IPay2MyAppHub | null; 
-  currentImparter?: Imparter | null;
+  @observable
   isSignedIn: boolean = false;
+
+  hub?: IPay2MyAppHub | null; 
+  currentImparter?: Imparter | null;  
   challenge?: string | null;
   signature?: string | null;
   loginElement?: IPay2MyAppLogin | null;
@@ -316,7 +318,7 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
 
   async addressClicked() {
     if (this.hub && !this.isSignedIn && !!this.loginElement) {
-      await this.loginElement.open();
+      if (!await this.loginElement.open()) return;
       let info: PaymentsInfo = this.hub.getInfo();
       if (info.currentImparter && !info.isOnLedger[info.currentImparter]) {
         await this.hub.topUp(0, null);

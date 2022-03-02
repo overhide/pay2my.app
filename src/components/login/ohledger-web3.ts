@@ -90,10 +90,14 @@ export class OverhideOhWeb3 extends FASTElement {
   @observable
   hasWallet?: boolean;
 
-  hub?: IPay2MyAppHub; 
+  @observable
   challenge?: string | null;
+
+  @observable
   signature?: string | null;
 
+  hub?: IPay2MyAppHub; 
+  
   public constructor() {
     super();
     this.setNormalMessage();

@@ -134,6 +134,9 @@ export interface IPay2MyAppSkuTopupOutstandingEvent {
  * The `imparter` for which the authentication is changed is signaled.
  */
  export interface IPay2MyAppSkuAuthenticationChangedEvent {
+  message: string,
+  signature: string,
+  from: string,
   imparter: Imparter,
   isAuthenticated: boolean;
 }
@@ -203,8 +206,8 @@ export interface IPay2MyAppLogin {
   //
   // Emits "pay2myapp-login-open" custom event.
   //
-  // @returns {Promise} to await until closed.
-  open(): Promise<void>;
+  // @returns {Promise} to await until closed.  `true` if authenticated, else `false` if user-closed.
+  open(): Promise<boolean>;
 }
 
 // Represents the pay2myapp-status component.

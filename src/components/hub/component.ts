@@ -565,7 +565,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
 
       await fn();
 
-      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ imparter: imparter, isAuthenticated: this.isAuthenticated(imparter) };
+      const event: IPay2MyAppSkuAuthenticationChangedEvent = <IPay2MyAppSkuAuthenticationChangedEvent>{ 
+        imparter: imparter, 
+        from: this.paymentsInfo.payerAddress[imparter],
+        message: this.paymentsInfo.messageToSign[imparter],
+        signature: this.paymentsInfo.payerSignature[imparter],
+        isAuthenticated: this.isAuthenticated(imparter) 
+      };
       this.$emit("pay2myapp-hub-sku-authentication-changed", event);
 
       this.pingApplicationState();
@@ -591,6 +597,8 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       this.paymentsInfo.isOnLedger[imparter] = false;
       if (await oh$.isOnLedger(imparter, options)) {
         this.paymentsInfo.isOnLedger[imparter] = true;
+        if ('message' in options) this.paymentsInfo.messageToSign[imparter] = options.message;
+        if ('signature' in options) this.paymentsInfo.payerSignature[imparter] = options.signature;
       }
     } catch (error) {
       throw `${typeof error == 'object' && 'message' in error ? error.message : error}`;

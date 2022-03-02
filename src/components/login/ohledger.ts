@@ -83,6 +83,7 @@ const template = html<OverhideOhledger>`
         </div>
       </div>    
     </form>
+    <iframe src="#" name="noop" style="display: none"></iframe>
   </div>
 `;
 
@@ -118,11 +119,15 @@ export class OverhideOhledger extends FASTElement {
   @observable
   message?: any;
 
+  @observable
+  challenge?: string | null;
+
+  @observable
+  signature?: string | null;
+
   autocompleteForm?: HTMLFormElement;
 
   hub?: IPay2MyAppHub;
-  challenge?: string | null;
-  signature?: string | null;
 
   public constructor() {
     super();

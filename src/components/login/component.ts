@@ -39,7 +39,7 @@ const template = html<Pay2MyAppLogin>`
       <div class="w3-display-container modal-container">
 
         <slot name="closeButton">
-          <button class="close-button w3-right w3-display-topright" type="button" @click="${(e, c) => e.close()}">${closeIcon}</button>
+          <button class="close-button w3-right w3-display-topright" type="button" @click="${(e, c) => e.close(false)}">${closeIcon}</button>
         </slot>
 
         <div class="modal">
@@ -172,23 +172,23 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
   }
 
   // Open the login modal
-  public open(): Promise<void> {
+  public open(): Promise<boolean> {
     if (this.rootElement) {
       this.rootElement.style.display = 'block';
       this.$emit('pay2myapp-login-open');
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<boolean>((resolve, reject) => {
         this.opens.push(resolve);
       });;      
     }
-    return Promise.resolve();
+    return Promise.resolve(false);
   }
 
   // Close the login modal
-  public close(): void {
+  public close(done: boolean = true): void {
     if (this.rootElement) {
       this.rootElement.style.display = 'none';
       this.$emit('pay2myapp-login-close');
-      this.opens.forEach(resolve => resolve());
+      this.opens.forEach(resolve => resolve(done));
       this.opens = [];
     }
   }
@@ -237,7 +237,7 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
 
     window.addEventListener('keydown', (event: any) => {
       if (event.key == 'Escape') {
-        this.close();
+        this.close(false);
       }
     });  
   };
@@ -247,7 +247,7 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
 
   outsideClick(event: any) {
     if (event.target == this.envelopeElement) {
-      this.close();
+      this.close(false);
     }
   }
 }
