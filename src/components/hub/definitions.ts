@@ -138,7 +138,7 @@ export interface IPay2MyAppSkuTopupOutstandingEvent {
   signature: string,
   from: string,
   imparter: Imparter,
-  isAuthenticated: boolean;
+  isAuthenticated: boolean
 }
 
 /**
@@ -148,7 +148,8 @@ export interface IPay2MyAppSkuTopupOutstandingEvent {
  */
 export interface IPay2MyAppSkuAuthorizationChangedEvent {
   sku: string,
-  isAuthorized: boolean;
+  isAuthorized: boolean,
+  asOf: string | null | undefined
 }
 
 /**
@@ -327,7 +328,8 @@ export interface IPay2MyAppHub {
   //
   // @param {string} sku -- to set
   // @param {boolean} authorized -- authorized or not?
-  setSkuAuthorized: (sku: string, authorized: boolean) => void;
+  // @param {string} asOf -- asOf timestamp for retrieving cached data
+  setSkuAuthorized: (sku: string, authorized: boolean, asOf: string | null | undefined) => void;
 
   // Is the SKU authorized?
   //

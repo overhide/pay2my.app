@@ -9,6 +9,7 @@ const overhide = require('../SharedCode/overhide.js');
  *   - 'currency', one of 'dollars', 'ethers', 'bitcoins'
  *   - 'from', ledger specific address of the customer (the 'from')
  *   - 'isTest', whether testnet ledgers should be used for authorization
+ *   - 'asOf' cache key to make request against back-end quota and not get 429s
  *   
  *   The header of the request must have an `Authorization` header in the format `Bearer ${message}:${signature}`.
  *   - 'token', base64 string containing token to be signed to prove ownership of 'address': will be the token retrieved by `getToken` earlier.
@@ -23,6 +24,7 @@ module.exports = async function (context, req) {
     const currency = req.query.currency;
     const from = req.query.from;
     const isTest = req.query.isTest;
+    const asOf = req.query.asOf;
     const authZ = req.headers['authorization'];
     const [token, tokenSignature] = overhide.extractTokenFromHeader(authZ);
     const to = feesSchedule[sku].address[currency];
@@ -45,7 +47,7 @@ module.exports = async function (context, req) {
 
     if (await overhide.isValidOnLedger(uri, from, token, tokenSignature)
         && (costDollars === 0 
-          || await overhide.isCostCovered(uri, from, token, tokenSignature, to, costDollars, expiryMinutes))) {
+          || await overhide.isCostCovered(uri, from, token, tokenSignature, to, costDollars, expiryMinutes, asOf))) {
       featureUsed = true;
     }
   } catch (e) {

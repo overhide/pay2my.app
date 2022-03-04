@@ -55,7 +55,8 @@ window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => {
     +`?sku=${e.detail.sku}`
     +`&currency=${e.detail.currency}`
     +`&from=${e.detail.from}`
-    +`&isTest=${e.detail.isTest}`,
+    +`&isTest=${e.detail.isTest}`
+    +`&asOf=${e.detail.asOf}`,
     { 
       headers: { 
         // note `e.detail.message` is the overhide api `token` retrieved by the library

@@ -38,16 +38,17 @@ async function getToken() {
  * @param {string} signature - signature for `token` signed by `from`.
  * @param {string} to - tally transactions to this address
  * @param {Date} date - 'null' for all-time, or date since when to tally transactions
+ * @param {string} asOf - key to make request against back-end quota and not get 429s
  * @returns {string} tally in remuneration provider's denomination
  */ 
-async function getTallyDollars(uri, from, token, signature, to, date) {
+async function getTallyDollars(uri, from, token, signature, to, date, asOf) {
   let since = '';
   if (date) {
     since = `&since=${date.toISOString()}`;
   }
 
   const signedTokenB64 = Buffer.from(signature).toString('base64')
-  uri = `${uri}/get-transactions/${from}/${to}?tally-only=true&tally-dollars=true${since}&signature=${signedTokenB64}`;
+  uri = `${uri}/get-transactions/${from}/${to}?tally-only=true&tally-dollars=true${since}&signature=${signedTokenB64}&as-of=${asOf}`;
   console.log(`remunaration API >> getTally call (${uri})`);
 
   return await fetch(uri, {headers: { "Authorization": `Bearer ${token}` }})
@@ -101,14 +102,15 @@ module.exports = {
    * @param {string} to - tally transactions to this address
    * @param {number} costDollars - amount of dollars (USD) to cover
    * @param {number} tallyMinutes - if null, all time, else number of minutes since now
+   * @param {string} asOf - key to make request against back-end quota and not get 429s
    */
-  isCostCovered: async (uri, from, token, signature, to, costDollars, tallyMinutes) => {
+  isCostCovered: async (uri, from, token, signature, to, costDollars, tallyMinutes, asOf) => {
     if (tallyMinutes) {
       let since = new Date();
       since.setMinutes(since.getMinutes() - tallyMinutes);
-      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, since);
+      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, since, asOf);
     } else {
-      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, null);
+      var tallyDollars = await getTallyDollars(uri, from, token, signature, to, null, asOf);
     }
     var delta = costDollars - tallyDollars;
     return delta <= 0;
@@ -129,7 +131,7 @@ module.exports = {
       message: Buffer.from(token).toString('base64'),
       address: address
     });
-    uri = `${uri}/is-signature-valid`
+    uri = `${uri}/is-signature-valid?skip-ledger=true`  /* skip-ledger here allows us to use back-end rate limits and get less 429s. */
 
     console.log(`remunaration API >> isValidOnLedger call (uri: ${uri}) (body: ${body})`);
 

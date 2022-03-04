@@ -386,7 +386,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
         }
       }
       if (this.hub && this.sku) {
-        this.hub?.setSkuAuthorized(this.sku, this.isAuthorized);
+        this.hub?.setSkuAuthorized(this.sku, this.isAuthorized, this.asOf);
       }
     });
   }

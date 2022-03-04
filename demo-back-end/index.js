@@ -26,6 +26,7 @@ app.use(allow_cors);
  *   The header of the request must have an `Authorization` header in the format `Bearer ${token}:${tokenSignature}`.
  *   - 'token', base64 string containing token to be signed to prove ownership of 'address': will be the token retrieved by `getToken` earlier.
  *   - 'tokenSignature', base64 string containing signature of 'token', signed by 'from'
+ *   - 'asOf' cache key to make request against back-end quota and not get 429s
  * @param {body:..} res -- will contain the response 'res' which is a JSON payload `{featureUsed:true|false}` 
  *   indicating whether the feature was "make-pretend" used by the back-end
  */
