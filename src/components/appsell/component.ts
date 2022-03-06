@@ -249,7 +249,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
     }
 
     if (this.loginMessage) {
-      await this.authorize();
+      this.isAuthorized = await this.authorize();
       return; // this is just a login button, no further actions.
     }
 
@@ -258,7 +258,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
         console.log(`in click(): sku:${this.sku} topup dollars not available`);
         return;
       }
-      await this.authorize();
+      this.isAuthorized = await this.authorize();
     }
 
     if (!this.isLogedIn || !this.isAuthorized) {
@@ -546,17 +546,19 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
 
   // @returns {Promise<boolean>} with status of topup -- successful or not.
   async authorize(): Promise<boolean> {
+    let isAuthorized = false;
     try {
       this.loading = true;
-      const isAuthorized = await this.determineAuthorized();
+      isAuthorized = await this.determineAuthorized();
       const address = this.getToAddress();
       if (this.hub && !isAuthorized) {
-        return await this.hub.topUp(this.topupDollars || 0, address);
+        isAuthorized = await this.hub.topUp(this.topupDollars || 0, address);
+        console.log(`authorize DA ${this.sku} ${this.currentImparter} ${isAuthorized}`);
       }
     } catch (e) {
     } finally {
       this.loading = false;
     }
-    return false;
+    return isAuthorized;
   }
 }
