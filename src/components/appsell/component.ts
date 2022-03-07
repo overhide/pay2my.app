@@ -290,7 +290,9 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       message: this.lastInfo.messageToSign[this.currentImparter],
       signature: this.lastInfo.payerSignature[this.currentImparter],
       to: this.getToAddress(),
-      asOf: this.asOf
+      asOf: this.asOf,
+      priceDollars: this.priceDollars ? this.priceDollars : '0',
+      withinMinutes: this.withinMinutes ? this.withinMinutes : '0'
     };
     this.$emit(`pay2myapp-appsell-sku-clicked`, event);
   }
@@ -553,7 +555,6 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       const address = this.getToAddress();
       if (this.hub && !isAuthorized) {
         isAuthorized = await this.hub.topUp(this.topupDollars || 0, address);
-        console.log(`authorize DA ${this.sku} ${this.currentImparter} ${isAuthorized}`);
       }
     } catch (e) {
     } finally {

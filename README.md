@@ -252,15 +252,15 @@ All demos below show one or the other.
 
 You can include *pay2my.app* via CDN:
 
-* `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.11/dist/pay2my.app.js`
+* `https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js`
 
 You can see all the [/demo-front-end/*.html](/demo-front-end) demos load it this way:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pay2my.app@1.4.11/dist/pay2my.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
 ```
 
-In our demos we specifically load the latest version, e.g. version *1.4.11*: `https://cdn.jsdelivr.net/npm/pay2my.app@1.4.11/dist/pay2my.app.js`
+In our demos we specifically load the latest version, e.g. version *1.4.11*: `https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js`
 
 The widgets can then be used in your DOM and via your framework JavaScript.
 
@@ -714,7 +714,9 @@ See the [custom buttons demo](https://overhide.github.io/pay2my.app/demo-front-e
   currency: Currency,
   imparter: Imparter,
   isTest: boolean,
-  asOf: string
+  asOf: string,
+  priceDollars: string,
+  withinMinutes: string
 }
 ```
 

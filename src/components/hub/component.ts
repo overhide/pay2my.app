@@ -188,7 +188,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     )
   }
 
-  // Set current imparter is signed message checks out against signature for address: if on ledger
+  // Set current imparter iff signed message checks out against signature for address: if on ledger
   // @param {Imparter} imparter - to set
   // @param {string|null} message
   // @param {string|null} signature
@@ -204,7 +204,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       imparter,
       async () => {
         if (oh$.canSetCredentials(imparter)) {
-          oh$.setCredentials({address});
+          oh$.setCredentials(imparter, {address});
         }
         await this.isOnLedger(imparter, {message, signature});
       }
@@ -721,8 +721,13 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
             if (this.paymentsInfo.currentSocial) await this.setCurrentSocial(this.paymentsInfo.currentSocial);
             break;
           case Imparter.ohledger:
-            const key = this.paymentsInfo.payerPrivateKey[Imparter.ohledgerSocial];
-            if (key) await this.setSecretKey(Imparter.ohledgerSocial, key);
+            const key = this.paymentsInfo.payerPrivateKey[Imparter.ohledger];
+            if (key) {
+              await this.setSecretKey(Imparter.ohledger, key);
+            } else {
+              const address = this.paymentsInfo.payerAddress[Imparter.ohledger];
+              if (address) await this.setAddress(Imparter.ohledger, address)
+            }
             break;
           case Imparter.ohledgerWeb3:
           case Imparter.ethWeb3:
@@ -730,6 +735,10 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
             const address = this.paymentsInfo.payerAddress[this.paymentsInfo.currentImparter];
             if (address) await this.setAddress(this.paymentsInfo.currentImparter, address);
             break;
+        }
+        if (!this.paymentsInfo.payerAddress[this.paymentsInfo.currentImparter]) {
+          this.paymentsInfo.messageToSign[this.paymentsInfo.currentImparter] = null;
+          this.paymentsInfo.payerSignature[this.paymentsInfo.currentImparter] = null;
         }
       }
     }

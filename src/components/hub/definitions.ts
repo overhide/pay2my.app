@@ -109,7 +109,9 @@ export interface PaymentsInfo {
   currency: Currency,
   imparter: Imparter,
   isTest: boolean,
-  asOf: string
+  asOf: string,
+  priceDollars: string,
+  withinMinutes: string
 }
 
 /**
@@ -271,6 +273,14 @@ export interface IPay2MyAppHub {
   // @param {Imparter} imparter - to set
   // @returns {bool} true if success or cancel, false if some problem
   setCurrentImparter: (imparter: Imparter) => Promise<boolean>,
+
+  // Set current imparter iff signed message checks out against signature for address: if on ledger
+  // @param {Imparter} imparter - to set
+  // @param {string|null} message
+  // @param {string|null} signature
+  // @param {string|null} address - if imparter is from wallet, wallet will be interrogated for addres, but will not be asked to sign
+  // @returns {bool} true if success or cancel, false if some problem
+  setCurrentImparterChecked: (imparter: Imparter, message: string|null, signature: string|null, address: string|null) => Promise<boolean>,
 
   // Set social provider if any
   // @param {Social} social provider to set
