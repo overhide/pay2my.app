@@ -181,7 +181,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     return this.setCurrentImparterByFn(
       imparter,
       async () => {
-        if (imparter !== Imparter.unknown && !this.isAuthenticated(imparter)) {
+        if (!this.isAuthenticated(imparter)) {
           await this.authenticate(imparter);
         }  
       }
@@ -203,6 +203,7 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     return this.setCurrentImparterByFn(
       imparter,
       async () => {
+        if (imparter === Imparter.unknown) return;
         if (oh$.canSetCredentials(imparter)) {
           oh$.setCredentials(imparter, {address});
         }

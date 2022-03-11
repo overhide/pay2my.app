@@ -672,6 +672,8 @@ These widgets are fully customizable through [slots](https://developer.mozilla.o
 - in our demos we usually have one button that expires after 30 minutes
 - leave out for indefinite &mdash; default
 
+##### Properties / Methods
+
 See *IPay2MyAppAppsell* in [/src/components/hub/definitions.ts](/src/components/hub/definitions.ts).
 
 ##### Slots
