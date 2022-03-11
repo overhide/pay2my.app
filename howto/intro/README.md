@@ -89,7 +89,7 @@ This change is specified on lines 26 through 32, as a reaction to a `pay2myapp-h
 31.       }
 ```
 
-This event is raised to the DOM event listeners by the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app">pay2my.app</a> components in response to user actions &mdash; logging in and out via the widgets.
+This event is raised to the DOM event listeners by the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app/v/latest">pay2my.app</a> components in response to user actions &mdash; logging in and out via the widgets.
 
 For example, on this page, when a user clicks on the "sign-in" text, they will be presented with a sign-in modal.  On a successful sign-in, the above `pay2myapp-hub-sku-authentication-changed`  DOM event is raised.
 
@@ -133,7 +133,7 @@ Let's pedal back to line 5 and discuss some of the requisite wiring.
 5.     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
 ```
 
-The interesting bit on line 5 is our pulling in of the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app">pay2my.app</a> node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.
+The interesting bit on line 5 is our pulling in of the <a target="_blank" href="https://www.npmjs.com/package/pay2my.app/v/latest">pay2my.app</a> node module from a CDN.  This module provides the w3c Web components we use for the user login widgets.
 
 
 
@@ -568,7 +568,7 @@ Next, we need the actual <a target="_blank" href="https://github.com/overhide/pa
 >
 > To study snippets of the back-end code used in this write-up please see the simple <a target="_blank" href="https://github.com/overhide/pay2my.app/tree/master/demo-back-end">demo back-end source code</a> as it lives in GitHub.  
 
-Note: the source code above is the same back-end running as Azure functions used for <a target="_blank" href="https://www.npmjs.com/package/pay2my.app#demos">the other in-repo code demos</a>.
+Note: the source code above is the same back-end running as Azure functions used for <a target="_blank" href="https://www.npmjs.com/package/pay2my.app/v/latest#demos">the other in-repo code demos</a>.
 
 
 
