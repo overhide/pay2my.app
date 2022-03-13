@@ -14,7 +14,7 @@ The word "liberating" in the title of this tutorial is somewhat overloaded, on p
 
 The brunt of this article is some very simple code -- we'll jump right into that.  This is very much a practical tutorial introducing how easy it is to use several standard w3c Web components to add user logins ("authenticate via signatures") and in-app purchases ("authorize via ledgers") to your Web offering.
 
-But nothing needs to stay black-box.  I'll cover a high level explanation of what's going on behind the scenes at the end of the write-up, as an aside, for those interested.  There is nothing hidden or closed off here.  All the concepts of Ledger-Based Authorizations, the mechanisms, the APIs, the libraries, are documented in several blog posts, articles, slide shows, all available at https://pay2my.app.  The code backing what's discussed herein is open sourced and can be browsed at your leisure.  If something isn't to your liking, making it your way is a pull-request away, community agreeing of course.
+But nothing needs to stay black-box.  I'll cover a high level explanation of what's going on behind the scenes at the end of the write-up, as an aside, for those interested.  There is nothing hidden or closed off here.  All the concepts of [Ledger-Based Authorizations](https://overhide.io/2019/05/02/8yearold.html), the mechanisms, the APIs, the libraries, are documented in several blog posts, articles, slide shows, all available at https://pay2my.app.  The code backing what's discussed herein is open sourced and can be browsed at your leisure.  If something isn't to your liking, making it your way is a pull-request away, community agreeing of course.
 
 There is no lock-in here.  
 
@@ -668,7 +668,7 @@ The `GET /RunFeature` ends up running the code <a target="_blank" href="https://
 
 ## Appendix A:  Workflow Introduction
 
-The <a target="_blank" href="https://pay2my.app">https://pay2my.app</A> site offers many materials introducing "Ledger-Based Authorizations", the mechanism used throughout this tutorial vis a vis the Web components.
+The <a target="_blank" href="https://pay2my.app">https://pay2my.app</A> site offers many materials introducing ["Ledger-Based Authorizations"](https://overhide.io/2019/05/02/8yearold.html), the mechanism used throughout this tutorial vis a vis the Web components.
 
 But let's attempt to quickly introduce the gist of it all with a simple business flow diagram.
 
