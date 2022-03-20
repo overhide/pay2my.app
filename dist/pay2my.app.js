@@ -522,6 +522,7 @@ ${Vt.a}
   .modal {
     max-width: 40em;
     max-height: 80vh;
+    color: black;
     background: white;
     overflow-y: auto;
   }
