@@ -75,8 +75,10 @@ export interface PaymentsInfo {
   loginElement?: IPay2MyAppLogin | null,                     // the login element
   pendingTransaction: IPay2MyAppPendingTransactionEvent,     // the currently pending transaction, if any (see flag inside)
 
-  skuAuthorizations: {[sku: string]: boolean}               // state of sku authorizations
-  skuComponents: {[sku: string]: IPay2MyAppAppsell}          // component per sku
+  skuAuthorizations: {[sku: string]: boolean},               // state of sku authorizations
+  skuComponents: {[sku: string]: IPay2MyAppAppsell},          // component per sku
+
+  enabled: boolean                          // is online and enabled?
 }
 
 /**

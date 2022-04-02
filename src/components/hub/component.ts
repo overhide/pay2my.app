@@ -4,7 +4,8 @@ import {
   html,
   ref,
   attr,
-  observable
+  observable,
+  Observable
 } from "@microsoft/fast-element";
 
 import {
@@ -108,7 +109,9 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
     skuAuthorizations: {},
     skuComponents: {},
 
-    ordinal: 0
+    ordinal: 0,
+
+    enabled: false
   };
 
   // set error if any
@@ -144,11 +147,24 @@ export class Pay2MyAppHub extends FASTElement implements IPay2MyAppHub {
       this.tokenChanged('', this.rootElement.getAttribute('token') || '');
     }
     this.initSession().then(() => {
+      this.enabledDetection();
       this.initCallbacks();
       this.initNetworks();
       this.pingApplicationState();
     });
   };
+
+  enabledDetection() {
+    this.paymentsInfo.enabled = navigator.onLine;
+    window.addEventListener('offline', () => { 
+      this.paymentsInfo.enabled = false;
+      Observable.notify(this, 'paymentsInfo')
+     });
+    window.addEventListener('online', () => { 
+      this.paymentsInfo.enabled = true; 
+      Observable.notify(this, 'paymentsInfo')
+    });
+  }
 
   public constructor() {
     super();

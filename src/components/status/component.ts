@@ -32,7 +32,7 @@ import errorIcon from "../../static/icons/error.svg";
 import refreshIcon from "../../static/icons/refresh.svg";
 
 const template = html<Pay2MyAppStatus>`
-  <div class="input">
+  <div class="input ${e => e.isEnabled ? '' : 'w3-disabled'}">
     <div class="panel ${e => e.error ? 'w3-tooltip' : ''}">
       <div class="${e => e.canGetTransactions ? '' : 'disabled'}">
 
@@ -195,6 +195,9 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
   @observable
   isSignedIn: boolean = false;
 
+  @observable
+  public isEnabled?: boolean | null;
+
   hub?: IPay2MyAppHub | null; 
   currentImparter?: Imparter | null;  
   challenge?: string | null;
@@ -247,6 +250,7 @@ export class Pay2MyAppStatus extends FASTElement implements IPay2MyAppStatus {
     this.error = null;
     this.currentImparter = info.currentImparter;
     this.isSignedIn = !!info.payerSignature[info.currentImparter] && !!info.isOnLedger[info.currentImparter];
+    this.isEnabled = info.enabled;
     this.address = this.isSignedIn ? info.payerAddress[info.currentImparter] : 'sign-in';
     this.challenge = info.messageToSign[info.currentImparter];
     this.signature = info.payerSignature[info.currentImparter];

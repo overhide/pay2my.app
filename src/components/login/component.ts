@@ -6,7 +6,8 @@ import {
   ref,
   when,
   FASTElement,
-  Observable
+  Observable,
+  observable
 } from "@microsoft/fast-element";
 
 import {
@@ -43,7 +44,7 @@ const template = html<Pay2MyAppLogin>`
         </slot>
 
         <div class="modal">
-          <div class="w3-container">
+          <div class="w3-container ${e => e.isEnabled ? '' : 'w3-disabled'}">
             <slot name="header"></slot>
             ${when(e => e.overhideSocialMicrosoftEnabled, html<Pay2MyAppLogin>`
               <div class="s12">
@@ -157,6 +158,9 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
   @attr({ mode: 'boolean' })
   ethereumWeb3Enabled?: boolean = false;
 
+  @observable
+  public isEnabled?: boolean | null;
+
   rootElement?: HTMLElement;
   envelopeElement?: HTMLElement;
   overhideSocialMicrosoftElement?: HTMLElement;
@@ -244,6 +248,7 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
   };
 
   paymentInfoChanged(info: PaymentsInfo): void {
+    this.isEnabled = info.enabled;
   }
 
   outsideClick(event: any) {

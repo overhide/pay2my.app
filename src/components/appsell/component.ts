@@ -29,7 +29,7 @@ import loadingCss from "../../static/loading.css";
 
 const template = html<Pay2MyAppSell>`
   <template ${ref('rootElement')}>
-    <div class="panel ${e => e.orientation}">
+    <div class="panel ${e => e.orientation} ${e => e.isEnabled ? '' : 'w3-disabled'}">
       ${when(e => e.isAuthorized, html<Pay2MyAppSell>`
         <slot name="authorized-header" class="${e => e.isClickable() ? '' : 'noclick'}"  @click="${e => e.isClickable() && e.click()}">
         </slot>
@@ -191,6 +191,9 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
   // Flags whether this sku is authorized.
   @observable
   public isAuthorized?: boolean | null;
+
+  @observable
+  public isEnabled?: boolean | null;
 
   @observable
   asOf?: string | null;
@@ -371,6 +374,7 @@ export class Pay2MyAppSell extends FASTElement implements IPay2MyAppAppsell {
       this.loginElement = info.loginElement;
       this.isLogedIn = !!info.currentImparter && !!info.payerSignature[info.currentImparter];
       this.signature = info.payerSignature[info.currentImparter];
+      this.isEnabled = info.enabled;
   
       if (!this.isInited) return;
   
