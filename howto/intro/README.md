@@ -544,6 +544,12 @@ Thus far everything we did was in-browser only, no back-end code.
 
 This may be sufficient for your project and you may want to skip this section, but on the other hand, it may not be.  Consider <a target="_blank" href="https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html">this write-up</a> to motivate your decision.
 
+> ℹ
+>
+> If you want to leverage a back-end but do not want to write back-end code, skip this section - instead connect your widgets to the the overhide.io [hosted back-end](https://overhide.io/#baas) with the help of [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest).
+
+
+
 Note, you need to standup a back-end discussed in this section *before* the preview link below functions.
 
 
