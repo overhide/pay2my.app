@@ -24,7 +24,7 @@ async function go (fn) {
   const browser = await puppeteer.launch({ headless: env.headless, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.goto(`http://localhost:8099/test/html/smoke.html`);
-  await page.waitForSelector('#pay2my.app-demo')
+  await page.waitForSelector('#demo-front-end')
   await page.evaluate(fn);
 }
 
@@ -33,7 +33,7 @@ describe('ledgers.js smoke', function() {
 
   it('finds login widget', async () => {
     await go(async () => {     
-      const widget = await waitFor(() => document.querySelector("#pay2my.app-demo pay2myapp-login#login-widget"));
+      const widget = await waitFor(() => document.querySelector("#demo-front-end pay2myapp-login"));
       const modal = await waitFor(() => widget.shadowRoot.querySelector(".envelope > .modal"));
       chai.assert(modal != null);
     });

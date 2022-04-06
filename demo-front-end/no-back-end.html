@@ -4,38 +4,26 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
+    <script src="assets/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
 
     <script>
-      // Uncomment on of the back-end connection strings below.
 
-      // BACKEND_CONNECTION_STRING = `https://demo-back-end.azurewebsites.net/api`;
-      // BACKEND_CONNECTION_STRING = `http://localhost:8100`;
-      // BACKEND_CONNECTION_STRING = `http://localhost:7071/api`;
-      BACKEND_CONNECTION_STRING = `NONE`
+      // This is where we listen to authorized users clicking on events when they click a feature button.
+      window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+        console.log(`sku-clicked :: ${JSON.stringify(e.detail, null, 2)}`);
+        
+        // No back-end version, handle in front-end only
+        addMessage(e.detail.sku);  
+        return;
+      }, false);
+
     </script>
 
-    <script src="./index.js"></script>
-  </head>
+</head>
 
   <body>
     <div id="demo-front-end">
-
-      <style>
-        pay2myapp-appsell {
-          width: 60%;
-        }
-        .visa {
-          position: fixed;
-          top: 0px;
-          right: 0px;
-          z-index: 50;
-          opacity: 0;
-          transition: opacity 1s ease-in 1s;
-          pointer-events: none;
-        }
-      </style>
-      <img class="visa" id="visa" src="./assets/visa.png">
 
       <pay2myapp-hub id="demo-hub" apiKey="0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___" isTest></pay2myapp-hub>      
 
@@ -112,6 +100,7 @@
         </div>
       </div>
 
+      <img class="visa" id="visa" src="./assets/visa.png">
       <div class="w3-row" style="display: flex; justify-content: center; margin-top: 12em;">
         <div id="messages" class="w3-col s8 w3-center">
         </div>

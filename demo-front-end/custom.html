@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
+    <script src="assets/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
 
     <script>
@@ -12,12 +13,7 @@
       BACKEND_CONNECTION_STRING = `https://demo-back-end.azurewebsites.net/api`;
       // BACKEND_CONNECTION_STRING = `http://localhost:8100`;
       // BACKEND_CONNECTION_STRING = `http://localhost:7071/api`;
-      // BACKEND_CONNECTION_STRING = `NONE`
-    </script>
 
-    <script src="./index.js"></script>
-
-    <script>
       // Set the token from back-end
       window.onload = (event) => {
       fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
@@ -30,6 +26,35 @@
           }
         }).catch(e => console.error(`error talking to back-end -- ${e}`));
       };
+
+      // This is where we listen to authorized users clicking on events when they click a feature button.
+      // We hit the back-end in response to these.
+      // We re-validate authorizations in the back-end.
+      // See /demo-back-end
+      window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+        console.log(`sku-clicked :: ${JSON.stringify(e.detail, null, 2)}`);
+        
+        // Call back-end and ensure it verifies before saying it's handled.
+        fetch(`${BACKEND_CONNECTION_STRING}/RunFeature`
+          +`?sku=${e.detail.sku}`
+          +`&currency=${e.detail.currency}`
+          +`&from=${e.detail.from}`
+          +`&isTest=${e.detail.isTest}`
+          +`&asOf=${e.detail.asOf}`,
+          { 
+            headers: { 
+              // note `e.detail.message` is the overhide api `token` retrieved by the library
+              // note `e.detail.signature` is the signature of the above `token`, signed with the `from` address (user address)
+              "Authorization": `Bearer ${btoa(e.detail.message)}:${btoa(e.detail.signature)}`
+          }})
+          .then(response => {
+            if (response.ok) {
+              addMessage(e.detail.sku);
+            } else {
+              addError(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+            }
+        }).catch(e => addError(`error talking to back-end &mdash; ${e}`))
+      }, false);
     </script>
 
   </head>
@@ -38,9 +63,6 @@
     <div id="demo-front-end">
 
       <style>
-        pay2myapp-appsell {
-          width: 60%;
-        }
         .neopolitan-button {
           color: #8C6551;
           background-color: #fa94c4;
@@ -78,15 +100,6 @@
         .button-icon.dim {
           opacity: 0.7;
         }        
-        .visa {
-          position: fixed;
-          top: 0px;
-          right: 0px;
-          z-index: 50;
-          opacity: 0;
-          transition: opacity 1s ease-in 1s;
-          pointer-events: none;
-        }
         .header-envelope {
           display: flex;
           justify-content: flex-start;
@@ -106,7 +119,6 @@
           font-size: x-large;
         }
       </style>
-      <img class="visa" id="visa" src="./assets/visa.png">
 
       <!-- look at `window.onload` script above to see how we set the token from back-end -->
       <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
@@ -207,6 +219,7 @@
         </div>
       </div>
 
+      <img class="visa" id="visa" src="./assets/visa.png">
       <div class="w3-row" style="display: flex; justify-content: center; margin-top: 12em;">
         <div id="messages" class="w3-col s8 w3-center">
         </div>

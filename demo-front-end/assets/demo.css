@@ -26,3 +26,15 @@ pay2myapp-appsell {
 .info {
   height: 2em;
 }
+pay2myapp-appsell {
+  width: 60%;
+}
+.visa {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 1s ease-in 1s;
+  pointer-events: none;
+}

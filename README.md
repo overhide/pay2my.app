@@ -1,9 +1,7 @@
 
 
 <p align="center"><a href="https://overhide.io"><img src="https://overhide.github.io/pay2my.app/assets/logo.png" width="200px"/></a></p>
-
 <p align="center"><a href="https://overhide.io">pay2my.app by overhide.io</a></p><p style="width: 500px; margin: auto">A free and fully open-sourced ecosystem of widgets, a front-end library, and back-end services &mdash; to make addition of "logins" and "in-app-purchases" (IAP) to your app as banal as possible.</p>
-
 <hr/>
 # pay2my.app widgets
 
@@ -17,9 +15,15 @@ The authentication and authorization mechanism used herein is the [Ledger-Based 
 
 
 
-> 👉 For the impatient, jump to the [demos](#demos).
+> 👉 jump to the [demos](#demos)
+>
+> 👉 read the [tutorial](https://github.com/overhide/pay2my.app/blob/master/howto/intro/README.md)
+>
+> 👉 read the *remote-storage* app [tutorial](https://github.com/overhide/remotestorage-tutorial)
+>
+> 👉 reach out on [r/overhide](https://www.reddit.com/r/overhide/).
 
-> For help, reach out on [r/overhide](https://www.reddit.com/r/overhide/).
+
 
 It's simple to add IAPs to your Web application &mdash;  check out the "simplest" [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) ([code](/demo-front-end/simplest.html))  &mdash; it's essentially:
 

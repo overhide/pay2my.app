@@ -4,41 +4,47 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./assets/demo.css">
+    <script src="assets/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucchetto/dist/lucchetto.js"></script>
 
     <script>
-      // Uncomment on of the back-end connection strings below.
 
-      BACKEND_CONNECTION_STRING = `https://demo-back-end.azurewebsites.net/api`;
-      // BACKEND_CONNECTION_STRING = `http://localhost:8100`;
-      // BACKEND_CONNECTION_STRING = `http://localhost:7071/api`;
-      // BACKEND_CONNECTION_STRING = `NONE`
-    </script>
-
-    <script src="./index.js"></script>
-
-    <script>
-      // Set the token from back-end
+      // instantiate lucchetto.js which will help us to talk to the https://test.rs.overhide.io back-end
+      //
+      // I've setup the three SKUs on https://test.rs.overhide.io using https://overhide.github.io/armadietto/lucchetto/onboard.html#
+      // against my 0x046c88317b23dc57F6945Bf4140140f73c8FC80F address
+      //
+      // See https://overhide.io#baas
+      //
       window.onload = (event) => {
-      fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
-        .then(async (response) => {
-          if (response.ok) {
-            const hub = document.querySelector('#demo-hub');
-            hub.setAttribute('token', await response.text());
-          } else {
-            console.error(`error talking to back-end -- ${response.status} -- ${response.statusText}`);
-          }
-        }).catch(e => console.error(`error talking to back-end -- ${e}`));
-      };
+        var lucchetto = new Lucchetto(null, true, document.getElementById('demo-hub'));
+      }
+
+      // This is where we listen to authorized users clicking on events when they click a feature button.
+      // We hit the overhide.io back-end in response to these.
+      // We re-validate authorizations in the back-end.
+      // See https://overhide.io#baas
+      window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+        console.log(`sku-clicked :: ${JSON.stringify(e.detail, null, 2)}`);
+        
+        // Call back-end and ensure it verifies before saying it's handled.
+        lucchetto.getSku(`https://test.rs.overhide.io`, e.detail)
+          .then(response => {
+            if (response.ok) {
+              addMessage(e.detail.sku);
+            } else {
+              addError(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+            }
+        }).catch(e => addError(`error talking to back-end &mdash; ${e}`))
+      }, false);
+
     </script>
 
   </head>
 
   <body>
     <div id="demo-front-end">
-
-      <!-- visa help image to aid demo viewer with fake credit card entry -->
-      <img class="visa" id="visa" src="./assets/visa.png">
 
       <!-- look at `window.onload` script above to see how we set the token from back-end -->
       <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
@@ -117,6 +123,8 @@
         </div>
       </div>
 
+      <!-- visa help image to aid demo viewer with fake credit card entry -->
+      <img class="visa" id="visa" src="./assets/visa.png">
       <div class="w3-row" style="display: flex; justify-content: center; margin-top: 12em;">
         <div id="messages" class="w3-col s8 w3-center">
         </div>
