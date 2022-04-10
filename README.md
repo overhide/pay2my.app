@@ -25,7 +25,7 @@ The authentication and authorization mechanism used herein is the [Ledger-Based 
 
 
 
-It's simple to add IAPs to your Web application &mdash;  check out the "simplest" [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) ([code](/demo-front-end/simplest.html))  &mdash; it's essentially:
+It's simple to add IAPs to your Web application &mdash;  check out the "simplest" [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html)  &mdash; it's essentially:
 
 ```
 <html>
@@ -54,7 +54,8 @@ It's simple to add IAPs to your Web application &mdash;  check out the "simplest
                       unauthorizedTemplate="Add Feature ($${topup})"
                       bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
                       ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
-                      overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
+                      overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
+                      alwaysLogin>
     </pay2myapp-appsell>
     
     ...
@@ -68,7 +69,12 @@ The above three web-components in an HTML page are all that's needed for the sim
 
 Now, of course, the simplest example above is limited, it doesn't use a back-end and all code sits fully decompilable in the browser.  It's useful for some scenarios, but for other scenarios you will want to [re-check authorizations in your back-end code and have feature-flows run through a back-end](https://overhide.io//2019/03/27/authorizations-and-exposed-source-code.html).
 
-Most demos in this repo have business flows incorporating a simple back-end.  The back-end is provided as the [/demo-back-end](/demo-back-end) node.js application &mdash; that also runs in [Azure functions](https://azure.microsoft.com/en-us/services/functions/).  You can base your own back-end off of these samples, it's very little code.
+Most demos in this repo have business flows incorporating one of two simple back-ends:
+
+- an [overhide.io hosted](https://overhide.io#baas) back-end
+- the [/demo-back-end](/demo-back-end) node.js application  &mdash; that also runs in [Azure functions](https://azure.microsoft.com/en-us/services/functions/)
+
+You can use the [overhide.io hosted](https://overhide.io#baas) back-end to authorize IAP data via the help of [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest) or simply base your own back-end off of [/demo-back-end](/demo-back-end)  it's very little code.
 
 
 
@@ -99,7 +105,7 @@ A logged in user can check their previous payments in new browser tabs &mdash; 
 
 ## Quick Start
 
-To use these widgets in your Web app follow the steps below.
+To use these widgets in your Web app follow the steps below (or read through the [tutorial](https://github.com/overhide/pay2my.app/blob/master/howto/intro/README.md)).
 
 Don't just read these steps, follow along copying/looking-at the [demos](#demos).
 
@@ -324,7 +330,9 @@ Simply set an ID on the *pay2myapp-hub* component and pass it into the other com
 
 With this setup, if we're providing our API key right in the client code, just set the *apiKey* attribute on the *pay2myapp-hub* element (a la [no-back-end](/demo-front-end/no-back-end.html) and [simplest](/demo-front-end/simplest.html) demos).
 
-Otherwise, provide the *pay2myapp-hub* element with a token as per all the other demos, repeated below:
+The [basic](/demo-front-end/basic.html) and [javascript-hub](/demo-front-end/javascript-hub.html) demos provide the *apiKey* to the [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest) helper which provides it to the injected *hub*.  
+
+The [custom](/demo-front-end/custom.html) demo provides the *pay2myapp-hub* element with a *token* explicitly retrieved from our [/demo-back-end](/demo-back-end)  &mdash; effectively moving the *apiKey* from sitting in the HTML code to sitting in the back-end:
 
 ```
 <script>
@@ -349,9 +357,9 @@ Otherwise, provide the *pay2myapp-hub* element with a token as per all the other
 
 ##### Setting the *pay2myapp-hub* Programatically
 
-Get an instance of the *pay2myapp-hub* component by instantiating in JavaScript (`document.createElement('pay2myapp-hub')`) or grabbing from the *document* (`document.querySelector(..)`).
+We can get an instance of the *pay2myapp-hub* Web component by instantiating right in JavaScript via `document.createElement('pay2myapp-hub')`.
 
-Provide it into each component using the `setHub(..)` setter via ES6 / TypeScript class.
+We then provide it into each component using the `setHub(..)` setter via ES6 / TypeScript class.
 
 Take a look at the [javascript-hub demo code](/demo-front-end/javascript-hub.html) ([demo](https://overhide.github.io/pay2my.app/demo-front-end/javascript-hub.html)).
 
@@ -359,29 +367,25 @@ Here, the components wired into the DOM do not have a `hubId=..` attribute speci
 
 ```
 <script>
-  // Set the token from back-end
-  window.onload = (event) => {
-  fetch(`${BACKEND_CONNECTION_STRING}/GetToken`)
-    .then(async (response) => {
-      if (response.ok) {            
-        const hub = document.createElement('pay2myapp-hub'); 
-        hub.setAttribute('token', await response.text());
-        hub.setAttribute('isTest', true);
-        hub.init();
-        document.querySelector('pay2myapp-login').setHub(hub);
-        document.querySelector('pay2myapp-status').setHub(hub);
-        document.querySelectorAll('pay2myapp-appsell').forEach(e => e.setHub(hub));
-      } else {
-        console.error(`error talking to back-end -- ${response.status} &mdash; ${response.statusText}`);
-      }
-    }).catch(e => console.error(`error talking to back-end -- ${e}`));
-  };
-</script>
+    ...
+    var hub = document.createElement('pay2myapp-hub'); 
+    hub.setAttribute('isTest', true);
+    ...
+    // Set the hub programatically
+    window.onload = (event) => {
+      hub.init();
+
+      // inject hub into other components
+      document.querySelector('pay2myapp-login').setHub(hub);
+      document.querySelector('pay2myapp-status').setHub(hub);
+      document.querySelectorAll('pay2myapp-appsell').forEach(e => e.setHub(hub));
+    };
+    ...
+  </script>
+
 ```
 
-- the wiring above is in response to retrieving [a valid token](#enabling-with-token) from the back-end &mdash; the `fetch`
-- we set the *token* on the hub using `setAttribute('token',..)`
-- the `BACKEND_CONNECTION_STRING` points at our back-end server (see [Target a Back-End](#target-a-back-end) section)
+- note that [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest) sets our hub *apiKey*  on this *hub* instance, not shown for brevity
 - we optionally set the *isTest* attribute
 - since we're not wiring the *pay2myapp-hub* component into the DOM, we explicitly call `hub.init()`
 - the remaining `document.querySelector..` calls find all the other pay2my.app web-components to set the newly initialized hub against them via their `setHub(..)` method
@@ -788,9 +792,13 @@ N/A
 
 #### Target a Back-End
 
-As mentioned in the [Demos](#demos) section, we have several component demo files in [/demo-front-end](/demo-front-end).
+You can more easily leverge the [overhide.io hosted](https://overhide.io#baas) back-end for your development (and later production).  This is why it's there &mdash; its raison d'être.  This is shown in the [basic](/demo-front-end/basic.html) and [javascript-hub](/demo-front-end/javascript-hub.html) demos.
 
-Each HTML file has a script constant `BACKEND_CONNECTION_STRING` which points at one of the back-end instances, either:
+If you already have a back-end or want to write your own, the rest of this section is concerned with that.
+
+The [custom](/demo-front-end/custom.html) demo runs against the sample [./demo-back-end](./demo-back-end).
+
+We have several ways to run the [./demo-back-end](./demo-back-end) for demo/development purposes.  The script constant `BACKEND_CONNECTION_STRING` points at one of the back-end instances, either:
 
 - https://demo-back-end.azurewebsites.net/api (default)
 - http://localhost:8100 (local node.js server)

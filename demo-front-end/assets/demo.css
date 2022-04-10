@@ -38,3 +38,13 @@ pay2myapp-appsell {
   transition: opacity 1s ease-in 1s;
   pointer-events: none;
 }
+.source {
+  display: flex;
+  align-items: center;
+}
+.source img {
+  width: 48px;
+}
+.source span {
+  margin-left: 10px;
+}

@@ -10,8 +10,9 @@
   </head>
 
   <body>
-    <div id="demo-front-end">
 
+    <div id="demo-front-end">
+  
       <!-- look at `window.onload` script above to see how we set the token from back-end -->
       <pay2myapp-hub id="demo-hub" isTest></pay2myapp-hub>      
 
@@ -23,13 +24,13 @@
 
       <!-- info note-->
       <div class="w3-container note-container"><div class="w3-card w3-sand w3-margin note">
-        <img class="w3-left info" src="./assets/info.png">
+        <img class="w3-left info" src="./assets/info.png"> 
         <p>The basic demo showing off all widgets.  Using features causes back-end endpoint invocations with authorization checks.</p>
         <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
         <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.</p>
         <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  The "free" one on the left inhibits login (doesn't allow login).  The "paid" two on the right cause initial login.  All three, once authorized, cause feature flows &mdash; through the backe-end &mdash; at different payment tiers.</p>
-        <p>⚠ No bitcoin support in this demo as it uses <a href="https://www.npmjs.com/package/lucchetto" target="_blank">lucchetto.js</a> connecting to an <a href="https://overhide.io#baas" target="_blank">overhide.io back-end as a service</a> &mdash; which only supports the Ethereum address space (for dollars and cryptos).</p>
-        <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>        
+        <p>⚠ No bitcoin support in this demo as it uses <a href="https://www.npmjs.com/package/lucchetto" target="_blank">lucchetto.js</a> connecting to an <a href="https://overhide.io#baas" target="_blank">overhide.io back-end as a service</a> &mdash; which only supports the Ethereum address space (for dollars and cryptos).</p>       
+        <p><a href="https://github.com/overhide/pay2my.app#demos" class="source" target="_blank"><img src="assets/icons8-github-96.png"></img><span>back to demos</span></a><a href="https://github.com/overhide/pay2my.app/blob/master/demo-front-end/basic.html" class="source" target="_blank"><img src="assets/icons8-github-96.png"></img><span>view the source</span></a></p>
       </div></div>
 
       <pay2myapp-login hubId="demo-hub"
