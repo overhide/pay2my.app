@@ -7,40 +7,6 @@
     <script src="assets/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pay2my.app@latest/dist/pay2my.app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucchetto/dist/lucchetto.js"></script>
-
-    <script>
-
-      // instantiate lucchetto.js which will help us to talk to the https://test.rs.overhide.io back-end
-      //
-      // I've setup the three SKUs on https://test.rs.overhide.io using https://overhide.github.io/armadietto/lucchetto/onboard.html#
-      // against my 0x046c88317b23dc57F6945Bf4140140f73c8FC80F address
-      //
-      // See https://overhide.io#baas
-      //
-      window.onload = (event) => {
-        var lucchetto = new Lucchetto(null, true, document.getElementById('demo-hub'));
-      }
-
-      // This is where we listen to authorized users clicking on events when they click a feature button.
-      // We hit the overhide.io back-end in response to these.
-      // We re-validate authorizations in the back-end.
-      // See https://overhide.io#baas
-      window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
-        console.log(`sku-clicked :: ${JSON.stringify(e.detail, null, 2)}`);
-        
-        // Call back-end and ensure it verifies before saying it's handled.
-        lucchetto.getSku(`https://test.rs.overhide.io`, e.detail)
-          .then(response => {
-            if (response.ok) {
-              addMessage(e.detail.sku);
-            } else {
-              addError(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
-            }
-        }).catch(e => addError(`error talking to back-end &mdash; ${e}`))
-      }, false);
-
-    </script>
-
   </head>
 
   <body>
@@ -62,6 +28,7 @@
         <p>In the top-right we see the <em>pay2myapp-status</em> widget &mdash; allows (re)login, transaction check, logout, and payments refresh.</p>
         <p>Just below we see an explicit "login" button (<em>pay2myapp-appsell</em> widget).  This button always allows (re)login and never starts a feature flow.</p>
         <p>At the bottom we see three feature buttons (<em>pay2myapp-appsell</em> widgets).  The "free" one on the left inhibits login (doesn't allow login).  The "paid" two on the right cause initial login.  All three, once authorized, cause feature flows &mdash; through the backe-end &mdash; at different payment tiers.</p>
+        <p>⚠ No bitcoin support in this demo as it uses <a href="https://www.npmjs.com/package/lucchetto" target="_blank">lucchetto.js</a> connecting to an <a href="https://overhide.io#baas" target="_blank">overhide.io back-end as a service</a> &mdash; which only supports the Ethereum address space (for dollars and cryptos).</p>
         <p><a href="https://github.com/overhide/pay2my.app#demos">...back to demos</a></p>        
       </div></div>
 
@@ -70,7 +37,6 @@
                       overhideSocialGoogleEnabled
                       overhideWeb3Enabled
                       ethereumWeb3Enabled
-                      bitcoinEnabled
                       overhideSecretTokenEnabled>
       </pay2myapp-login>
 
@@ -90,20 +56,17 @@
             inhibitLogin
             authorizedMessage="Use Feature"
             unauthorizedTemplate="Login to Use Free Feature"
-            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
           </pay2myapp-appsell>
         </div>
         <div class="w3-col s4 w3-center">
           <pay2myapp-appsell 
-            id="foo"
             hubId="demo-hub" 
             sku="paid-feature"
             priceDollars="2"
             authorizedMessage="Use Feature"
             unauthorizedTemplate="Add Feature ($${topup})"
-            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F">
           </pay2myapp-appsell>
@@ -115,7 +78,6 @@
             priceDollars="3"
             authorizedMessage="Use Feature"
             unauthorizedTemplate="Subscribe Feature For 30 Minutes ($${topup})"
-            bitcoinAddress="tb1qr9d7z0es86sps5f2kefx5grpj4a5yvp4evj80z"
             ethereumAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             overhideAddress="0x046c88317b23dc57F6945Bf4140140f73c8FC80F"
             withinMinutes="30">
@@ -132,4 +94,39 @@
 
     </div>
   </body>
+
+  <script>
+
+    // instantiate lucchetto.js which will help us to talk to the https://test.rs.overhide.io back-end
+    //
+    // I've setup the three SKUs on https://test.rs.overhide.io using https://overhide.github.io/armadietto/lucchetto/onboard.html#
+    // against my 0x046c88317b23dc57F6945Bf4140140f73c8FC80F address
+    //
+    // See https://overhide.io#baas
+    //
+    var lucchetto = new Lucchetto({
+      overhideIsTest: true, 
+      pay2myAppHub: document.getElementById('demo-hub'),
+      overhideApiKey: '0x___API_KEY_ONLY_FOR_DEMOS_AND_TESTS___'});
+
+    // This is where we listen to authorized users clicking on events when they click a feature button.
+    // We hit the overhide.io back-end in response to these.
+    // We re-validate authorizations in the back-end.
+    // See https://overhide.io#baas
+    window.addEventListener('pay2myapp-appsell-sku-clicked',(e) => { 
+      console.log(`sku-clicked :: ${JSON.stringify(e.detail, null, 2)}`);
+      
+      // Call back-end and ensure it verifies before saying it's handled.
+      lucchetto.getSku(`https://test.rs.overhide.io`, e.detail)
+        .then(response => {
+          if (response === 'OK') {
+            addMessage(e.detail.sku);
+          } else {
+            addError(`error talking to back-end &mdash; ${response.status} &mdash; ${response.statusText}`);
+          }
+      }).catch(e => addError(`error talking to back-end &mdash; ${e}`))
+    }, false);
+
+  </script>
+
 </html>
