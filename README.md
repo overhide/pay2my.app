@@ -172,14 +172,14 @@ The remainder of the steps are actual code changes in your Web application.
 
 We have several component demo files in [/demo-front-end](/demo-front-end):
 
-| **Demo Name**                                                | **Link**                                                     | **Code**                                                     | **Uses Back-End** | **Notes**                                                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| basic                                                        | [demo](https://overhide.github.io/pay2my.app/demo-front-end/basic.html) | [code](/demo-front-end/basic.html)                           | ✔                 | the basic demo &mdash; *pay2myapp-status* in the nav-bar, a login button, 3 feature buttons. |
-| no back-end                                                  | [demo](https://overhide.github.io/pay2my.app/demo-front-end/no-back-end.html) | [code](/demo-front-end/no-back-end.html)                     | ✖                 | a no  [back-end](#back-end) demo, everything just in-browser &mdash; same as basic otherwise |
-| custom buttons                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/custom.html) | [code](/demo-front-end/custom.html)                          | ✔                 | same as basic demo but the login button has different colors and the feature buttons are ice cream desserts &mdash; see [slots](#slots-2) section of the [pay2myapp-appsell](#pay2myapp-appsell-) component below |
-| javascript-hub                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/javascript-hub.html) | [code](/demo-front-end/javascript-hub.html)                  | ✔                 | same as basic demo but the *pay2myapp-hub* component is not in the DOM, it's wired in via script |
-| simplest                                                     | [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) | [code](/demo-front-end/simplest.html)                        | ✖                 | bare bones single button demo &mdash; the simplest demo, no [back-end](#back-end) |
-| ![](./assets/react.png)<br /><br />[pay2my.app React.js Demo app](https://github.com/overhide/pay2my.app-react-demo) | [demo](https://github.com/overhide/pay2my.app-react-demo) | [code](https://github.com/overhide/pay2my.app-react-demo) | ✔                 | React.js version of these demos.                             |
+| **Demo Name**                                                | **Link**                                                     | **Code**                                                  | **Type of Back-End**                                         | **Notes**                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| basic                                                        | [demo](https://overhide.github.io/pay2my.app/demo-front-end/basic.html) | [code](/demo-front-end/basic.html)                        | [overhide.io hosted](https://overhide.io#baas)               | the basic demo &mdash; *pay2myapp-status* in the nav-bar, a login button, 3 feature buttons. |
+| no back-end                                                  | [demo](https://overhide.github.io/pay2my.app/demo-front-end/no-back-end.html) | [code](/demo-front-end/no-back-end.html)                  | none                                                         | a no  [back-end](#back-end) demo, everything just in-browser &mdash; same as basic otherwise |
+| custom buttons                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/custom.html) | [code](/demo-front-end/custom.html)                       | [./demo-back-end](./demo-back-end) as [Azure Function](https://azure.microsoft.com/en-us/services/functions/) | same as basic demo but the login button has different colors and the feature buttons are ice cream desserts &mdash; see [slots](#slots-2) section of the [pay2myapp-appsell](#pay2myapp-appsell-) component below |
+| javascript-hub                                               | [demo](https://overhide.github.io/pay2my.app/demo-front-end/javascript-hub.html) | [code](/demo-front-end/javascript-hub.html)               | [overhide.io hosted](https://overhide.io#baas)               | same as basic demo but the *pay2myapp-hub* component is not in the DOM, it's wired in via script |
+| simplest                                                     | [demo](https://overhide.github.io/pay2my.app/demo-front-end/simplest.html) | [code](/demo-front-end/simplest.html)                     | none                                                         | bare bones single button demo &mdash; the simplest demo, no [back-end](#back-end) |
+| ![](./assets/react.png)<br /><br />[pay2my.app React.js Demo app](https://github.com/overhide/pay2my.app-react-demo) | [demo](https://github.com/overhide/pay2my.app-react-demo)    | [code](https://github.com/overhide/pay2my.app-react-demo) | [./demo-back-end](./demo-back-end) as [Azure Function](https://azure.microsoft.com/en-us/services/functions/) | React.js version of these demos.                             |
 
 
 
@@ -200,13 +200,35 @@ You could just have a single up-sell / in-app purchase button, no status, no exp
 
 The [/demo-front-end/no-back-end.html](/demo-front-end/no-back-end.html) shows the use of these widgets without any back-end &mdash; shows use of widgets with just an API key, the back-end setup can be ignored for this one.  This is OK for some projects, but is less bad-actor proof.  All other demos leverage a back-end.
 
-##### Back-End
+#### Back-End
 
-Most of the above demos run their feature-flows via our  [/demo-back-end](/demo-back-end): when a user clicks a feature, the back-end is interrogated to complete the feature flow.  
+Most of the above demos run their feature-flows via one of two back-ends:
 
-Note that the back-end verifies authentication and authorization as per credentials provided and monies paid on a ledger of choice.
+- an [overhide.io hosted](https://overhide.io#baas) back-end
+- the [/demo-back-end](/demo-back-end) node.js application  &mdash; that also runs in [Azure functions](https://azure.microsoft.com/en-us/services/functions/)
 
-The back-end serves three purposes on behalf of our front-ends:
+Regardless of back-end choice, when a user clicks a feature, the back-end is interrogated to complete the feature flow.  
+
+Either back-end verifies authentication and authorization as per credentials provided and monies paid on a ledger of choice.
+
+##### Notes on the [overhide.io hosted](https://overhide.io#baas) back-end
+
+The demos that leverage the [overhide.io hosted](https://overhide.io#baas) back-end also leverage the [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest) module.  This module has a nice convenience `getSku(..)` function that connects the *pay2myapp-appsell-sku-clicked* event  data to the back-ends.
+
+The back-ends are:
+
+- [https://test.rs.overhide.io](https://test.rs.overhide.io/) for testnet / fake money / coding
+- [https://rs.overhide.io](https://rs.overhide.io/) for live / production deployment
+
+See [lucchetto.js](https://www.npmjs.com/package/lucchetto/v/latest) for details on how to onboard in-app purchase SKUs for use with the *Lucchetto* back-ends.
+
+> ⚠ Note that the [overhide.io hosted](https://overhide.io#baas) back-ends are [remote-storage](https://remotestorage.io) servers supporting *remote-storage* applications.  But you absolutly do not have to be writing a *remote-storage* application to leverage them:  as the here-in demos demonstrate.
+>
+> But if you are interested in writing a *remote-storage* application with in-app purchases, check out the [remote-storage tutorial](https://github.com/overhide/remotestorage-tutorial).
+
+##### Notes on the [/demo-back-end](/demo-back-end)
+
+The [/demo-back-end](/demo-back-end) serves a couple purposes on behalf of our front-ends:
 
 - retrieves [an overhide token](https://token.overhide.io/swagger.html) for use with *overhide* APIs &mdash; browser front-end code calls this to get the token and provide to the [pay2myapp-hub](#pay2myapp-hub-)  component.
 - retrieves the fees-schedule (not actually leveraged in demos for simplicity, but provided for completness)
@@ -228,7 +250,7 @@ The endpoints for these are discussed in the [Local Development](#local-developm
 
 The [/demo-back-end](/demo-back-end) code runs both as stand-alone *node.js* as well as on  [Azure Functions](https://azure.microsoft.com/en-us/services/functions/) (instructions below in [Local Development](#local-development) section).  
 
-All of the above demos &mdash; with the exception of the *no-back-end* and *simplest* demos &mdash; hit this back-end code as it is stood up at https://demo-back-end.azurewebsites.net/api on Azure; but, it's easy enough to stand-up locally and play around (again, see [Local Development](#local-development) below).
+The above demos that hit this back-end code, hit it as it's stood up at https://demo-back-end.azurewebsites.net/api on Azure; but, it's easy enough to stand-up locally and play around (again, see [Local Development](#local-development) below).
 
 ## Distributable
 
