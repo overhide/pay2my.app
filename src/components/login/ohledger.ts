@@ -83,7 +83,7 @@ const template = html<OverhideOhledger>`
         </div>
       </div>    
     </form>
-    <iframe src="#" name="noop" style="display: none"></iframe>
+    <iframe name="noop" style="display: none"></iframe>
   </div>
 `;
 
@@ -236,10 +236,6 @@ export class OverhideOhledger extends FASTElement {
           });      
           await navigator.credentials.store(credential);
         }
-
-        //setTimeout(function(){     
-        //  history.replaceState({success:true}, 'login');
-        //}, 100);
 
         if (this.autocompleteForm) this.autocompleteForm.submit();
 
