@@ -212,6 +212,7 @@ export class Pay2MyAppLogin extends FASTElement implements IPay2MyAppLogin {
       }
     }
     this.hub.setLoginElement(this);
+    this.isEnabled = this.hub.getInfo().enabled;
 
     if (this.overhideSocialMicrosoftElement) (this.overhideSocialMicrosoftElement as any).setHub(hub);
     if (this.overhideSocialGoogleElement) (this.overhideSocialGoogleElement as any).setHub(hub);
